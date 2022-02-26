@@ -1,0 +1,683 @@
+body, button, input, select, td, textarea, th  { font-size: 14px !important; }
+.ico_badge  { font-size: 11px !important; }
+.btn_refresh  { font-size: 12px !important; }
+.bg_file_upload, .swfupload  { font-size: 99px!important !important; }
+.head_story .link_logo  { font-size: 24px !important; }
+#kakaoRelServices .link_services  { font-size: 19px !important; }
+.head_story .login_btn .ing  { font-size: 14px !important; }
+.kakao_search .lab_keyword  { font-size: 12px !important; }
+.kakao_search .tf_keyword  { font-size: 13px !important; }
+.newnoti_layer .tit_subject  { font-size: 14px !important; }
+.newnoti_layer .list_newnoti .txt_data  { font-size: 11px !important; }
+.newnoti_layer .txt_newnoti  { font-size: 12px !important; }
+.newnoti_layer .thumb_txt  { font-size: 11px !important; }
+.newnoti_layer .no_data  { font-size: 13px !important; }
+.search_layer .list_search .txt_with  { font-size: 11px !important; }
+.search_layer .link_id  { font-size: 12px !important; }
+.search_layer .search_id .btn_com  { font-size: 12px !important; }
+.search_layer .list_search .id_nodata  { font-size: 12px !important; }
+.search_layer .no_data  { font-size: 13px !important; }
+.toast_layer .txt  { font-size: 13px !important; }
+.toast_layer .link_view  { font-size: 12px !important; }
+.toast_popup .txt  { font-size: 13px !important; }
+.toast_top_layer .txt  { font-size: 13px !important; }
+.toast_top_layer .btn_com  { font-size: 12px !important; }
+.story_layer .inner_poster_layer .tit_story  { font-size: 15px !important; }
+.story_layer .emph_poster  { font-size: 13px !important; }
+.story_layer .inner_still_layer .tit_story  { font-size: 15px !important; }
+.story_layer .wrap_confirm .desc_confirm  { font-size: 13px !important; }
+.story_layer .list_people .tit_userinfo  { font-size: 13px !important; }
+.story_layer .list_people .txt_feel  { font-size: 12px !important; }
+.story_layer .list_people .btn_com  { font-size: 12px !important; }
+.story_layer .desc_people  { font-size: 13px !important; }
+.story_layer .copy_url .inp_txt  { font-size: 13px !important; }
+.story_layer .copy_txt  { font-size: 12px !important; }
+.story_layer .sns_etc .txt_sns  { font-size: 12px !important; }
+.story_layer .fld_mapservice .agree_mapservice  { font-size: 13px !important; }
+.story_layer .service_check .lab_check  { font-size: 15px !important; }
+.story_layer .list_report .tit_report  { font-size: 15px !important; }
+.story_layer .list_report .txt_report  { font-size: 13px !important; }
+.story_layer .txt_war  { font-size: 12px !important; }
+.story_layer .tab_report .link_tab  { font-size: 15px !important; }
+.story_layer .tabcont_report .tit_nox  { font-size: 13px !important; }
+.story_layer .tabcont_report .txt_nox  { font-size: 12px !important; }
+.story_layer .tabcont_report .list_nox .lab_radio  { font-size: 13px !important; }
+.story_layer .tabcont_report .nox_etc .inp_txt  { font-size: 13px !important; }
+.story_layer .tabcont_report .nox_etc .lab_txt  { font-size: 13px !important; }
+.story_layer .tabcont_report .txt_violate  { font-size: 12px !important; }
+.story_layer .tabcont_report .violate_report .tf_textarea  { font-size: 13px !important; }
+.story_layer .tabcont_report .violate_report .lab_textarea  { font-size: 13px !important; }
+.story_layer .user_report  { font-size: 12px !important; }
+.story_layer .channel_info .tit_chinfo  { font-size: 15px !important; }
+.story_layer .channel_info .desc_chinfo  { font-size: 13px !important; }
+.story_layer .infotxt_ch .txt_info  { font-size: 12px !important; }
+.snb_profile .wrap_thumb .link_name  { font-size: 22px !important; }
+.util_menu .menu_util .link_menu  { font-size: 13px !important; }
+.mystory_menu .info_dk .link_dauminfo, .mystory_menu .info_dk .txt_copy  { font-size: 12px !important; }
+.mystory_menu .list_infodk .link_menu  { font-size: 12px !important; }
+.menu_mystory .link_logout, .menu_mystory .tit_mystory  { font-size: 14px !important; }
+.menu_mystory .link_menu  { font-size: 13px !important; }
+.tab_friend .link_friend  { font-size: 14px !important; }
+.cate_tab .tit_cate .link_title  { font-size: 12px !important; }
+.cate_channel .link_channel  { font-size: 12px !important; }
+.list_cate .thumb_name  { font-size: 14px !important; }
+.friend_search .box_searchbar .tf_keyword  { font-size: 14px !important; }
+.friend_search .box_searchbar .lab_keyword  { font-size: 12px !important; }
+.tabcont_message .btn_message .btn_wh  { font-size: 14px !important; }
+.tabcont_message .desc_message .txt_name  { font-size: 14px !important; }
+.tabcont_message .desc_message .txt_message  { font-size: 12px !important; }
+.tabcont_message .list_message .txt_data  { font-size: 12px !important; }
+.cont_login .login_box .tit_share  { font-size: 24px !important; }
+.login_box .login_inp .lab_login  { font-size: 13px !important; }
+.login_box .login_inp .tf_login  { font-size: 14px !important; }
+.login_box .login_check .lab_check  { font-size: 13px !important; }
+.login_box .btn_login  { font-size: 16px !important; }
+.login_box .info_user .link_user  { font-size: 13px !important; }
+.fld_login .txt_error  { font-size: 13px !important; }
+.login_inp .ly_tooltip p  { font-size: 13px !important; }
+.login_inp .ly_tooltip .link_find  { font-size: 13px !important; }
+.join_user .ly_tooltip p  { font-size: 13px !important; }
+.join_user .user_link .link_g  { font-size: 13px !important; }
+.layer_kakao .tit_subject  { font-size: 16px !important; }
+.layer_kakao .login_inp .lab_login  { font-size: 13px !important; }
+.layer_kakao .login_inp .tf_login  { font-size: 14px !important; }
+.layer_kakao .login_check .lab_check  { font-size: 13px !important; }
+.layer_kakao .btn_login  { font-size: 16px !important; }
+.layer_kakao .info_user .link_user  { font-size: 13px !important; }
+.layer_kakao .btn_start .tit_start  { font-size: 16px !important; }
+.layer_kakao .btn_start .user_email  { font-size: 13px !important; }
+.layer_kakao .login_differ .link_differ  { font-size: 13px !important; }
+.layer_kakao .user_mailid  { font-size: 16px !important; }
+.layer_kakao .btn_ok  { font-size: 16px !important; }
+.footer_login .list_policy li  { font-size: 12px !important; }
+.footer_login .list_app .link_app  { font-size: 12px !important; }
+.footer_login .txt_copyright  { font-size: 12px !important; }
+.footer_login .user_profile .txt_user  { font-size: 13px !important; }
+.layer_profile .tit_subject  { font-size: 30px !important; }
+.layer_profile .txt_subject  { font-size: 14px !important; }
+.layer_profile .tit_profile  { font-size: 13px !important; }
+.layer_profile .profile_inp .lab_input  { font-size: 13px !important; }
+.layer_profile .profile_inp .tf_input  { font-size: 13px !important; }
+.layer_profile .profile_check .lab_check  { font-size: 13px !important; }
+.layer_profile .agree_check .lab_check  { font-size: 13px !important; }
+.layer_profile .agree_all .txt_agree  { font-size: 12px !important; }
+.covermenu_layer .list_menuly .link_menu  { font-size: 13px !important; }
+.share_cont .profile_box .tit_share  { font-size: 24px !important; }
+.share_cont .profile_box .info_share  { font-size: 14px !important; }
+.share_cont .profile_box .tit_profile  { font-size: 13px !important; }
+.share_cont .profile_box .profile_inp .lab_input  { font-size: 13px !important; }
+.share_cont .profile_box .profile_inp .tf_input  { font-size: 13px !important; }
+.share_cont .profile_check .lab_check  { font-size: 13px !important; }
+.share_cont .agree_check .inner_agree  { font-size: 13px !important; }
+.login_box .link_start .tit_start  { font-size: 16px !important; }
+.login_box .link_start .txt_mail  { font-size: 13px !important; }
+.login_box .box_start .link_other  { font-size: 13px !important; }
+.ly_tooltip p  { font-size: 12px !important; }
+.ly_tooltip .bn_box a  { font-size: 13px !important; }
+.feed .section .add_top .btn_receive  { font-size: 12px !important; }
+.hash .tit_hash  { font-size: 24px !important; }
+.hash .btn_wh  { font-size: 14px !important; }
+.pf_flayer .btn_com  { font-size: 12px !important; }
+.pf_flayer .pf_layer_in .pf_txt  { font-size: 12px !important; }
+.pf_flayer .pf_layer_in .pf_txt .tit  { font-size: 15px !important; }
+.pf_flayer .pf_layer_in .add_txt  { font-size: 12px !important; }
+.section .other_layer  { font-size: 13px !important; }
+.section .open_layer li  { font-size: 13px !important; }
+.section .open_layer .txt_comfort  { font-size: 11px !important; }
+.section.section_action .action_graph .txt_action  { font-size: 13px !important; }
+.section.recommend .tit_recommend  { font-size: 15px !important; }
+.section.recommend .list_recommend li .txt .desc  { font-size: 17px !important; }
+.section.recommend .list_recommend li .count_group  { font-size: 13px !important; }
+.section.recommend .btn_more  { font-size: 13px !important; }
+.section.recommend .btn_more_group .btn_story  { font-size: 13px !important; }
+.section.recommend .list_recommend2 .desc  { font-size: 17px !important; }
+.section.recommend .list_recommend2 .count_group  { font-size: 14px !important; }
+.section.recommend .list_recommend2 .hash_story .desc .txt_hash  { font-size: 14px !important; }
+.section.recommend .list_friend li .pf_flayer .pf_layer_in .pf_txt .tit  { font-size: 17px !important; }
+.section.disseminate .btn_more  { font-size: 13px !important; }
+.section.disseminate .pf_tit  { font-size: 13px !important; }
+.section.disseminate .list_news li .box_news .desc_news  { font-size: 13px !important; }
+.section.disseminate .list_news li .box_news .btn_com  { font-size: 12px !important; }
+.section.noti_report .desc_quest  { font-size: 12px !important; }
+.section.noti_report .desc_quest .txt_quest  { font-size: 13px !important; }
+.section.noti_report .desc_answer  { font-size: 14px !important; }
+.section.noti_report .btn_quest  { font-size: 13px !important; }
+.section.noti_report .pf_tit  { font-size: 13px !important; }
+.section.noti_report .info_profile .tit_profile  { font-size: 15px !important; }
+.section.noti_report .info_profile .txt_profile  { font-size: 12px !important; }
+.section.noti_report .desc_profileinfo .txt_info  { font-size: 15px !important; }
+.section.noti_report .desc_profileinfo .txt_data  { font-size: 12px !important; }
+.section.noti_report .btn_allview  { font-size: 13px !important; }
+.section_time .tit_time  { font-size: 22px !important; }
+.section_time .desc_time  { font-size: 14px !important; }
+.time_cont .time_head  { font-size: 14px !important; }
+.time_cont .txt_date  { font-size: 18px !important; }
+.time_cont .txt_desc  { font-size: 14px !important; }
+.time_cont .link_share  { font-size: 14px !important; }
+.section .wrap_reshare .link_reshare  { font-size: 14px !important; }
+.add_top .pf_name  { font-size: 15px !important; }
+.add_top .pf_date  { font-size: 22px !important; }
+.add_top .share, .add_top .time  { font-size: 12px !important; }
+.add_top .num_answer  { font-size: 12px !important; }
+.add_top .source  { font-size: 12px !important; }
+.add_top .txt_total  { font-size: 12px !important; }
+.fd_cont .place  { font-size: 13px !important; }
+.fd_cont .more  { font-size: 12px !important; }
+.fd_cont .img .desc_detail  { font-size: 13px !important; }
+.fd_cont .img_wrap .photo_more  { font-size: 11px !important; }
+.fd_cont .music_wrap .txt p  { font-size: 13px !important; }
+.fd_cont .music_wrap .txt .tit  { font-size: 16px !important; }
+.fd_cont .third_txt .txt_appname  { font-size: 12px !important; }
+.fd_cont .movie_wrap .movie_txt .tit_movie  { font-size: 17px !important; }
+.fd_cont .movie_wrap .movie_txt .txt_movie  { font-size: 12px !important; }
+.fd_cont .movie_wrap .movie_txt .link_source  { font-size: 12px !important; }
+.fd_cont .scrap_wrap .link_scrap  { font-size: 12px !important; }
+.fd_cont .scrap_wrap .link_scrap .tit_scrap  { font-size: 17px !important; }
+.fd_cont .scrap_wrap .link_scrap .txt_scrap  { font-size: 13px !important; }
+.fd_cont .scrap_wrap .link_source  { font-size: 12px !important; }
+.fd_cont .scrap_image .tit_scrap  { font-size: 17px !important; }
+.fd_cont .scrap_image .txt_scrap  { font-size: 12px !important; }
+.fd_cont .scrap_image .link_source  { font-size: 12px !important; }
+.fd_cont .scrap_magazine .tit_scrap  { font-size: 32px !important; }
+.fd_cont .scrap_magazine .subtit_scrap  { font-size: 15px !important; }
+.fd_cont .scrap_magazine .link_source  { font-size: 15px !important; }
+.fd_cont .scrap_tistory .cont_scrap  { font-size: 12px !important; }
+.fd_cont .scrap_tistory .cont_scrap .tit_scrap  { font-size: 17px !important; }
+.fd_cont .scrap_tistory .cont_scrap .txt_scrap  { font-size: 13px !important; }
+.fd_cont .scrap_tistory .info_scrap .site_scrap  { font-size: 14px !important; }
+.fd_cont .scrap_tistory .info_scrap .cate_scrap  { font-size: 13px !important; }
+.fd_cont .share_wrap .add_top p  { font-size: 12px !important; }
+.fd_cont .share_wrap .case_del, .fd_cont .share_wrap .case_lock, .fd_cont .share_wrap .case_report, .fd_cont .share_wrap .link_change  { font-size: 12px !important; }
+.notify .pf_tit .txt  { font-size: 13px !important; }
+.notify.addbtn .btn_com  { font-size: 12px !important; }
+.notify.notice_short .pf_tit .txt strong  { font-size: 14px !important; }
+.notify .txt_info p  { font-size: 16px !important; }
+.notify.news .info .desc  { font-size: 17px !important; }
+.add_bot .feel_group ul li.more a  { font-size: 12px !important; }
+.count_group  { font-size: 12px !important; }
+.comment .more  { font-size: 12px !important; }
+.comment .list>li .txt  { font-size: 13px !important; }
+.comment .list>li .txt p .time  { font-size: 12px !important; }
+.comment .list>li .txt .data_like  { font-size: 12px !important; }
+.comment .list>li .txt .btn_like  { font-size: 12px !important; }
+.comment .list>li .cmt_setup .bn_comment .ly_tooltip, .comment .list>li .cmt_setup .bn_del .ly_tooltip, .comment .list>li .cmt_setup .bn_edit .ly_tooltip, .comment .list>li .cmt_setup .bn_report .ly_tooltip  { font-size: 11px !important; }
+.comment .comt_write .inp_write .txt_copy  { font-size: 13px !important; }
+.comment .comt_write .inp_write textarea  { font-size: 13px !important; }
+.comment .comt_write .inp_write label  { font-size: 13px !important; }
+.comment .comt_write .inp_write .ly_tooltip  { font-size: 12px !important; }
+.comment .comt_write .inp_write.dis label  { font-size: 12px !important; }
+.comment .comt_write .btn_com  { font-size: 14px !important; }
+.friend_layer ul li .txt  { font-size: 13px !important; }
+.hash_layer .hash_info  { font-size: 12px !important; }
+.hash_layer ul li a  { font-size: 13px !important; }
+.hash_layer .box_hash .desc_hash  { font-size: 12px !important; }
+.hash_layer .box_hash .hash_movie  { font-size: 12px !important; }
+.gallery_paging  { font-size: 18px !important; }
+.gallery_viewer .img_wrap .in_txt  { font-size: 13px !important; }
+.gallery_viewer .img_wrap .in_txt .pic_info  { font-size: 13px !important; }
+.gallery_viewer .img_wrap .in_txt .feel  { font-size: 13px !important; }
+.gallery_viewer .img_wrap .in_txt .date  { font-size: 12px !important; }
+.differ_wrap .tit_differ  { font-size: 16px !important; }
+.feed_connect .tit_connect  { font-size: 20px !important; }
+.feed_connect .link_keyword .txt_keyword  { font-size: 14px !important; }
+.feed_relation .tit_relation  { font-size: 20px !important; }
+.feed_relation .wrap_relation .desc_relation  { font-size: 14px !important; }
+.feed_relation .wrap_relation .cont_empathy  { font-size: 14px !important; }
+.feed_relation .wrap_relation .txt_location  { font-size: 14px !important; }
+.feed_hothash .tit_hothash  { font-size: 20px !important; }
+.feed_hothash .link_hothash .tit_hash  { font-size: 18px !important; }
+.feed_place .tit_place  { font-size: 20px !important; }
+.feed_place .link_place .info_place  { font-size: 18px !important; }
+.feed_place .link_place .info_space  { font-size: 14px !important; }
+.feed_appview .txt_appview  { font-size: 20px !important; }
+.dim_ly .message .box_writing .tit_message  { font-size: 14px !important; }
+.dim_ly .message .box_writing .box_from .lab_from  { font-size: 13px !important; }
+.dim_ly .message .box_writing .box_from .tf_from  { font-size: 13px !important; }
+.dim_ly .message .box_writing .box_from .friends_choice .tag  { font-size: 12px !important; }
+.dim_ly .message .box_writing .box_from .from_ly .list_friends li a strong  { font-size: 13px !important; }
+.dim_ly .message .box_writing .box_write .lab_write  { font-size: 20px !important; }
+.dim_ly .message .list_photo li .photo  { font-size: 99px !important; }
+.dim_ly .message .box_media .cont_emoticon .list_emoticon .txt_info  { font-size: 12px !important; }
+.dim_ly .message .box_writing .box_from .friends_choice .ly_set .link_modify  { font-size: 13px !important; }
+.dim_ly .view .box_writing .box_from .friends_choice .ico_timer  { font-size: 30px !important; }
+.minipf_layer .user_profile  { font-size: 12px !important; }
+.minipf_layer .user_profile .tit_pfname  { font-size: 18px !important; }
+.wrap_map .feed .section .add_top .myid .pf_name  { font-size: 16px !important; }
+.wrap_map .info_map .inner_info .head_area .tit_area  { font-size: 28px !important; }
+.wrap_map .info_map .inner_info .head_area .desc_area  { font-size: 13px !important; }
+.wrap_map .info_map .inner_info .tab_area .list_tab li .link_tab  { font-size: 13px !important; }
+.wrap_map .info_map .inner_info .tab_area .list_tab li .link_tab span  { font-size: 22px !important; }
+.wrap_map .info_map .inner_info .list_area .box_cont .link_txt  { font-size: 20px !important; }
+.wrap_map .info_map .inner_info .list_area .box_cont .link_desc  { font-size: 15px !important; }
+.wrap_map .info_map .inner_info .list_area .list_place li .link_place .desc_place .tit_place  { font-size: 18px !important; }
+.wrap_map .info_map .inner_info .list_area .list_place li .link_place .desc_place .txt_place  { font-size: 13px !important; }
+.wrap_map .info_map .inner_info .list_area .list_place li .link_place .info_place  { font-size: 13px !important; }
+.wrap_map .info_map .inner_info .btn_write_map  { font-size: 16px !important; }
+.wrap_map .info_map .txt_none  { font-size: 16px !important; }
+.wrap_map .tooltip_map .desc_tooltip .desc_place .tit_place  { font-size: 23px !important; }
+.wrap_map .tooltip_map .desc_tooltip .desc_place .txt_place  { font-size: 13px !important; }
+.wrap_map .tooltip_map .desc_tooltip .friends_more .link_friends  { font-size: 13px !important; }
+.wrap_map .tooltip_newmap .desc_tooltip .desc_place .tit_place  { font-size: 23px !important; }
+.wrap_map .tooltip_newmap .desc_tooltip .desc_place .txt_place  { font-size: 13px !important; }
+.wrap_map .tooltip_newmap .desc_tooltip .friends_more .link_friends  { font-size: 13px !important; }
+.wrap_map .type_btn span .btn_view  { font-size: 16px !important; }
+.write .section .txt_edit  { font-size: 12px !important; }
+.write .inp_contents .editable_clone  { font-size: 14px !important; }
+.write .with_friend .inp label  { font-size: 12px !important; }
+.write .with_friend .inp input  { font-size: 12px !important; }
+.write .with_friend .tag  { font-size: 12px !important; }
+.write .friend_layer .list_friend .txt .link_txt  { font-size: 13px !important; }
+.write .with_map .inp label  { font-size: 12px !important; }
+.write .with_map .inp input  { font-size: 12px !important; }
+.write .with_map .tag  { font-size: 12px !important; }
+.write .with_map .place_layer .tit_place  { font-size: 13px !important; }
+.write .with_map .place_layer .txt_place  { font-size: 12px !important; }
+.write .with_map .place_layer .num_place  { font-size: 13px !important; }
+.write .section .place_layer2 .desc_hash  { font-size: 13px !important; }
+.write .section .place_layer2 .tit_place  { font-size: 13px !important; }
+.write .type li .link_menu  { font-size: 13px !important; }
+.write .upload .add  { font-size: 15px !important; }
+.write .preview .reload  { font-size: 13px !important; }
+.write .preview .reload .btn_wh  { font-size: 12px !important; }
+.write .preview .list_preview .txt_time  { font-size: 12px !important; }
+.write .preview .list_preview .cover_frame .btn_reload  { font-size: 13px !important; }
+.write .preview .list_preview .btn_caption  { font-size: 12px !important; }
+.write .preview .tooltip_wrap .tooltip  { font-size: 13px !important; }
+.write .dropzone  { font-size: 16px !important; }
+.write .preview .desc_layer .lab_desc  { font-size: 12px !important; }
+.write .preview .desc_layer .tf_desc  { font-size: 12px !important; }
+.write .preview .desc_layer .wrap_btn .btn_com  { font-size: 12px !important; }
+.write .media_wrap .tit_media .txt  { font-size: 15px !important; }
+.write .media_wrap .tit_media .txt_title  { font-size: 15px !important; }
+.write .media_wrap .tit_media .info  { font-size: 14px !important; }
+.write .music .tit_media .txt  { font-size: 13px !important; }
+.write .music .list_music .fl p  { font-size: 12px !important; }
+.write .music .list_music .fl .tit  { font-size: 14px !important; }
+.write .music .list_music .btn_com  { font-size: 12px !important; }
+.write .music .preview .txt p  { font-size: 13px !important; }
+.write .music .preview .txt .tit  { font-size: 15px !important; }
+.write .scrap .tit_media .txt label  { font-size: 13px !important; }
+.write .scrap .tit_media .txt input  { font-size: 15px !important; }
+.write .scrap .preview .inner_scrap .tit_scrap  { font-size: 17px !important; }
+.write .scrap .preview .inner_scrap .desc_scrap  { font-size: 13px !important; }
+.write .scrap .preview .inner_scrap .link_by  { font-size: 12px !important; }
+.write .scrap .preview.scrap_movie .desc_scrap  { font-size: 12px !important; }
+.write .scrap .preview.scrap_magazine .info .site  { font-size: 14px !important; }
+.write .scrap .preview.scrap_magazine .cate  { font-size: 13px !important; }
+.write .scrap .preview .inner_scrap .link_cont  { font-size: 13px !important; }
+.write .scrap_newssc .txt_newssc  { font-size: 12px !important; }
+.write .scrap_newssc .btn_com  { font-size: 12px !important; }
+.write .inp_footer .bn_open .inner_open  { font-size: 12px !important; }
+.write .tooltip  { font-size: 12px !important; }
+.write .section .open_layer li  { font-size: 12px !important; }
+.write .section .open_layer .txt_comfort  { font-size: 11px !important; }
+.write_share .inp_contents .tit_label  { font-size: 15px !important; }
+.write_share .inp_contents .editable, .write_share .inp_contents .editable_clone  { font-size: 15px !important; }
+.write_share .bn_group .btn_com  { font-size: 16px !important; }
+.write_share .with_friend .inp label  { font-size: 14px !important; }
+.write_share .with_friend .inp input  { font-size: 14px !important; }
+.share_popup .txt  { font-size: 15px !important; }
+.share_popup .btn_group .btn_com  { font-size: 16px !important; }
+.profile_modify .tit_modify  { font-size: 18px !important; }
+.profile_modify .list_profile dt  { font-size: 13px !important; }
+.profile_modify .lunar_inp .lab_lunar  { font-size: 13px !important; }
+.profile_modify .list_profile .profile_inp  { font-size: 13px !important; }
+.profile_modify .birthday_inp  { font-size: 13px !important; }
+.profile_modify .profile_inp .tf_profile  { font-size: 13px !important; }
+.profile_modify .list_profile .link_view  { font-size: 12px !important; }
+.profile_modify .list_info li  { font-size: 12px !important; }
+.set_type .set_inp .lab_set  { font-size: 12px !important; }
+.set_type .my_inp .lab_my  { font-size: 13px !important; }
+.set_type .my_inp .tf_txt  { font-size: 13px !important; }
+.set_letter .num_letter  { font-size: 12px !important; }
+.set_music .box_music .txt  { font-size: 12px !important; }
+.set_music .box_music .txt .tit  { font-size: 13px !important; }
+.set_music .list_play li .info_music  { font-size: 12px !important; }
+.set_music .list_play li .info_music .tit_music  { font-size: 13px !important; }
+.set_music .list_play li .btn_com  { font-size: 12px !important; }
+.set_music .txt_music  { font-size: 13px !important; }
+.account_modify .tit_modify  { font-size: 18px !important; }
+.account_modify .list_account dt  { font-size: 13px !important; }
+.account_modify .desc_profile .link_name  { font-size: 15px !important; }
+.account_modify .desc_profile .user_info  { font-size: 12px !important; }
+.account_modify .btn_area .btn_com  { font-size: 12px !important; }
+.account_modify .srch_area .tf_id  { font-size: 13px !important; }
+.account_modify .srch_area .lab_id  { font-size: 13px !important; }
+.account_modify .srch_area .btn_com  { font-size: 12px !important; }
+.account_modify .btn_make  { font-size: 12px !important; }
+.account_modify .txt_id  { font-size: 13px !important; }
+.account_modify .agree_inp  { font-size: 13px !important; }
+.account_modify .id_inp  { font-size: 12px !important; }
+.account_modify .info_agree  { font-size: 12px !important; }
+.account_modify .withdrawal_wrap .link_withdrawal  { font-size: 13px !important; }
+.account_modify .radio_inp  { font-size: 13px !important; }
+.account_modify .info_msg  { font-size: 12px !important; }
+.layer_profile_setting .tit_layer  { font-size: 14px !important; }
+.layer_profile_setting .desc_guide  { font-size: 12px !important; }
+.layer_profile_setting .list_guide  { font-size: 12px !important; }
+.popup_notice .popup_head .tit_notice  { font-size: 22px !important; }
+.popup_notice .list_notice .link_notice  { font-size: 14px !important; }
+.popup_notice .list_notice .desc_notice  { font-size: 14px !important; }
+.popup_notice .link_notice .txt_date  { font-size: 13px !important; }
+.popup_notice .on .tit_notice  { font-size: 16px !important; }
+.popup_notice .popup_foot  { font-size: 16px !important; }
+.cover_cont .cover_layer .link_layer  { font-size: 13px !important; }
+.cover_cont .desc_cover  { font-size: 14px !important; }
+.cover_cont .desc_cover .info_account  { font-size: 13px !important; }
+.cover_cont .desc_cover .link_tit  { font-size: 32px !important; }
+.cover_cont .menu_story .link_story  { font-size: 15px !important; }
+.cover_cont .info_btn .layer_phoneinfo li  { font-size: 13px !important; }
+.scoll .cover_cont .menu_story .link_story  { font-size: 14px !important; }
+.scoll .cover_cont .menu_story .btn_or  { font-size: 12px !important; }
+.story_widgets .tit_widgets  { font-size: 15px !important; }
+.story_widgets .subtit_info  { font-size: 13px !important; }
+.story_widgets .desc_info  { font-size: 17px !important; }
+.story_widgets .desc_info .txt_info  { font-size: 14px !important; }
+.story_widgets .desc_info .link_qna  { font-size: 13px !important; }
+.story_widgets .desc_info .ico_answer  { font-size: 11px !important; }
+.story_widgets .link_edit  { font-size: 13px !important; }
+.story_widgets .link_chview  { font-size: 13px !important; }
+.story_widgets .none_birthday  { font-size: 13px !important; }
+.story_widgets .desc_birthday  { font-size: 13px !important; }
+.story_widgets .emph_birthday  { font-size: 30px !important; }
+.story_widgets .link_birthday  { font-size: 14px !important; }
+.story_widgets .list_biography .desc_info  { font-size: 13px !important; }
+.widgets_info .subtit_info  { font-size: 13px !important; }
+.widgets_info .desc_info  { font-size: 20px !important; }
+.widgets_info .desc_info .txt_info  { font-size: 14px !important; }
+.widgets_info .link_edit  { font-size: 13px !important; }
+.story_widgets .txt_location  { font-size: 20px !important; }
+.story_widgets .link_location  { font-size: 20px !important; }
+.story_widgets .link_visited  { font-size: 13px !important; }
+.story_widgets .keyword_widgets .link_keyword  { font-size: 13px !important; }
+.story_widgets .desc_friend  { font-size: 13px !important; }
+.story_widgets .info_user .link_name  { font-size: 13px !important; }
+.story_widgets .info_user .txt_with  { font-size: 11px !important; }
+.story_widgets .list_friend.list_with .link_more  { font-size: 12px !important; }
+.story_widgets .report_wrap .txt_quest  { font-size: 12px !important; }
+.story_widgets .report_wrap .txt_answer  { font-size: 14px !important; }
+.story_widgets .report_wrap .link_more  { font-size: 13px !important; }
+.layer_story .inner_story_layer .total_storylayer  { font-size: 12px !important; }
+.music_collection .link_music  { font-size: 16px !important; }
+.music_collection .txt_artist  { font-size: 12px !important; }
+.story_desc .link_empathy  { font-size: 13px !important; }
+.image_collection .txt_data  { font-size: 28px !important; }
+.image_collection .link_desc  { font-size: 12px !important; }
+.warning_install .desc_install  { font-size: 12px !important; }
+.warning_install .link_install  { font-size: 12px !important; }
+.friend_collection .tit_collection  { font-size: 19px !important; }
+.friend_collection .tool_pub .btn_tool  { font-size: 13px !important; }
+.friend_collection .open_layer li  { font-size: 13px !important; }
+.friend_collection .other_layer .menu_li  { font-size: 13px !important; }
+.friend_collection .tab_story .link_menu  { font-size: 14px !important; }
+.friend_collection .tab_story .link_menu .txt_total  { font-size: 12px !important; }
+.friend_collection .desc_frinfo  { font-size: 15px !important; }
+.friend_collection .wrap_frinfo_v2 .desc_frinfo  { font-size: 13px !important; }
+.friend_collection .wrap_frinfo_v2 .link_toolmodify  { font-size: 15px !important; }
+.friend_collection .box_searchbar .lab_keyword  { font-size: 12px !important; }
+.friend_collection .box_searchbar .tf_keyword  { font-size: 12px !important; }
+.frinfo_wrap .tit_frinfo  { font-size: 13px !important; }
+.frinfo_wrap .txt_frinfo  { font-size: 12px !important; }
+.frinfo_wrap .txt_frinfo2  { font-size: 13px !important; }
+.frinfo_wrap .list_frinfo .desc_friend .txt_fr  { font-size: 12px !important; }
+.frinfo_wrap .list_frinfo .btn_group .btn_com  { font-size: 12px !important; }
+.profile_collection .tit_collection  { font-size: 19px !important; }
+.profile_collection .check_inp .lab_check  { font-size: 13px !important; }
+.profile_collection .radio_inp .lab_radio  { font-size: 13px !important; }
+.profile_collection .list_profile .btn_group .btn_profile  { font-size: 12px !important; }
+.profile_collection .list_profile .btn_group .txt_bar  { font-size: 12px !important; }
+.profile_collection .box_music .txt_nomusic  { font-size: 12px !important; }
+.profile_collection .list_addschool .link_menu  { font-size: 12px !important; }
+.profile_collection .add_layer .tit_add  { font-size: 15px !important; }
+.profile_collection .add_layer .profile_inp .lab_job  { font-size: 13px !important; }
+.profile_collection .add_layer .profile_inp .lab_job_v2  { font-size: 14px !important; }
+.profile_collection .add_layer .add_job2 .txt_bar  { font-size: 13px !important; }
+.profile_collection .add_layer .btn_group .btn_com  { font-size: 12px !important; }
+.profile_collection .add_layer .year_school .txt_bar  { font-size: 13px !important; }
+.profile_collection .add_layer .year_school .profile_inp .tf_job  { font-size: 13px !important; }
+.profile_collection .addition_layer .tit_job  { font-size: 13px !important; }
+.profile_collection .addition_layer .txt_job  { font-size: 12px !important; }
+.profile_collection .addition_layer .link_home  { font-size: 12px !important; }
+.profile_collection .opt_comm  { font-size: 13px !important; }
+.profile_collection .opt_comm .list_opt  { font-size: 12px !important; }
+.profile_collection .modify_info .lab_date  { font-size: 13px !important; }
+.profile_collection .modify_info .profile_inp .lab_profile  { font-size: 13px !important; }
+.profile_collection .modify_info .profile_inp .tf_profile  { font-size: 13px !important; }
+.profile_collection .modify_info .txt_tip  { font-size: 12px !important; }
+.profile_collection .modify_info .box_music2 .tit_play  { font-size: 14px !important; }
+.profile_collection .modify_info .box_music2 .txt_play  { font-size: 13px !important; }
+.profile_collection .modify_info .box_music2 .txt_nomusic  { font-size: 13px !important; }
+.profile_collection .list_music .list_play .info_music  { font-size: 12px !important; }
+.profile_collection .list_music .list_play .tit_music  { font-size: 13px !important; }
+.profile_collection .list_music .list_play .btn_com  { font-size: 12px !important; }
+.profile_collection .my_inp .lab_my  { font-size: 13px !important; }
+.profile_collection .my_inp .tf_txt  { font-size: 13px !important; }
+.profile_collection .my_inp .num_letter  { font-size: 12px !important; }
+.profile_collection .modify_info .modify_btn .btn_com  { font-size: 12px !important; }
+.profile_collection .modifyall_btn .btn_com  { font-size: 14px !important; }
+.profile_collection .gender_opentool .bn_open .inner_open  { font-size: 12px !important; }
+.profile_collection .gender_opentool .txt_opentool  { font-size: 11px !important; }
+.profile_collection .gender_opentool .open_layer li  { font-size: 12px !important; }
+.profile_collection .gender_opentool .open_layer .btn_option  { font-size: 12px !important; }
+.get_collection .tit_collection  { font-size: 19px !important; }
+.get_collection .subtit_collection  { font-size: 12px !important; }
+.get_collection .list_get .tit_get  { font-size: 14px !important; }
+.get_collection .list_get .tit_get .txt_source  { font-size: 12px !important; }
+.get_collection .list_get .btn_group .txt_bar  { font-size: 12px !important; }
+.get_collection .list_get .btn_get  { font-size: 12px !important; }
+.get_collection .txt_noquest  { font-size: 14px !important; }
+.get_collection .txt_badge  { font-size: 12px !important; }
+.get_collection .answer_inp .lab_answer  { font-size: 13px !important; }
+.get_collection .answer_inp .inp_answer  { font-size: 14px !important; }
+.get_collection .answer_inp .txt_copy  { font-size: 14px !important; }
+.get_collection .answer_inp .num_letter  { font-size: 12px !important; }
+.get_collection .desc_answer .btn_group .txt_open  { font-size: 11px !important; }
+.get_collection .desc_answer .bn_open .inner_open  { font-size: 12px !important; }
+.get_collection .btn_more  { font-size: 12px !important; }
+.get_collection_v2 .list_get .tit_get  { font-size: 12px !important; }
+.get_collection_v2 .txt_answer  { font-size: 14px !important; }
+.get_collection .quest_recomm .list_quest .btn_modifygroup .btn_get  { font-size: 12px !important; }
+.get_collection .quest_recomm .list_quest .btn_modifygroup .txt_bar  { font-size: 12px !important; }
+.get_collection .desc_answer .open_layer li  { font-size: 12px !important; }
+.get_collection .desc_answer .open_layer .btn_option  { font-size: 12px !important; }
+.quest_collection .tit_collection  { font-size: 19px !important; }
+.quest_collection .quest_wrap .btn_com  { font-size: 12px !important; }
+.quest_collection .quest_inp .lab_quest  { font-size: 13px !important; }
+.quest_collection .quest_inp .tf_quest  { font-size: 13px !important; }
+.quest_collection .quest_inp .num_letter  { font-size: 12px !important; }
+.quest_recomm .tit_quest  { font-size: 12px !important; }
+.quest_recomm .btn_com  { font-size: 12px !important; }
+.channel_info .tit_sub  { font-size: 12px !important; }
+.channel_info .list_profile .tit_info  { font-size: 12px !important; }
+.desc_channelinfo  { font-size: 12px !important; }
+.frinfo_wrap .list_frinfo .txt_total  { font-size: 12px !important; }
+.loading_box .loading_bar .bg_bar .now_time  { font-size: 12px !important; }
+.loading_box .info_time  { font-size: 12px !important; }
+.story_comfort_layer .lab_search  { font-size: 12px !important; }
+.story_comfort_layer .inp_search  { font-size: 12px !important; }
+.story_comfort_layer .box_choice .btn_re  { font-size: 12px !important; }
+.story_comfort_layer .box_head .lab_check  { font-size: 12px !important; }
+.story_comfort_layer .list_comfort .lab_check  { font-size: 13px !important; }
+.story_comfort_layer .choice_btn .btn_com  { font-size: 16px !important; }
+.story_comfort_layer .box_choice .choice_head  { font-size: 12px !important; }
+.story_layer .txt_noshare  { font-size: 12px !important; }
+.section .tit_channel  { font-size: 18px !important; }
+.comment_type2 .btn_sort  { font-size: 12px !important; }
+.comment_type2 .list_view .link_view  { font-size: 12px !important; }
+.section_bundle .action_graph .txt_action  { font-size: 13px !important; }
+.section_bundle .btn_more  { font-size: 13px !important; }
+.section_bundle .case_del, .section_bundle .case_lock, .section_bundle .case_report, .section_bundle .link_change  { font-size: 12px !important; }
+.fd_cont .movie_wrap .desc  { font-size: 13px !important; }
+.today_storyteller .info_profile .txt_profile  { font-size: 15px !important; }
+.tab_storyteller .link_tab  { font-size: 15px !important; }
+.tab_fixed .opt_tab .link_selected  { font-size: 17px !important; }
+.tab_fixed .opt_tab .list_opt .link_option  { font-size: 13px !important; }
+.list_storyteller .box_item .thumb_item .tit_item  { font-size: 20px !important; }
+.list_storyteller .desc_item .link_user  { font-size: 15px !important; }
+.list_storyteller .desc_item .info_append .txt_info  { font-size: 12px !important; }
+.list_storyteller .desc_item .btn_com  { font-size: 12px !important; }
+.list_storyteller_type1 .desc_item .link_user  { font-size: 14px !important; }
+.feed_mystory .tit_wrap .tit_feed  { font-size: 18px !important; }
+.feed_mystory .tool_pub .btn_tool  { font-size: 13px !important; }
+.feed_mystory .open_layer li  { font-size: 13px !important; }
+.wrap_itemstory .item_story .link_story .tit_story  { font-size: 15px !important; }
+.wrap_itemstory .item_story .link_story .txt_story  { font-size: 15px !important; }
+.wrap_itemstory .item_story .link_belong .txt_belong  { font-size: 13px !important; }
+.wrap_itemstory .item_story .txt_blind  { font-size: 15px !important; }
+.wrap_itemstory .item_story .btn_action  { font-size: 12px !important; }
+.add_top .btn_require  { font-size: 12px !important; }
+.story_comfort_layer .tit_comfort  { font-size: 12px !important; }
+.story_comfort_layer .choice_head .lab_check  { font-size: 12px !important; }
+.story_comfort_layer .box_choice .ly_tooltip  { font-size: 11px !important; }
+.story_comfort_layer .friend_history .tit_history  { font-size: 12px !important; }
+.story_comfort_layer .list_history .pf_txt .txt_name  { font-size: 12px !important; }
+.story_comfort_layer .txt_comfort  { font-size: 14px !important; }
+.story_comfort_layer .choice_comfort .txt_comfort  { font-size: 12px !important; }
+.story_comfort_layer .search_on .wrap_comfort .txt_comfort  { font-size: 12px !important; }
+.write .with_map .place_layer .desc_place .link_hash  { font-size: 13px !important; }
+.pswp__error-msg  { font-size: 14px !important; }
+.date_collection .box_cell .top_wrap .txt_year  { font-size: 13px !important; }
+.date_collection .box_cell .top_wrap .txt_month  { font-size: 32px !important; }
+.date_collection .box_cell .total_story  { font-size: 13px !important; }
+.date_collection .box_cell .link_thumb .txt_date  { font-size: 13px !important; }
+.date_collection .box_cell .link_txt  { font-size: 15px !important; }
+.date_collection .box_cell .link_txt .txt_date  { font-size: 12px !important; }
+.date_collection .box_cell .btn_more  { font-size: 15px !important; }
+.feature_feed .box_feed .tit_feed  { font-size: 22px !important; }
+.feature_feed .box_feed .txt_feed  { font-size: 16px !important; }
+.feature_feed .btn_feed  { font-size: 16px !important; }
+.write .tooltip.v3  { font-size: 14px !important; }
+.write .tooltip.v3 .tit_tip  { font-size: 17px !important; }
+.comment .list .comt_write .friend_layer ul li .txt  { font-size: 13px !important; }
+.section.recommend .list_buddy .pf_txt  { font-size: 12px !important; }
+.section.recommend .list_buddy .pf_txt .tit  { font-size: 16px !important; }
+.story_buddy_layer .list_people .tit_userinfo  { font-size: 16px !important; }
+.story_buddy_layer .list_people .txt_userinfo  { font-size: 12px !important; }
+.box_feedback .tit_feedback  { font-size: 13px !important; }
+.hash .emph_tag  { font-size: 13px !important; }
+.hash .list_tag .link_tag  { font-size: 13px !important; }
+.wrap_recomm .img_wrap .link_txt  { font-size: 15px !important; }
+.wrap_recomm .img_wrap .txt_date  { font-size: 12px !important; }
+.wrap_recomm .img_wrap .txt_hash  { font-size: 18px !important; }
+.wrap_recomm .img_wrap .emph_location  { font-size: 16px !important; }
+.wrap_recomm .img_wrap .txt_distance  { font-size: 13px !important; }
+.wrap_recomm .img_wrap .cont_empathy  { font-size: 13px !important; }
+.error_wrap_v3 .info_error .desc_error  { font-size: 16px !important; }
+.story_recomms .recomm_story .tit_recomm  { font-size: 22px !important; }
+.story_recomms .link_morestory  { font-size: 18px !important; }
+.recomm_hotstory .list_hotstory .user_pf .link_pf  { font-size: 16px !important; }
+.recomm_hotstory .list_hotstory .desc_hotstory .link_txt  { font-size: 16px !important; }
+.recomm_hotstory .list_hotstory .cont_empathy .link_empathy  { font-size: 14px !important; }
+.recomm_popular .hash_popular .link_hash  { font-size: 24px !important; }
+.recomm_popular .list_popular .desc_popular .link_txt  { font-size: 16px !important; }
+.recomm_popular .list_popular .user_pf .link_pf  { font-size: 14px !important; }
+.recomm_popular .link_keyword .txt_keyword  { font-size: 18px !important; }
+.footer_recomm .list_policy .link_policy  { font-size: 12px !important; }
+.footer_recomm .list_app .link_app  { font-size: 12px !important; }
+.footer_recomm .txt_copyright  { font-size: 12px !important; }
+.info_error .tit_error  { font-size: 36px !important; }
+.info_error .desc_error  { font-size: 15px !important; }
+.info_error .txt_error  { font-size: 14px !important; }
+.info_error .btn_group  { font-size: 14px !important; }
+.story_banner .cont_banner .tit_banner  { font-size: 17px !important; }
+.story_banner_sosocmt .name_sosocmt  { font-size: 12px !important; }
+.story_banner_sosocmt .btn_like  { font-size: 12px !important; }
+.edit_layer .emph_effect  { font-size: 14px !important; }
+.edit_layer .wrap_btn .btn_com  { font-size: 13px !important; }
+.section_birth .tit_birth  { font-size: 15px !important; }
+.section_birth .link_name  { font-size: 17px !important; }
+.section_birth .txt_friend  { font-size: 13px !important; }
+.feed_sosohan .desc_sosohan  { font-size: 13px !important; }
+.feed_sosohan .desc_sosostory .link_sosohan  { font-size: 13px !important; }
+.feed_sosohan .desc_sosostory .txt_user  { font-size: 13px !important; }
+.feed_fortune .tit_fortune  { font-size: 22px !important; }
+.feed_fortune .txt_fortune  { font-size: 14px !important; }
+.feed_fortune .btn_fortune  { font-size: 13px !important; }
+.feed_fortune .fortune_ing  { font-size: 14px !important; }
+.feel_group .txt_advice  { font-size: 12px !important; }
+.story_inflow .tit_inflow  { font-size: 35px !important; }
+.story_inflow.none_rnb .tit_inflow  { font-size: 43px !important; }
+.story_inflow .head_inflow .add_top .pf_name  { font-size: 25px !important; }
+.story_inflow .inflow_type2 .add_top .pf_name  { font-size: 17px !important; }
+.story_inflow.none_rnb .head_inflow .add_top .pf_name  { font-size: 30px !important; }
+.story_inflow.none_rnb .inflow_type2 .add_top .pf_name  { font-size: 17px !important; }
+.story_inflow .add_top .time  { font-size: 13px !important; }
+.story_inflow .fd_cont .txt_wrap  { font-size: 15px !important; }
+.story_inflow .fd_cont .place  { font-size: 15px !important; }
+.story_inflow .fd_cont .share_wrap .case_del, .story_inflow .fd_cont .share_wrap .case_lock, .story_inflow .fd_cont .share_wrap .case_report, .story_inflow .fd_cont .share_wrap .link_change  { font-size: 15px !important; }
+.story_inflow .fd_cont .scrap_wrap .link_scrap .tit_scrap  { font-size: 18px !important; }
+.story_inflow .fd_cont .scrap_wrap .link_scrap .txt_scrap  { font-size: 15px !important; }
+.story_inflow .fd_cont .scrap_image .tit_scrap  { font-size: 18px !important; }
+.story_inflow .fd_cont .scrap_image .txt_scrap  { font-size: 15px !important; }
+.story_inflow .fd_cont .movie_wrap .movie_txt .tit_movie  { font-size: 18px !important; }
+.story_inflow .fd_cont .movie_wrap .movie_txt .txt_movie  { font-size: 15px !important; }
+.story_inflow .comment .count_group  { font-size: 15px !important; }
+.story_inflow .comment_type2 .btn_sort  { font-size: 15px !important; }
+.story_inflow .comment .list>li .txt  { font-size: 15px !important; }
+.story_inflow .comment .list>li .txt p .name  { font-size: 16px !important; }
+.story_inflow .comment .list>li .txt p .time  { font-size: 14px !important; }
+.story_inflow .comment .list>li .txt .btn_like, .story_inflow .comment .list>li .txt .data_like  { font-size: 14px !important; }
+.story_inflow .comment .more  { font-size: 15px !important; }
+.story_inflow .comment_type2 .more  { font-size: 14px !important; }
+.story_inflow .comment .comt_write .inp_write .txt_copy  { font-size: 15px !important; }
+.story_inflow .comment .comt_write .inp_write textarea  { font-size: 15px !important; }
+.story_inflow .comment .comt_write .inp_write label  { font-size: 15px !important; }
+.story_inflow .comment .comt_write .btn_com  { font-size: 15px !important; }
+.story_inflow .differ_wrap .tit_differ  { font-size: 17px !important; }
+.story_inflow .tit_other  { font-size: 17px !important; }
+.story_inflow .list_other .desc  { font-size: 15px !important; }
+.story_inflow .other_story .btn_entire  { font-size: 14px !important; }
+.story_inflow .info_profile .name_profile  { font-size: 25px !important; }
+.story_inflow .info_profile .txt_profile  { font-size: 13px !important; }
+.story_inflow .info_profile .txt_follow  { font-size: 13px !important; }
+.story_inflow .feed_relation .tit_relation  { font-size: 13px !important; }
+.story_inflow .feed_relation .wrap_relation .desc_relation  { font-size: 15px !important; }
+.story_inflow .slide_recomm .tit_recomm  { font-size: 16px !important; }
+.story_inflow .list_recomm .link_recomm  { font-size: 17px !important; }
+.story_inflow .list_recomm .data_story  { font-size: 13px !important; }
+.slide_recomm .list_recomm .txt_category  { font-size: 13px !important; }
+.slide_recomm .list_recomm .tit_teller  { font-size: 24px !important; }
+.slide_recomm .desc_story .name_user  { font-size: 16px !important; }
+.differ_similar .list_differ .info_similar  { font-size: 12px !important; }
+.differ_similar .txt_ad  { font-size: 12px !important; }
+.profile_collection .list_profile .info_txt  { font-size: 12px !important; }
+.agree_check .tit_agree  { font-size: 12px !important; }
+.__tablet__ .tit_show, .desktop_s .tit_show  { font-size: 15px !important; }
+.__tablet__ .wrap_map .info_map .inner_info .tab_area .opt_tab .btn_opt, .wrap_map.tablet .info_map .inner_info .tab_area .opt_tab .btn_opt  { font-size: 13px !important; }
+.__tablet__ .wrap_map .info_map .inner_info .tab_area .opt_tab .btn_opt span, .wrap_map.tablet .info_map .inner_info .tab_area .opt_tab .btn_opt span  { font-size: 13px !important; }
+.__tablet__ .wrap_map .info_map .inner_info .tab_area .list_tab li .link_tab span, .wrap_map.tablet .info_map .inner_info .tab_area .list_tab li .link_tab span  { font-size: 13px !important; }
+.__tablet__ .wrap_map .info_map .inner_info .head_area .tit_area, .wrap_map.tablet .info_map .inner_info .head_area .tit_area  { font-size: 24px !important; }
+.wrap_map .feed .fd_cont .share_wrap_v4 .add_top .myid .pf_name  { font-size: 15px !important; }
+.fd_cont .share_wrap_v4 .time_head  { font-size: 14px !important; }
+.story_widgets .calendar_top .tit_year  { font-size: 14px !important; }
+.story_widgets .list_calendar .btn_month  { font-size: 14px !important; }
+.hash_layer .link_more  { font-size: 12px !important; }
+.load_match  { font-size: 14px !important; }
+.dim_ly .match .match_list em  { font-size: 12px !important; }
+.emoticon_keyboard  { font-size: 14px !important; }
+.emoticon_keyboard button  { font-size: 14px !important; }
+.emoticon_keyboard .emt_il .emt_il_empty  { font-size: 13px !important; }
+.emoticon_keyboard .emt_agree .emt_a_tit_agree, .emoticon_keyboard .emt_agree .emt_a_tit_expire  { font-size: 13px !important; }
+.emoticon_keyboard .emt_connect .emt_c_title  { font-size: 13px !important; }
+.emoticon_keyboard .emt_guide .emt_g_title  { font-size: 18px !important; }
+.mejs-container .mejs-controls div  { font-size: 11px !important; }
+.mejs-container .mejs-controls .mejs-time span  { font-size: 11px !important; }
+.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total  { font-size: 1px !important; }
+.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-current  { font-size: 1px !important; }
+.mejs-controls .mejs-captions-button .mejs-captions-selector ul li label  { font-size: 10px !important; }
+.mejs-controls .mejs-captions-button .mejs-captions-translations  { font-size: 10px !important; }
+.mejs-container.mejs-kakao .mejs-controls .mejs-currenttime-container  { font-size: 12px !important; }
+.story_business_layer .layer_body .desc_guide  { font-size: 12px !important; }
+.story_business_layer .layer_body .link_guide  { font-size: 12px !important; }
+.story_business_layer .layer_body .tit_business  { font-size: 13px !important; }
+.story_business_layer .profile_inp .tf_business  { font-size: 13px !important; }
+.story_business_layer .profile_inp .lab_business  { font-size: 13px !important; }
+.story_business_layer .radio_inp  { font-size: 13px !important; }
+.story_business_layer .agree_inp  { font-size: 12px !important; }
+.story_business_layer .desc_agree  { font-size: 11px !important; }
+.story_business_layer .txt_agree  { font-size: 11px !important; }
+.business_collection .tit_collection  { font-size: 19px !important; }
+.business_collection .list_dl dt  { font-size: 12px !important; }
+.business_collection .txt_business  { font-size: 12px !important; }
+.wrap_swipe .info_swipe  { font-size: 12px !important; }
+.box_notice .txt_notice  { font-size: 14px !important; }
