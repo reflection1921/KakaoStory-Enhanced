@@ -31,11 +31,11 @@
                                 <label for="enhancedDarkStyleDiscord">Discord Dark</label>
                             </div>
                             <div class="radio_inp">
-                                <input type="radio" name="enhancedSelectDarkStyle" class="inp_radio _friendListExposure" id="enhancedDarkStyleRed" value="red">
+                                <input type="radio" name="enhancedSelectDarkStyle" class="inp_radio _friendListExposure" id="enhancedDarkStyleRed" value="darkred">
                                 <label for="enhancedDarkStyleRed">Dark Red</label>
                             </div>
                             <div class="radio_inp">
-                                <input type="radio" name="enhancedSelectDarkStyle" class="inp_radio _friendListExposure" id="enhancedDarkStyleBlue" value="blue">
+                                <input type="radio" name="enhancedSelectDarkStyle" class="inp_radio _friendListExposure" id="enhancedDarkStyleBlue" value="darkblue">
                                 <label for="enhancedDarkStyleBlue">Dark Blue</label>
                             </div>
                         </div>
@@ -44,12 +44,12 @@
                     <dd>
                         <div class="option_msg">
                             <div class="radio_inp">
-                                <input type="radio" name="enhancedSelectDiscordMention" class="inp_radio _friendListExposure" id="enhancedDiscordMentionEnable" value="discord">
-                                <label for="enhancedDarkStyleDiscord">Discord Dark</label>
+                                <input type="radio" name="enhancedSelectDiscordMention" class="inp_radio _friendListExposure" id="enhancedDiscordMentionEnable" value="true">
+                                <label for="enhancedDiscordMentionEnable">사용</label>
                             </div>
                             <div class="radio_inp">
-                                <input type="radio" name="enhancedSelectDiscordMention" class="inp_radio _friendListExposure" id="enhancedDiscordMentionDisable" value="red">
-                                <label for="enhancedDarkStyleRed">Dark Red</label>
+                                <input type="radio" name="enhancedSelectDiscordMention" class="inp_radio _friendListExposure" id="enhancedDiscordMentionDisable" value="false">
+                                <label for="enhancedDiscordMentionDisable">사용안함</label>
                             </div>
                         </div>
                         ※디스코드의 Mention 기능처럼 누군가 댓글에서 자신을 언급했다면, 하이라이팅 되어 표시됩니다.<br><br>
@@ -63,23 +63,228 @@
                         <div class="option_msg">
                             <div class="radio_inp">
                                 <input type="radio" name="enhancedSelectFont" class="inp_radio _friendListExposure" id="enhancedFontNoto" value="Noto Sans KR">
-                                <label for="enhancedDarkStyleDiscord">Noto Sans</label>
+                                <label for="enhancedFontNoto">Noto Sans</label>
                             </div>
                             <div class="radio_inp">
                                 <input type="radio" name="enhancedSelectFont" class="inp_radio _friendListExposure" id="enhancedFontNanum" value="나눔고딕">
-                                <label for="enhancedDarkStyleRed">나눔고딕</label>
+                                <label for="enhancedFontNanum">나눔고딕</label>
                             </div>
                             <div class="radio_inp">
                                 <input type="radio" name="enhancedSelectFont" class="inp_radio _friendListExposure" id="enhancedFontCustom" value="custom">
-                                <label for="enhancedDarkStyleBlue">사용자 설정</label>
+                                <label for="enhancedFontCustom">사용자 설정</label>
                             </div>
                         </div>
                     </dd>
+                    <dt>폰트명</dt>
+                    <dd>
+                        <input type="text" class="tf_profile _input _ksdark_cls" id="enhancedTxtFontName" style="border: 0px; font-size: 13px; width: 316px; height: 16px; padding: 6px 8px;">
+                    </dd>
+                    <dt>폰트 CSS URL</dt>
+                    <dd>
+                        <input type="text" class="tf_profile _input _ksdark_cls" id="enhancedTxtFontCSS" value="" style="border: 0px; font-size: 13px; width: 316px; height: 16px; padding: 6px 8px;">
+
+                    </dd>
                     <dt>폰트 크기</dt>
                     <dd>
-                        <input type="text" class="tf_profile _input _ksdark_cls" id="ksdark_font_size_add" style="border: 0px; font-size: 13px; width: 30px; height: 16px; padding: 6px 8px;"> px 추가</input>
+                        <input type="text" class="tf_profile _input _ksdark_cls" id="enhancedTxtFontSize" style="border: 0px; font-size: 13px; width: 30px; height: 16px; padding: 6px 8px;"> px 추가</input>
+                    </dd>
+                    <dt>TIP</dt>
+                    <dd>
+                        폰트 설정 변경 시, 아래 확인 버튼을 클릭해야 적용됩니다.<br><br>
+                        사용자의 PC에 설치된 폰트도 사용할 수 있습니다.
                     </dd>
                 </dl>
+                <strong class="subtit_modify">알림 설정</strong>
+                <dl class="list_account">
+                    <dt>알림 사용</dt>
+                    <dd>
+                        <div class="option_msg">
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectNotifyUse" class="inp_radio _friendListExposure" id="enhancedNotifyEnable" value="true">
+                                <label for="enhancedNotifyEnable">사용</label>
+                            </div>
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectNotifyUse" class="inp_radio _friendListExposure" id="enhancedNotifyDisable" value="false">
+                                <label for="enhancedNotifyDisable">사용안함</label>
+                            </div>
+                        </div>
+                    </dd>
+                    <dt>알림 사운드</dt>
+                    <dd>
+                        <div class="option_msg">
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectNotifySoundUse" class="inp_radio _friendListExposure" id="enhancedNotifySoundEnable" value="true">
+                                <label for="enhancedNotifySoundEnable">켜기</label>
+                            </div>
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectNotifySoundUse" class="inp_radio _friendListExposure" id="enhancedNotifySoundDisable" value="false">
+                                <label for="enhancedNotifySoundDisable">끄기</label>
+                            </div>
+                        </div>
+                    </dd>
+                    <dt>알림 체크 주기</dt>
+                    <dd>
+                        <input type="text" class="tf_profile _input _ksdark_cls" id="enhancedTxtNotifyTime" style="border: 0px; font-size: 13px; width: 30px; height: 16px; padding: 6px 8px;"> 초 마다 로드</input>
+                        <br>※알림 체크 주기는 20초 또는 그 이상을 권장합니다.
+                    </dd>
+                </dl>
+                <strong class="subtit_modify">차단 설정</strong>
+                <dl class="list_account">
+                    <dt>강화된 차단</dt>
+                    <dd>
+                        <div class="option_msg">
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectBlockUser" class="inp_radio _friendListExposure" id="enhancedBlockUserEnable" value="true">
+                                <label for="enhancedBlockUserEnable">사용</label>
+                            </div>
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectBlockUser" class="inp_radio _friendListExposure" id="enhancedBlockUserDisable" value="false">
+                                <label for="enhancedBlockUserDisable">사용안함</label>
+                            </div>
+                        </div>
+                    </dd>
+                    <dt>문자열 차단</dt>
+                    <dd>
+                        <div class="btn_area">
+                            <a href="#" class="btn_com btn_wh _enhanced_green_btn" id="enhancedBtnBlockString">
+                                <em>차단할 문자열 등록</em>
+                            </a>
+                        </div>
+                    </dd>
+                    <dt>TIP</dt>
+                    <dd>
+                        강화된 차단을 사용하면 차단한 사용자의 댓글을 안보이게 가려줍니다.<br><br>
+                        문자열 차단을 사용하면 등록한 문자열이 있는 글을 안보이게 가려줍니다.
+                    </dd>
+                </dl>
+                <strong class="subtit_modify">기타 설정</strong>
+                <dl class="list_account">
+                    <dt>흑역사 숨기기</dt>
+                    <dd>
+                        <div class="option_msg">
+                            <div class="radio_inp">
+                                <input type="radio" name="enhnacnedSelectHideMemorize" class="inp_radio _friendListExposure" id="enhancedHideMemorizeEnable" value="true">
+                                <label for="enhancedHideMemorizeEnable">사용</label>
+                            </div>
+                            <div class="radio_inp">
+                                <input type="radio" name="enhnacnedSelectHideMemorize" class="inp_radio _friendListExposure" id="enhancedHideMemorizeDisable" value="false">
+                                <label for="enhancedHideMemorizeDisable">사용안함</label>
+                            </div>
+                        </div>
+                        ※해당 기능을 사용하면 "과거의 오늘 있었던 추억들"이 보이지 않게됩니다.
+                    </dd>
+                    <dt>텔러/채널 버튼</dt>
+                    <dd>
+                        <div class="option_msg">
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectHideChannelButton" class="inp_radio _friendListExposure" id="enhancedHideChannelButtonEnable" value="true">
+                                <label for="enhancedHideChannelButtonEnable">숨기기</label>
+                            </div>
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectHideChannelButton" class="inp_radio _friendListExposure" id="enhancedHideChannelButtonDisable" value="false">
+                                <label for="enhancedHideChannelButtonDisable">보이기</label>
+                            </div>
+                        </div>
+                        ※해당 기능을 사용하면 "과거의 오늘 있었던 추억들"이 보이지 않게됩니다.
+                    </dd>
+                    <dt>이모티콘 크기</dt>
+                    <dd>
+                        <div class="option_msg">
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectEmoticonSize" class="inp_radio _friendListExposure" id="enhancedEmoticonSizeSmall" value="small">
+                                <label for="enhancedEmoticonSizeSmall">기본</label>
+                            </div>
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectEmoticonSize" class="inp_radio _friendListExposure" id="enhancedEmoticonSizeMiddle" value="middle">
+                                <label for="enhancedEmoticonSizeMiddle">중(96px)</label>
+                            </div>
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectEmoticonSize" class="inp_radio _friendListExposure" id="enhancedEmoticonSizeBig" value="big">
+                                <label for="enhancedEmoticonSizeBig">대(128px)</label>
+                            </div>
+                        </div>
+                        ※기본 크기는 댓글은 48px, 글은 84px로 다르게 표시됩니다.
+                    </dd>
+                    <dt>동영상 다운로드</dt>
+                    <dd>
+                        <div class="option_msg">
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectDownloadVideo" class="inp_radio _friendListExposure" id="enhancedDownloadVideoEnable" value="true">
+                                <label for="enhancedDownloadVideoEnable">활성화</label>
+                            </div>
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectDownloadVideo" class="inp_radio _friendListExposure" id="enhancedDownloadVideoDisable" value="false">
+                                <label for="enhancedDownloadVideoDisable">비활성화</label>
+                            </div>
+                        </div>
+                        ※해당 기능을 사용하시면 동영상에 다운로드 버튼이 나타납니다.
+                    </dd>
+                </dl>
+                <strong class="subtit_modify">부가 기능</strong>
+                <dl class="list_account">
+                    <dt>친구목록 백업</dt>
+                    <dd>
+                        <div class="btn_area">
+                            <a style="cursor: pointer" class="btn_com btn_wh _enhanced_green_btn" id="enhancedBtnBackupFriendsList">
+                                <em>백업 데이터 저장</em>
+                            </a>
+                        </div>
+                        ※해당 기능은 친구목록을 텍스트파일로 백업해주는 기능입니다.
+                    </dd>
+                    <dt>스토리 클리너</dt>
+                    <dd>
+                        <div class="btn_area">
+                            <a href="http://chihaya.kr/scleaner/" class="btn_com btn_wh _enhanced_green_btn" id="enhancedBtnBlockString" target="_blank">
+                                <em>바로가기</em>
+                            </a>
+                        </div>
+                        ※카카오스토리에 업로드한 게시글을 한번에 삭제하고 싶다면 스토리 클리너를 사용해보세요!
+                    </dd>
+                    <dt>스토리 다운로더</dt>
+                    <dd>
+                        <div class="btn_area">
+                            <a href="/_jYmvy/eKt4Mis15Y0" class="btn_com btn_wh _enhanced_green_btn close_btn_cls" data-id="_jYmvy" data-profile-popup="_jYmvy">
+                                <em>다운로드</em>
+                            </a>
+                        </div>
+                        ※카카오스토리에 업로드한 게시글, 주고받은 댓글, 쪽지, 사진, 동영상 등을 백업하고 싶다면? 스토리 다운로더를 사용해보세요!
+                    </dd>
+                </dl>
+                <strong class="subtit_modify">버전 정보</strong>
+                <dl class="list_account">
+                    <dt>' Enhanced<br>Version</dt>
+                    <dd>
+                        <div id="enhancedCurrentVersion"></div><br><div id="enhancedLatestVersion">0.381212121</div>
+                        <div class="btn_area">
+                            <a href="#" class="btn_com btn_wh _enhanced_green_btn" style="display: none;" id="enhancedBtnUpdate">
+                                <em>업데이트</em>
+                            </a>
+                            <a style="cursor: pointer" class="btn_com btn_wh _enhanced_green_btn" id="enhancedBtnUpdateInfo">
+                                <em>업데이트 정보 보기</em>
+                            </a>
+                        </div>
+                    </dd>
+                    <dt>다크테마 CSS<br>업데이트 일자</dt>
+                    <dd>
+                        <div id="enhancedCSSVersion"></div>
+                    </dd>
+                    <dt>개발</dt>
+                    <dd>
+                        <a href="/_jYmvy" data-id="_jYmvy" data-profile-popup="_jYmvy" style="color: #00b5ff" class="_decoratedProfile close_btn_cls" data-kant-id="516">Reflection</a>
+                        , 
+                        <a href="/ldc6974" data-id="ldc6974" data-profile-popup="ldc6974" style="color: #00b5ff" class="_decoratedProfile close_btn_cls">박종우</a>
+                    </dd>
+                    <dt>도움 주신 분들</dt>
+                    <dd>
+                        <a href="/_2ZQlS7" data-id="_2ZQlS7" data-profile-popup="_2ZQlS7" style="color: #00b5ff" class="_decoratedProfile close_btn_cls">AppleWebKit</a>
+                        , 사일
+                    </dd>
+                    <dt>' Enhanced 소개<br>게시글</dt>
+                    <dd>
+                        <a href="/_jYmvy/IJRIyFQOVWA" data-id="_jYmvy" data-profile-popup="_jYmvy" style="color: #00b5ff" class="_decoratedProfile close_btn_cls">' Enhanced 정보 보러가기</a>
+                    </dd>
+                </dl>
+                <div class="inp_footer"><div class="bn_group"><a style="cursor: pointer;" class="btn_com btn_or" id="enhancedBtnOK"><em>확인</em></a></div></div>
             </div>
         </div>
     </div>

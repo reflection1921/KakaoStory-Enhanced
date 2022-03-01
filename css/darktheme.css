@@ -83,7 +83,7 @@ body { color: var(--text-color) !important; }
 .tab_friend .on .link_friend { border: 1px solid var(--light-background-color) !important; }
 .tab_friend .link_friend { border-bottom: 1px solid var(--light-background-color) !important; }
 .tab_friend .link_friend { border-top: 1px solid var(--light-background-color) !important; }
-.tab_friend .link_friend { background: var(--light-background-color) url(../img/tab_bar.png) no-repeat 0 50% !important; }
+.tab_friend .link_friend { background: var(--light-background-color) no-repeat 0 50% !important; }
 .snb_tabcont { background-color: var(--light-background-color) !important; }
 .cate_tab .tit_cate { background-color: var(--light-background-color) !important; }
 .fd_cont .img_wrap .img .line { border: 0px !important; }

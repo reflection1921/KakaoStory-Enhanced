@@ -1,1 +1,12 @@
 ._ksdark_cls { background-color: var(--lighter-background-color) !important; }
+._ksdark_cls { color: var(--text-color) !important; }
+.btn_com.btn_wh._enhanced_green_btn { background: #43b581 !important; }
+.mejs-container.mejs-kakao .mejs-controls .mejs-videodown-button { top: -42px !important; }
+.mejs-container.mejs-kakao .mejs-controls .mejs-videodown-button { left: 14px !important; }
+.mejs-container.mejs-kakao .mejs-controls .mejs-videodown-button { width: 42px !important; }
+.mejs-container.mejs-kakao .mejs-controls .mejs-videodown-button { height: 42px !important; }
+.mejs-container.mejs-kakao .mejs-controls .mejs-videodown-button button { width: 18px !important; }
+.mejs-container.mejs-kakao .mejs-controls .mejs-videodown-button button { height: 18px !important; }
+.mejs-container.mejs-kakao .mejs-controls .mejs-videodown-button button { background: url(https://raw.githubusercontent.com/reflection1921/KakaoStory-DarkTheme/master/btn_download.png) !important; }
+.mejs-container.mejs-kakao .mejs-controls .mejs-videodown-button button { margin: 10px 6px !important; }
+.mejs-container.mejs-kakao .mejs-controls .mejs-videodown-button button { padding: 0 !important; }
