@@ -443,6 +443,8 @@ body { color: var(--text-color) !important; }
 .feed .section .open_layer li .bg_chk { background-color: rgba(0,0,0,0) !important; }
 .feed_mystory { background-color: var(--light-background-color) !important; }
 .feed_mystory .tit_wrap .tit_feed { color: var(--text-highlight-color) !important; }
+.feed_mystory .tool_pub:hover { background-color: var(--background-color) !important;}
+.feed_mystory .tool_pub .btn_tool .ico_tool { background: url(https://t1.kakaocdn.net/story_static/web/713734703/desktop/img/ico_set_s.png) !important;}
 .wrap_itemstory .item_story .link_story .txt_story { color: var(--text-color) !important; }
 .wrap_itemstory .item_story .link_belong .txt_belong { color: var(--info-text-color) !important; }
 .wrap_itemstory { border-top: 1px solid var(--dark-background-color) !important; }

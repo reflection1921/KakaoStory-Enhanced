@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.0
+// @version      1.1
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -32,15 +32,17 @@
  * enhancedBlockUser : 강화된 차단 사용
  * enhancedVersion : 버전 정보
  * enhancedBlockStringList : 차단 문자열 리스트
+ * enhancedKittyMode : Kitty Mode(verycute: sound + kitty, cute: kitty, none: 적용안함)
  */
 
-//let resourceURL = 'https://127.0.0.1:9000/kakaostory-enhanced/';
+//let resourceURL = 'https://127.0.0.1:9000/kakaostory-enhanced/'; //for debug
 let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
 let blockedList = new Set(); //block users
 let blockedStringList = new Array(); //block strings
+//let catEffect = new Audio(resourceURL + 'sounds/cat-meow.wav');
 
 function AddEnhancedMenu() {
     document.getElementsByClassName("menu_util")[0].innerHTML = '<li><a href="#" id="enhancedOpenSettings" class="link_menu _btnSettingProfile">Enhanced 설정</a></li>' + document.getElementsByClassName("menu_util")[0].innerHTML;
@@ -197,6 +199,12 @@ function InitEnhancedValues()
     var isEnhancedBlock = GetValue('enhancedBlockUser', 'true');
     $('input:radio[name="enhancedSelectBlockUser"]:input[value=' + isEnhancedBlock + ']').attr("checked", true);
 
+    var isKitty = GetValue('enhancedKittyMode', 'none');
+    $('input:radio[name="enhancedSelectKittyMode"]:input[value=' + isKitty + ']').attr("checked", true);
+
+    var isEarthquake = GetValue('enhancedEarthquake', 'false');
+    $('input:radio[name="enhancedSelectEarthquake"]:input[value=' + isEarthquake + ']').attr("checked", true);
+
     var version = GM_info.script.version;
     if (version != GetValue('enhancedVersion', ''))
     {
@@ -306,12 +314,28 @@ function LoadCommonEvents()
         document.getElementById("banStringLayer").remove();
     });
 
-    $('body').on('click', '#enhancedBtnSaveBlockString', function() {
-        var banStrings = document.getElementById("textBlockString").value;
-        SetValue('enhancedBlockStringList', banStrings);
-        CreateBlockStringList();
+    $('body').on('click', '#enhancedBtnCancelBlockString', function() {
         document.getElementById("banStringLayer").remove();
     });
+
+    $(document).on('keydown', '._editable', function(e) {
+        if (GetValue("enhancedEarthquake", 'false') == 'true') {
+            $('div[data-part-name="writing"]').addClass("shake_text");
+            $('#contents_write').addClass("blink_text");
+        }
+    });
+
+    $(document).on('keyup', '._editable', function() {
+        $('div[data-part-name="writing"]').removeClass("shake_text");
+        $('#contents_write').removeClass("blink_text");
+    });
+
+    //$('body').on('input', '#contents_write', function() {
+        //catEffect.pause();
+        //catEffect.currentTime = 0;
+        //setTimeout(() => null, 1);
+        //catEffect.play();
+    //});
 }
 
 function LoadSettingsPageEvents()
@@ -425,9 +449,20 @@ function LoadSettingsPageEvents()
         SetEmoticonSize();
     });
 
+    $(document).on("change",'input[name="enhancedSelectKittyMode"]',function(){
+        var changed = $('[name="enhancedSelectKittyMode"]:checked').val();
+        SetValue("enhancedKittyMode", changed);
+        MoveKitty();
+    });
+
     $(document).on("change",'input[name="enhancedSelectBlockUser"]',function(){
         var isEnhancedBlock = $('[name="enhancedSelectBlockUser"]:checked').val();
         SetValue("enhancedBlockUser", isEnhancedBlock);
+    });
+
+    $(document).on("change",'input[name="enhancedSelectEarthquake"]',function(){
+        var changed = $('[name="enhancedSelectEarthquake"]:checked').val();
+        SetValue("enhancedEarthquake", changed);
     });
 
     $('body').on('click', '#enhancedUpdateNoticeOK', function() {
@@ -460,7 +495,7 @@ function CreateBlockStringList() {
 
 function SetFont()
 {
-    GM_addStyle("body, button, input, select, td, textarea, th {font-family: '" + GetValue('enhancedFontName', 'Noto Sans KR') + "' !important;}");
+    GM_addStyle("body, button, input, select, td, textarea, th {font-family: '" + GetValue('enhancedFontName', 'Noto Sans KR') + "', 'Nanum Gothic' !important;}");
     GM_addStyle("@import url(" + GetValue('enhancedFontCSS', 'https://fonts.googleapis.com/earlyaccess/notosanskr.css') + ");");
 }
 
@@ -728,6 +763,27 @@ function HideBlockStringArticle() {
     }
 }
 
+function MoveKitty()
+{
+    if (GetValue('enhancedKittyMode', 'none') == 'none')
+    {
+        if ($("#enhancedKittyImage").length > 0)
+        {
+            document.getElementById("enhancedKittyImage").remove();
+        }
+        return;
+    }
+    if ($("#enhancedKittyImage").length <= 0)
+    {
+        var kitty = document.createElement('img');
+        kitty.id = 'enhancedKittyImage';
+        kitty.className = 'enhanced_kitty';
+        kitty.src = resourceURL + "images/cat.gif";
+        document.getElementById("kakaoHead").insertBefore(kitty, document.getElementById("kakaoHead").firstChild);
+        //document.getElementById("kakaoHead").appendChild(kitty);
+    }
+}
+
 function GetValue(key, defaultValue) {
     var value = localStorage[key];
     if (value == "" || value == null) {
@@ -747,6 +803,7 @@ function SetValue(key, value)
     LoadCommonEvents();
     GetBlockedUsers();
     setTimeout(() => AddEnhancedMenu(), 1000);
+    setTimeout(() => MoveKitty(), 1000);
     setTimeout(() => GetMyID(), 3000); //for discord style mention feature
     setTimeout(() => HideChannelButton(), 500); //hide channel and teller buttons
 
