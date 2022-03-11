@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.1
+// @version      1.2
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -9,8 +9,6 @@
 // @downloadURL  https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/enhanced.user.js
 // @updateURL    https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/enhanced.user.js
 // @require      https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js
-// @grant        GM_addStyle
-// @grant        GM_notification
 // ==/UserScript==
 
 /*
@@ -33,16 +31,20 @@
  * enhancedVersion : 버전 정보
  * enhancedBlockStringList : 차단 문자열 리스트
  * enhancedKittyMode : Kitty Mode(verycute: sound + kitty, cute: kitty, none: 적용안함)
+ * enhancedLatestNotyID : 알림 마지막 ID(여러 개 창에서 중복 알림 발생 방지)
  */
 
-//let resourceURL = 'https://127.0.0.1:9000/kakaostory-enhanced/'; //for debug
+
+let scriptVersion = "1.2";
+
+//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
-let latestNotyID = ''; //for notification feature
+//let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
 let blockedList = new Set(); //block users
 let blockedStringList = new Array(); //block strings
-//let catEffect = new Audio(resourceURL + 'sounds/cat-meow.wav');
+let catEffect = new Audio(resourceURL + 'sounds/cat-meow.mp3');
 
 function AddEnhancedMenu() {
     document.getElementsByClassName("menu_util")[0].innerHTML = '<li><a href="#" id="enhancedOpenSettings" class="link_menu _btnSettingProfile">Enhanced 설정</a></li>' + document.getElementsByClassName("menu_util")[0].innerHTML;
@@ -175,7 +177,7 @@ function InitEnhancedValues()
     document.getElementById('enhancedTxtFontSize').value = GetValue('enhancedFontSize', '0');
     SetFontSize();
 
-    var notifyEnabled = GetValue('enhancedNotify', 'true');
+    var notifyEnabled = GetValue('enhancedNotify', 'false');
     $('input:radio[name="enhancedSelectNotifyUse"]:input[value=' + notifyEnabled + ']').attr("checked", true);
 
     var notifySoundEnabled = GetValue('enhancedNotifySound', 'true');
@@ -205,7 +207,7 @@ function InitEnhancedValues()
     var isEarthquake = GetValue('enhancedEarthquake', 'false');
     $('input:radio[name="enhancedSelectEarthquake"]:input[value=' + isEarthquake + ']').attr("checked", true);
 
-    var version = GM_info.script.version;
+    var version = scriptVersion;
     if (version != GetValue('enhancedVersion', ''))
     {
         ViewUpdatePage();
@@ -217,6 +219,13 @@ function InitEnhancedValues()
     GetLatestVersion();
 
     CreateBlockStringList();
+}
+
+function RemoveRecommendFeed() {
+    var recommendFeed = document.getElementsByClassName("section recommend");
+    for (var i = 0; i < recommendFeed.length; i++) {
+        recommendFeed[i].remove();
+    }
 }
 
 function CloseSettingsPage()
@@ -420,6 +429,10 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedSelectNotifyUse"]',function(){
         var changed = $('[name="enhancedSelectNotifyUse"]:checked').val();
         SetValue("enhancedNotify", changed);
+        if (GetValue("enhancedNotify", "false") == "true")
+        {
+            Notification.requestPermission();
+        }
     });
 
     $(document).on("change",'input[name="enhancedSelectNotifySoundUse"]',function(){
@@ -477,6 +490,10 @@ function LoadSettingsPageEvents()
     $('body').on('click', '#enhancedBtnBlockString', function() {
         ShowBlockStringPage();
     });
+
+    $('body').on('click', '#enhancedKittyImage', function() {
+        catEffect.play();
+    });
 }
 
 function CreateBlockStringList() {
@@ -495,8 +512,8 @@ function CreateBlockStringList() {
 
 function SetFont()
 {
-    GM_addStyle("body, button, input, select, td, textarea, th {font-family: '" + GetValue('enhancedFontName', 'Noto Sans KR') + "', 'Nanum Gothic' !important;}");
-    GM_addStyle("@import url(" + GetValue('enhancedFontCSS', 'https://fonts.googleapis.com/earlyaccess/notosanskr.css') + ");");
+    SetCSS("enhancedFontCSS", "body, button, input, select, td, textarea, th {font-family: '" + GetValue('enhancedFontName', 'Noto Sans KR') + "', 'Nanum Gothic' !important;}");
+    SetCSS("enhancedFontURLCSS", "@import url(" + GetValue('enhancedFontCSS', 'https://fonts.googleapis.com/earlyaccess/notosanskr.css') + ");");
 }
 
 function SetFontSize() {
@@ -509,7 +526,7 @@ function SetFontSize() {
                 var originSize = parseInt(lines[i].split("font-size: ")[1].split("px")[0]);
                 var changedSize = originSize + parseInt(GetValue('enhancedFontSize', '0'));
                 var modifiedCSS = lines[i].replace( originSize , changedSize);
-                GM_addStyle ( modifiedCSS );
+                SetCSS('enhancedFontSizeCSS' + i, modifiedCSS);
             }
         }
     }
@@ -546,7 +563,7 @@ function LoadDarkThemeCSS() {
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             var darkcss = xmlHttp.responseText;
-            GM_addStyle ( darkcss );
+            SetCSS("enhancedDarkCSS", darkcss);
         }
     }
     xmlHttp.open("GET", resourceURL + "css/darktheme.css");
@@ -558,7 +575,7 @@ function LoadEnhancedCSS() {
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             var darkcss = xmlHttp.responseText;
-            GM_addStyle ( darkcss );
+            SetCSS('enhancedCSS', darkcss);
         }
     }
     xmlHttp.open("GET", resourceURL + "css/enhanced.css");
@@ -577,11 +594,12 @@ function ChangeTheme(styleName)
         SetFont();
         SetFontSize();
         //SettingsV2 //Reload font css changed
-        GM_addStyle('.head_story .tit_kakaostory .link_kakaostory { background: url(\''+ resourceURL + 'images/logo_kseh.png\'); } ');
+        SetCSS('enhancedLightLogo', '.head_story .tit_kakaostory .link_kakaostory { background: url(\''+ resourceURL + 'images/logo_kseh.png\'); } ');
     }
     //hide original logo
-    GM_addStyle('.head_story .tit_kakaostory .logo_kakaostory { width: 0px !important; }');
-    GM_addStyle('.head_story .tit_kakaostory .link_kakaostory { width: 144px !important; }');
+    var hideOriginLogo = '.head_story .tit_kakaostory .logo_kakaostory { width: 0px !important; }'
+    + '.head_story .tit_kakaostory .link_kakaostory { width: 144px !important; }';
+    SetCSS('enhancedHideLogoCSS', hideOriginLogo);
     LoadEnhancedCSS();
 }
 
@@ -596,9 +614,9 @@ function GetLatestNotify() {
             var notyContent = jsonNoty[0]["content"];
             var notyURL = String(notyScheme).split("/");
             notyURL = notyURL[notyURL.length-1].replace(".", "/");
-            if (String(notyID) != latestNotyID)
+            if (String(notyID) != GetValue('enhancedLatestNotyID', ''))
             {
-                latestNotyID = String(notyID);
+                SetValue('enhancedLatestNotyID', String(notyID));
                 if (String(jsonNoty[0]["is_new"]) == 'false') {
                     return;
                 }
@@ -617,19 +635,34 @@ function GetLatestNotify() {
     xmlHttp.send();
 }
 
-function SetNotify(content, title_, url) {
-    GM_notification ({
-        text: content,
-        title: title_,
-        image: 'https://i.imgur.com/FSvg18g.png',
-        highlight: false,
+function SetNotify(content, title_, url)
+{
+    var options = {
+        body: content,
+        icon: 'https://i.imgur.com/FSvg18g.png',
         silent: (GetValue('enhancedNotifySound', 'true') === 'true'),
-        timeout: 5000,
-        onclick: function () {
+        onclick: function() {
             space.Router.navigate("/" + url);
         }
-    });
+    }
+
+    var noty = new Notification(title_, options);
 }
+
+// GM version
+// function SetNotify(content, title_, url) {
+//     GM_notification ({
+//         text: content,
+//         title: title_,
+//         image: 'https://i.imgur.com/FSvg18g.png',
+//         highlight: false,
+//         silent: (GetValue('enhancedNotifySound', 'true') === 'true'),
+//         timeout: 5000,
+//         onclick: function () {
+//             space.Router.navigate("/" + url);
+//         }
+//     });
+// }
 
 function SaveText(str, fileName) {
     var blob = new Blob([str], { type: "text/plain;charset=utf-8" });
@@ -687,19 +720,19 @@ function HideMemorize() {
 
 function SetEmoticonSize()
 {
-    var sSize = GetValue("enhancedEmoticonSize", '');
+    var sSize = GetValue("enhancedEmoticonSize", 'small');
     if (sSize == "small")
     {
-        GM_addStyle('.comment .comt_write .inp_write .inp_graphic .kakao_emoticon, .comment .list>li .txt .emoticon .kakao_emoticon { width: 64px !important; height: 64px !important; }');
-        GM_addStyle('.fd_cont .txt_wrap .kakao_emoticon { width: 84px !important; height: 84px !important; }');
+        SetCSS('enhancedCommentEmoticonSize', '.comment .comt_write .inp_write .inp_graphic .kakao_emoticon, .comment .list>li .txt .emoticon .kakao_emoticon { width: 64px !important; height: 64px !important; }');
+        SetCSS('enhancedArticleEmoticonSize', '.fd_cont .txt_wrap .kakao_emoticon { width: 84px !important; height: 84px !important; }');
     } else if (sSize == "middle")
     {
-        GM_addStyle('.comment .comt_write .inp_write .inp_graphic .kakao_emoticon, .comment .list>li .txt .emoticon .kakao_emoticon { width: 96px !important; height: 96px !important; }');
-        GM_addStyle('.fd_cont .txt_wrap .kakao_emoticon { width: 96px !important; height: 96px !important; }');
+        SetCSS('enhancedCommentEmoticonSize', '.comment .comt_write .inp_write .inp_graphic .kakao_emoticon, .comment .list>li .txt .emoticon .kakao_emoticon { width: 96px !important; height: 96px !important; }');
+        SetCSS('enhancedArticleEmoticonSize', '.fd_cont .txt_wrap .kakao_emoticon { width: 96px !important; height: 96px !important; }');
     } else
     {
-        GM_addStyle('.comment .comt_write .inp_write .inp_graphic .kakao_emoticon, .comment .list>li .txt .emoticon .kakao_emoticon { width: 128px !important; height: 128px !important; }');
-        GM_addStyle('.fd_cont .txt_wrap .kakao_emoticon { width: 128px !important; height: 128px !important; }');
+        SetCSS('enhancedCommentEmoticonSize', '.comment .comt_write .inp_write .inp_graphic .kakao_emoticon, .comment .list>li .txt .emoticon .kakao_emoticon { width: 128px !important; height: 128px !important; }');
+        SetCSS('enhancedArticleEmoticonSize', '.fd_cont .txt_wrap .kakao_emoticon { width: 128px !important; height: 128px !important; }');
     }
 }
 
@@ -798,6 +831,15 @@ function SetValue(key, value)
     return localStorage[key]=value;
 }
 
+function SetCSS(elID, cssText)
+{
+    //GM_addStyle(cssText);
+    var elem = document.createElement('style');
+    elem.id = elID;
+    document.head.appendChild(elem);
+    document.getElementById(elID).innerHTML = cssText;
+}
+
 (function() {
     InitEnhancedSettingsPage();
     LoadCommonEvents();
@@ -808,7 +850,7 @@ function SetValue(key, value)
     setTimeout(() => HideChannelButton(), 500); //hide channel and teller buttons
 
     setInterval(function() {
-        if (GetValue('enhancedNotify', 'true') == 'true')
+        if (GetValue('enhancedNotify', 'false') == 'true')
         {
             notyTimeCount += 1;
             if (notyTimeCount >= parseInt(GetValue('enhancedNotifyTime', '20')) * 10)
@@ -836,6 +878,8 @@ function SetValue(key, value)
         }
 
         HideBlockStringArticle();
+
+        RemoveRecommendFeed();
 
     }, 100);
 })();
