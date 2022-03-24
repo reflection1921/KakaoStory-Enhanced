@@ -174,6 +174,17 @@ body { color: var(--text-color) !important; }
 .feed .loading_wrap { width: 24px !important; }
 .feed .loading_wrap { height: 24px !important; }
 .feed .loading_wrap img { margin: -9999px 0 0 -9999px !important; }
+.image_collection.photo_collection .loading_wrap { background: url(https://i.imgur.com/GPJrniq.gif) no-repeat !important;}
+.image_collection.photo_collection .loading_wrap { height: 24px !important; }
+.image_collection.photo_collection .loading_wrap { background-position: center !important; }
+.image_collection.photo_collection .loading_wrap { padding: 0px !important; }
+.image_collection.photo_collection .loading_wrap img { margin: -9999px 0 0 -9999px !important; }
+/* All loading circle is changed maybe... */
+.loading_wrap { background: url(https://i.imgur.com/GPJrniq.gif) no-repeat !important;}
+.loading_wrap { height: 24px !important; }
+.loading_wrap { background-position: center !important; }
+.loading_wrap img { margin: -9999px 0 0 -9999px !important; }
+/* End */
 .section_bundle .action_graph .txt_action { color: var(--info-text-color) !important; }
 .section_bundle .action_graph .link_action { color: var(--text-color) !important; }
 .section_bundle .action_graph .link_action { background-color: var(--background-color) !important; }
@@ -281,6 +292,8 @@ body { color: var(--text-color) !important; }
 .tabcont_message .desc_message .txt_name { color: var(--text-highlight-color) !important; }
 .tabcont_message .desc_message .txt_message { color: var(--text-color) !important; }
 .tabcont_message .list_message .txt_data { color: var(--info-text-color) !important; }
+.tabcont_message .btn_message .btn_com { background: var(--light-background-color) !important; }
+.tabcont_message .btn_message .btn_com { color: var(--menu-text-color) !important; }
 .write .photo .preview { background-color: var(--light-background-color) !important; }
 .write .preview .list_preview .bn_plus { border: 1px dashed var(--dark-background-color) !important; }
 .write .preview .list_preview .bn_plus { background-color: rgba(0,0,0,0.2) !important; }
@@ -435,10 +448,15 @@ body { color: var(--text-color) !important; }
 .story_widgets .keyword_widgets .link_keyword:focus, .story_widgets .keyword_widgets .link_keyword:hover { border-radius: 2px !important; }
 .story_widgets .keyword_widgets .link_keyword:focus, .story_widgets .keyword_widgets .link_keyword:hover { color: var(--discord-blue) !important; }
 .story_widgets .desc_info .link_qna { color: var(--text-color) !important; }
+.story_widgets .desc_birthday { color: var(--text-color) !important; }
+.story_widgets .emph_birthday { color: var(--text-highlight-color) !important; }
 .friend_collection { background-color: var(--light-background-color) !important; }
 .friend_collection { border-bottom: 0px !important; }
 .friend_collection { box-shadow: 0 2px 0 rgb(0 0 0 / 10%) !important; }
 .friend_collection { -webkit-box-shadow: 0 2px 0 rgb(0 0 0 / 10%) !important; }
+.friend_collection .tool_pub .btn_tool .ico_tool { background: url(https://t1.kakaocdn.net/story_static/web/713734703/desktop/img/ico_set_s.png) !important; }
+.friend_collection .tool_pub .btn_tool { color: var(--text-title-color) !important; }
+.friend_collection .tool_pub:hover { background: var(--background-hover-color) !important; }
 .section .open_layer .li_v4 { border-top: 1px solid var(--background-border-color) !important; }
 .feed .section .open_layer li .bg_chk { background-color: rgba(0,0,0,0) !important; }
 .feed_mystory { background-color: var(--light-background-color) !important; }
@@ -561,6 +579,7 @@ body { color: var(--text-color) !important; }
 .story_widgets .calendar_top .btn_next.on .ico_ks2 { background-position: -160px -80px !important; }
 .story_widgets .calendar_top .btn_prev.on .ico_ks2 { background-position: -140px -80px !important; }
 .story_widgets .calendar_top .btn_prev .ico_ks2 { background-position: -140px -100px !important; }
+.story_widgets .list_friend.list_with .link_more { color: var(--text-color) !important; }
 .date_collection .box_cell .link_txt { color: var(--text-color) !important; }
 .date_collection .box_cell .link_txt { border: 1px solid var(--dark-background-color) !important; }
 .date_collection .box_cell .link_txt .txt_date { color: var(--text-desc-color) !important; }
@@ -696,6 +715,8 @@ body { color: var(--text-color) !important; }
 .add_top .btn_follow { background-color: var(--background-color) !important; }
 .add_top .btn_follow { color: var(--text-color) !important; }
 .story_widgets .link_edit { color: var(--discord-blue) !important; }
+.story_widgets .link_birthday.link_message { color: var(--discord-blue) !important; }
+.story_widgets .link_birthday { border-top: 1px solid var(--dark-background-color) !important; }
 .kakao_emoticon img { background-color: rgba(255,255,255,0.6) !important; }
 .kakao_emoticon img { border-radius: 9px !important; }
 .write .inp_contents .sticon { background-color: rgba(255,255,255,0.6) !important; }
@@ -718,3 +739,7 @@ body { color: var(--text-color) !important; }
 .section.disseminate .list_news li .box_news .desc_news .txt_news { color: var(--text-color) !important; }
 .section.disseminate .list_news li .box_news .desc_news .link_news .tit_news { color: var(--text-highlight-color) !important; }
 .section.disseminate .list_news li .box_news { border: 1px solid var(--lighter-border-color) !important; }
+.story_layer .list_report .tit_report { color: var(--text-color) !important; }
+.story_layer .list_report .txt_report { color: var(--text-desc-color) !important; }
+.story_layer .txt_war { color: var(--text-desc-color) !important;}
+.story_layer .list_report li { border-bottom: 1px solid var(--header-border-color) !important; }
