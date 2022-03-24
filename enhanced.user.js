@@ -32,10 +32,11 @@
  * enhancedBlockStringList : 차단 문자열 리스트
  * enhancedKittyMode : Kitty Mode(verycute: sound + kitty, cute: kitty, none: 적용안함)
  * enhancedLatestNotyID : 알림 마지막 ID(여러 개 창에서 중복 알림 발생 방지)
+ * enhancedHideRecommendFriend : 추천친구 숨기기
  */
 
 
-let scriptVersion = "1.2";
+let scriptVersion = "1.3";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
@@ -194,6 +195,9 @@ function InitEnhancedValues()
     var isHiddenMemorize = GetValue('enhancedHideMemorize', 'true');
     $('input:radio[name="enhnacnedSelectHideMemorize"]:input[value=' + isHiddenMemorize + ']').attr("checked", true);
 
+    var isHiddenRecommendFriend = GetValue('enhancedHideRecommendFriend', 'false');
+    $('input:radio[name="enhancedSelectRecommendFriend"]:input[value=' + isHiddenRecommendFriend + ']').attr("checked", true);
+
     var size = GetValue('enhancedEmoticonSize', 'small');
     $('input:radio[name="enhancedSelectEmoticonSize"]:input[value=' + size + ']').attr("checked", true);
     SetEmoticonSize();
@@ -294,6 +298,19 @@ function ViewUpdateAllPage() {
     xmlHttp.send();
 }
 
+function ViewDetailNotFriendArticle()
+{
+    var detail = document.getElementsByClassName("_btnViewDetailInShare");
+    for (var i = 0; i < detail.length; i++)
+    {
+        if (detail[i].innerText == "...더보기")
+        {
+            detail[i].href = "javascript:void(0);";
+            detail[i].className = "_btnViewDetailNotFriend";
+        }
+    }
+}
+
 function LoadCommonEvents()
 {
     //Add user to block list when block.
@@ -325,6 +342,11 @@ function LoadCommonEvents()
 
     $('body').on('click', '#enhancedBtnCancelBlockString', function() {
         document.getElementById("banStringLayer").remove();
+    });
+
+    $('body').on('click', '._btnViewDetailNotFriend', function() {
+        this.parentElement.parentElement.getElementsByClassName("txt_wrap")[0].getElementsByClassName("_content")[0].style.cssText = "overflow: hidden;";
+        this.style.display = 'none';
     });
 
     $(document).on('keydown', '._editable', function(e) {
@@ -456,6 +478,11 @@ function LoadSettingsPageEvents()
         SetValue("enhancedHideMemorize", changed);
     });
 
+    $(document).on("change",'input[name="enhancedSelectRecommendFriend"]',function(){
+        var changed = $('[name="enhancedSelectRecommendFriend"]:checked').val();
+        SetValue("enhancedHideRecommendFriend", changed);
+    });
+
     $(document).on("change",'input[name="enhancedSelectEmoticonSize"]',function(){
         var size = $('[name="enhancedSelectEmoticonSize"]:checked').val();
         SetValue("enhancedEmoticonSize", size);
@@ -492,8 +519,22 @@ function LoadSettingsPageEvents()
     });
 
     $('body').on('click', '#enhancedKittyImage', function() {
-        catEffect.play();
+        if (GetValue('enhancedKittyMode', 'none') == 'verycute') {
+            catEffect.play();
+        }
     });
+}
+
+function HideRecommendFriend()
+{
+    var el = document.getElementsByClassName("tit_widgets");
+    for (var i = 0; i < el.length; i++)
+    {
+        if (el[i].innerText == '추천친구')
+        {
+            el[i].parentElement.style.display = "none";
+        }
+    }
 }
 
 function CreateBlockStringList() {
@@ -877,7 +918,14 @@ function SetCSS(elID, cssText)
             HideBlockedUserComment();
         }
 
+        if (GetValue('enhancedHideRecommendFriend', 'false') == 'true')
+        {
+            HideRecommendFriend();
+        }
+
         HideBlockStringArticle();
+
+        ViewDetailNotFriendArticle();
 
         RemoveRecommendFeed();
 
