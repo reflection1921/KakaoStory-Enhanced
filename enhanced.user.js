@@ -39,7 +39,8 @@
 let scriptVersion = "1.3";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
-let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/';
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
@@ -142,9 +143,7 @@ function InitEnhancedValues()
     $('input:radio[name="enhancedSelectTheme"]:input[value=' + selectedTheme + ']').attr("checked", true);
     ChangeTheme(selectedTheme);
 
-    var selectedDarkStyle = GetValue('enhancedDarkThemeStyle', 'discord');
-    $('input:radio[name="enhancedSelectDarkStyle"]:input[value=' + selectedDarkStyle + ']').attr("checked", true);
-    SetDarkThemeStyle(selectedDarkStyle);
+    LoadThemeList();
 
     var useDiscordMention = GetValue('enhancedDiscordMention', 'false');
     $('input:radio[name="enhancedSelectDiscordMention"]:input[value=' + useDiscordMention + ']').attr("checked", true);
@@ -390,7 +389,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on("change",'input[name="enhancedSelectDarkStyle"]',function(){
-        var styleName = $('[name="enhancedSelectDarkStyle"]:checked').val();
+        var styleName = document.getElementById("enhancedOptionDarkTheme").value;
         SetValue("enhancedDarkThemeStyle", styleName);
         SetDarkThemeStyle(styleName);
     });
@@ -596,6 +595,31 @@ function SetDarkThemeStyle(styleName) {
         }
     }
     xmlHttp.open("GET", resourceURL + "theme_colors/" + styleName + ".css");
+    xmlHttp.send();
+}
+
+function LoadThemeList() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            var json = JSON.parse(xmlHttp.responseText);
+            for (var i = 0; i < json.Length; i++)
+            {
+                var opTheme = document.getElementById("enhancedOptionDarkTheme");
+                var op = new Option();
+                op.value = json.themes[i].id;
+                op.text = json.themes[i].name;
+
+                opTheme.add(op);
+            }
+
+            var selectedDarkStyle = GetValue('enhancedDarkThemeStyle', 'discord');
+            document.getElementById("enhancedOptionDarkTheme").value = selectedDarkStyle;
+            SetDarkThemeStyle(selectedDarkStyle);
+            
+        }
+    }
+    xmlHttp.open("GET", resourceURL + "theme_colors/themes.json");
     xmlHttp.send();
 }
 
