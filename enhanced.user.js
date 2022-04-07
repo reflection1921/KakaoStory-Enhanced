@@ -388,7 +388,8 @@ function LoadSettingsPageEvents()
         }
     });
 
-    $(document).on("change",'input[name="enhancedSelectDarkStyle"]',function(){
+    $(document).on("change",'select[name="enhancedSelectDarkStyle"]',function(){
+        console.log("dd");
         var styleName = document.getElementById("enhancedOptionDarkTheme").value;
         SetValue("enhancedDarkThemeStyle", styleName);
         SetDarkThemeStyle(styleName);
@@ -603,9 +604,9 @@ function LoadThemeList() {
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             var json = JSON.parse(xmlHttp.responseText);
-            for (var i = 0; i < json.Length; i++)
+            for (var i = 0; i < json.themes.length; i++)
             {
-                var opTheme = document.getElementById("enhancedOptionDarkTheme");
+                var opTheme = document.getElementById("enhancedOptionDarkTheme").options;
                 var op = new Option();
                 op.value = json.themes[i].id;
                 op.text = json.themes[i].name;
