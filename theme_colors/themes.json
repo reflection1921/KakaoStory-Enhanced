@@ -1,0 +1,24 @@
+{
+  "themes": [
+    {
+      "id": "discord",
+      "name": "Black & White"
+    },
+    {
+      "id": "darkblue",
+      "name": "Dark Blue"
+    },
+    {
+      "id": "darkred",
+      "name": "Dark Red"
+    },
+    {
+      "id": "blackwhite",
+      "name": "Black & White"
+    },
+    {
+      "id": "visualstudio",
+      "name": "Visual Studio"
+    }
+  ]
+}
