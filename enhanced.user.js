@@ -609,7 +609,7 @@ function LoadThemeList() {
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             jThemes = JSON.parse(xmlHttp.responseText);
-            for (var i = 0; i < json.themes.length; i++)
+            for (var i = 0; i < jThemes.themes.length; i++)
             {
                 var opTheme = document.getElementById("enhancedOptionDarkTheme").options;
                 var op = new Option();
