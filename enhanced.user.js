@@ -1,14 +1,13 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.3
+// @version      1.4
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
 // @icon         https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/story_favicon.ico
 // @downloadURL  https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/enhanced.user.js
 // @updateURL    https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/enhanced.user.js
-// @require      https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js
 // ==/UserScript==
 
 /*
@@ -36,9 +35,10 @@
  */
 
 
-let scriptVersion = "1.3";
+let scriptVersion = "1.4";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
 let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
@@ -46,6 +46,7 @@ let notyTimeCount = 0; //for notification feature
 let blockedList = new Set(); //block users
 let blockedStringList = new Array(); //block strings
 let catEffect = new Audio(resourceURL + 'sounds/cat-meow.mp3');
+let jThemes;
 
 function AddEnhancedMenu() {
     document.getElementsByClassName("menu_util")[0].innerHTML = '<li><a href="#" id="enhancedOpenSettings" class="link_menu _btnSettingProfile">Enhanced 설정</a></li>' + document.getElementsByClassName("menu_util")[0].innerHTML;
@@ -142,9 +143,7 @@ function InitEnhancedValues()
     $('input:radio[name="enhancedSelectTheme"]:input[value=' + selectedTheme + ']').attr("checked", true);
     ChangeTheme(selectedTheme);
 
-    var selectedDarkStyle = GetValue('enhancedDarkThemeStyle', 'discord');
-    $('input:radio[name="enhancedSelectDarkStyle"]:input[value=' + selectedDarkStyle + ']').attr("checked", true);
-    SetDarkThemeStyle(selectedDarkStyle);
+    LoadThemeList();
 
     var useDiscordMention = GetValue('enhancedDiscordMention', 'false');
     $('input:radio[name="enhancedSelectDiscordMention"]:input[value=' + useDiscordMention + ']').attr("checked", true);
@@ -389,8 +388,13 @@ function LoadSettingsPageEvents()
         }
     });
 
-    $(document).on("change",'input[name="enhancedSelectDarkStyle"]',function(){
-        var styleName = $('[name="enhancedSelectDarkStyle"]:checked').val();
+    $(document).on("change",'select[name="enhancedSelectDarkStyle"]',function(){
+        var styleName = document.getElementById("enhancedOptionDarkTheme").value;
+        var authorIdx = document.getElementById("enhancedOptionDarkTheme").selectedIndex;
+        var authorEl = document.getElementById("themeAuthor");
+        var authorLink = jThemes.themes[authorIdx].url;
+        authorEl.innerText = jThemes.themes[authorIdx].author;
+        authorEl.href = authorLink;
         SetValue("enhancedDarkThemeStyle", styleName);
         SetDarkThemeStyle(styleName);
     });
@@ -599,6 +603,36 @@ function SetDarkThemeStyle(styleName) {
     xmlHttp.send();
 }
 
+function LoadThemeList() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            jThemes = JSON.parse(xmlHttp.responseText);
+            for (var i = 0; i < jThemes.themes.length; i++)
+            {
+                var opTheme = document.getElementById("enhancedOptionDarkTheme").options;
+                var op = new Option();
+                op.value = jThemes.themes[i].id;
+                op.text = jThemes.themes[i].name;
+
+                opTheme.add(op);
+            }
+
+            var selectedDarkStyle = GetValue('enhancedDarkThemeStyle', 'discord');
+            document.getElementById("enhancedOptionDarkTheme").value = selectedDarkStyle;
+            var authorIdx = document.getElementById("enhancedOptionDarkTheme").selectedIndex;
+            var authorEl = document.getElementById("themeAuthor");
+            var authorLink = jThemes.themes[authorIdx].url;
+            authorEl.innerText = jThemes.themes[authorIdx].author;
+            authorEl.href = authorLink;
+            SetDarkThemeStyle(selectedDarkStyle);
+            
+        }
+    }
+    xmlHttp.open("GET", resourceURL + "theme_colors/themes.json");
+    xmlHttp.send();
+}
+
 function LoadDarkThemeCSS() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
@@ -705,9 +739,16 @@ function SetNotify(content, title_, url)
 //     });
 // }
 
-function SaveText(str, fileName) {
+function DEPRECATEDSaveText(str, fileName) {
     var blob = new Blob([str], { type: "text/plain;charset=utf-8" });
     saveAs(blob, fileName);
+}
+
+function SaveText(text, name, type) {
+    var btnEl = document.getElementById("enhancedBtnBackupFriendsList");
+    var file = new Blob([text], {type: type});
+    btnEl.href = URL.createObjectURL(file);
+    btnEl.download = name;
 }
 
 function BackupFriendsList() {
@@ -719,7 +760,8 @@ function BackupFriendsList() {
             for (var i = 0; i < jsonFriends.profiles.length; i ++) {
                 friendsText = friendsText + String(jsonFriends.profiles[i]["display_name"]) + " : " + String(jsonFriends.profiles[i]["id"]) + '\n';
             }
-            SaveText(friendsText, "친구목록백업.txt");
+            document.getElementById("enhancedFriendsBackupDescription").innerHTML = "※백업 데이터가 생성 되었습니다! 한번 더 클릭하여 다운로드를 진행하세요.<br>만약 다운로드가 진행되지 않을 경우, 우클릭하여 다른 이름으로 링크 저장을 사용해보세요.<br>다시 새로운 정보로 다운로드 하시려면, 새로고침이 필요합니다.";
+            SaveText(friendsText, "친구목록백업.txt", "text/plain");
         }
     }
     xmlHttp.open("GET", "https://story.kakao.com/a/friends");
@@ -880,6 +922,13 @@ function SetCSS(elID, cssText)
     document.head.appendChild(elem);
     document.getElementById(elID).innerHTML = cssText;
 }
+
+function DownloadText(text, name, type) {
+    var a = document.getElementById("a");
+    var file = new Blob([text], {type: type});
+    a.href = URL.createObjectURL(file);
+    a.download = name;
+  }
 
 (function() {
     InitEnhancedSettingsPage();

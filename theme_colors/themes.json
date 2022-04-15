@@ -1,0 +1,34 @@
+{
+  "themes": [
+    {
+      "id": "discord",
+      "name": "Discord",
+      "author": "KakaoStory Enhanced",
+      "url": "http://chihaya.kr"
+    },
+    {
+      "id": "darkblue",
+      "name": "Dark Blue",
+      "author": "KakaoStory Enhanced",
+      "url": ""
+    },
+    {
+      "id": "darkred",
+      "name": "Dark Red",
+      "author": "KakaoStory Enhanced",
+      "url": ""
+    },
+    {
+      "id": "blackwhite",
+      "name": "Black & White",
+      "author": "KakaoStory Enhanced",
+      "url": ""
+    },
+    {
+      "id": "visualstudio",
+      "name": "Visual Studio",
+      "author": "KakaoStory Enhanced",
+      "url": ""
+    }
+  ]
+}
