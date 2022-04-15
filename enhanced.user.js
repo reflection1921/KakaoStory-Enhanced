@@ -47,6 +47,7 @@ let notyTimeCount = 0; //for notification feature
 let blockedList = new Set(); //block users
 let blockedStringList = new Array(); //block strings
 let catEffect = new Audio(resourceURL + 'sounds/cat-meow.mp3');
+let jThemes;
 
 function AddEnhancedMenu() {
     document.getElementsByClassName("menu_util")[0].innerHTML = '<li><a href="#" id="enhancedOpenSettings" class="link_menu _btnSettingProfile">Enhanced 설정</a></li>' + document.getElementsByClassName("menu_util")[0].innerHTML;
@@ -389,8 +390,12 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on("change",'select[name="enhancedSelectDarkStyle"]',function(){
-        console.log("dd");
         var styleName = document.getElementById("enhancedOptionDarkTheme").value;
+        var authorIdx = document.getElementById("enhancedOptionDarkTheme").selectedIndex;
+        var authorEl = document.getElementById("themeAuthor");
+        var authorLink = jThemes[authorIdx].url;
+        authorEl.innerText = jThemes.themes[authorIdx].author;
+        authorEl.href = authorLink;
         SetValue("enhancedDarkThemeStyle", styleName);
         SetDarkThemeStyle(styleName);
     });
@@ -603,19 +608,24 @@ function LoadThemeList() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-            var json = JSON.parse(xmlHttp.responseText);
+            jThemes = JSON.parse(xmlHttp.responseText);
             for (var i = 0; i < json.themes.length; i++)
             {
                 var opTheme = document.getElementById("enhancedOptionDarkTheme").options;
                 var op = new Option();
-                op.value = json.themes[i].id;
-                op.text = json.themes[i].name;
+                op.value = jThemes.themes[i].id;
+                op.text = jThemes.themes[i].name;
 
                 opTheme.add(op);
             }
 
             var selectedDarkStyle = GetValue('enhancedDarkThemeStyle', 'discord');
             document.getElementById("enhancedOptionDarkTheme").value = selectedDarkStyle;
+            var authorIdx = document.getElementById("enhancedOptionDarkTheme").selectedIndex;
+            var authorEl = document.getElementById("themeAuthor");
+            var authorLink = jThemes[authorIdx].url;
+            authorEl.innerText = jThemes.themes[authorIdx].author;
+            authorEl.href = authorLink;
             SetDarkThemeStyle(selectedDarkStyle);
             
         }
