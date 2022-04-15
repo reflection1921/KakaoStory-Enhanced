@@ -8,7 +8,6 @@
 // @icon         https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/story_favicon.ico
 // @downloadURL  https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/enhanced.user.js
 // @updateURL    https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/enhanced.user.js
-// @require      https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js
 // ==/UserScript==
 
 /*
@@ -393,7 +392,7 @@ function LoadSettingsPageEvents()
         var styleName = document.getElementById("enhancedOptionDarkTheme").value;
         var authorIdx = document.getElementById("enhancedOptionDarkTheme").selectedIndex;
         var authorEl = document.getElementById("themeAuthor");
-        var authorLink = jThemes[authorIdx].url;
+        var authorLink = jThemes.themes[authorIdx].url;
         authorEl.innerText = jThemes.themes[authorIdx].author;
         authorEl.href = authorLink;
         SetValue("enhancedDarkThemeStyle", styleName);
@@ -623,7 +622,7 @@ function LoadThemeList() {
             document.getElementById("enhancedOptionDarkTheme").value = selectedDarkStyle;
             var authorIdx = document.getElementById("enhancedOptionDarkTheme").selectedIndex;
             var authorEl = document.getElementById("themeAuthor");
-            var authorLink = jThemes[authorIdx].url;
+            var authorLink = jThemes.themes[authorIdx].url;
             authorEl.innerText = jThemes.themes[authorIdx].author;
             authorEl.href = authorLink;
             SetDarkThemeStyle(selectedDarkStyle);
@@ -740,9 +739,16 @@ function SetNotify(content, title_, url)
 //     });
 // }
 
-function SaveText(str, fileName) {
+function DEPRECATEDSaveText(str, fileName) {
     var blob = new Blob([str], { type: "text/plain;charset=utf-8" });
     saveAs(blob, fileName);
+}
+
+function SaveText(text, name, type) {
+    var btnEl = document.getElementById("enhancedBtnBackupFriendsList");
+    var file = new Blob([text], {type: type});
+    btnEl.href = URL.createObjectURL(file);
+    btnEl.download = name;
 }
 
 function BackupFriendsList() {
@@ -754,7 +760,8 @@ function BackupFriendsList() {
             for (var i = 0; i < jsonFriends.profiles.length; i ++) {
                 friendsText = friendsText + String(jsonFriends.profiles[i]["display_name"]) + " : " + String(jsonFriends.profiles[i]["id"]) + '\n';
             }
-            SaveText(friendsText, "친구목록백업.txt");
+            document.getElementById("enhancedFriendsBackupDescription").innerHTML = "※백업 데이터가 생성 되었습니다! 한번 더 클릭하여 다운로드를 진행하세요.<br>만약 다운로드가 진행되지 않을 경우, 우클릭하여 다른 이름으로 링크 저장을 사용해보세요.<br>다시 새로운 정보로 다운로드 하시려면, 새로고침이 필요합니다.";
+            SaveText(friendsText, "친구목록백업.txt", "text/plain");
         }
     }
     xmlHttp.open("GET", "https://story.kakao.com/a/friends");
@@ -915,6 +922,13 @@ function SetCSS(elID, cssText)
     document.head.appendChild(elem);
     document.getElementById(elID).innerHTML = cssText;
 }
+
+function DownloadText(text, name, type) {
+    var a = document.getElementById("a");
+    var file = new Blob([text], {type: type});
+    a.href = URL.createObjectURL(file);
+    a.download = name;
+  }
 
 (function() {
     InitEnhancedSettingsPage();
