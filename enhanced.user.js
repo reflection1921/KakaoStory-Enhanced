@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.4
+// @version      1.5
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -35,7 +35,7 @@
  */
 
 
-let scriptVersion = "1.4";
+let scriptVersion = "1.5";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
@@ -47,6 +47,9 @@ let blockedList = new Set(); //block users
 let blockedStringList = new Array(); //block strings
 let catEffect = new Audio(resourceURL + 'sounds/cat-meow.mp3');
 let jThemes;
+
+let deletedFriendCount = 0;
+let jsonMyFriends;
 
 function AddEnhancedMenu() {
     document.getElementsByClassName("menu_util")[0].innerHTML = '<li><a href="#" id="enhancedOpenSettings" class="link_menu _btnSettingProfile">Enhanced 설정</a></li>' + document.getElementsByClassName("menu_util")[0].innerHTML;
@@ -452,6 +455,18 @@ function LoadSettingsPageEvents()
         ViewUpdateAllPage();
     });
 
+    $(document).on('click', '#enhancedBtnDeleteFriendConfirm', function() {
+        DeleteFriendsConfirm();
+    });
+
+    $(document).on('click', '#deleteFriendConfirmCancel', function() {
+        document.getElementById("deleteLayer").remove();
+    });
+
+    $(document).on('click', '#deleteFriendConfirmOK', function() {
+        LoadForDeleteFriends();
+    });
+
     $(document).on("change",'input[name="enhancedSelectNotifyUse"]',function(){
         var changed = $('[name="enhancedSelectNotifyUse"]:checked').val();
         SetValue("enhancedNotify", changed);
@@ -527,6 +542,78 @@ function LoadSettingsPageEvents()
             catEffect.play();
         }
     });
+}
+
+function LoadForDeleteFriends() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            jsonMyFriends = JSON.parse(xmlHttp.responseText);
+
+            var deleteCountLayer = document.createElement('div');
+            deleteCountLayer.id = "deleteCountLayer";
+            deleteCountLayer.className = "cover _cover";
+            document.body.appendChild(deleteCountLayer);
+            document.getElementById('deleteCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="deleteFriendText">친구 삭제 중... (0 / 0)</p><div>※정책상 삭제 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendComplete" style="display: none;"><span>확인</span></a> </div></div></div></div>';
+            //deletedFriendCount = 0;
+            DeleteFriends();
+        }
+    }
+    xmlHttp.open("GET", "https://story.kakao.com/a/friends");
+    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+    xmlHttp.setRequestHeader("Accept", "application/json");
+    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xmlHttp.send();
+}
+
+function DeleteFriendsConfirm()
+{
+    var deleteLayer = document.createElement('div');
+    deleteLayer.id = "deleteLayer";
+    deleteLayer.className = "cover _cover";
+    document.body.appendChild(deleteLayer);
+    document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' + 
+                                                        '<div class="cover_wrapper" style="z-index: 201;">' + 
+                                                        '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
+                                                                '<div class="inner_toast_layer _toastBody">' + 
+                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
+                                                                    '<div class="btn_group">' + 
+                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendConfirmCancel"><span>취소</span></a>' + 
+                                                                        '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendConfirmOK"><span>확인</span></a>' +
+                                                                    '</div>' +
+                                                                '</div>' +
+                                                            '</div>' +
+                                                        '</div>';
+}
+
+function DeleteFriends() {
+    setTimeout(function() {
+        if (deletedFriendCount < jsonMyFriends.profiles.length) {
+            _DeleteFriend(jsonMyFriends.profiles[deletedFriendCount]["id"]);
+            document.getElementById('deleteFriendText').innerHTML = '친구 삭제 중... (' + (deletedFriendCount + 1) + ' / ' + jsonMyFriends.profiles.length + ')';
+            deletedFriendCount++;
+            DeleteFriends();
+        } else {
+            document.getElementById('deleteFriendText').innerHTML = '전체 삭제 완료';
+            document.getElementById('deleteFriendComplete').style.display = 'block';
+        }
+    }, 750);
+}
+
+function _DeleteFriend(userid) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            //Deleted Message;
+        }
+    }
+    xmlHttp.open("DELETE", "https://story.kakao.com/a/friends/" + userid);
+    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+    xmlHttp.setRequestHeader("Accept", "application/json");
+    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xmlHttp.send();
 }
 
 function HideRecommendFriend()
