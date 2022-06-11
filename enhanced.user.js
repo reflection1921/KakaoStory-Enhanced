@@ -38,8 +38,8 @@
 let scriptVersion = "1.4";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
-//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
