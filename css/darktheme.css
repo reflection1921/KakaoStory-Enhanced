@@ -744,3 +744,4 @@ body { color: var(--text-color) !important; }
 .story_layer .txt_war { color: var(--text-desc-color) !important;}
 .story_layer .list_report li { border-bottom: 1px solid var(--header-border-color) !important; }
 .story_inflow.none_rnb .cont_inflow { border-right: 0px; }
+.cover_center { text-align: left !important; }
