@@ -33,14 +33,16 @@
  * enhancedLatestNotyID : 알림 마지막 ID(여러 개 창에서 중복 알림 발생 방지)
  * enhancedHideRecommendFriend : 추천친구 숨기기
  * enhancedHideLogo : 로고 숨기기(네이버)
+ * enhancedEarthquake : EARTHQUAKE!!!
+ * enhancedBlink : BLINK!!!
  */
 
 
 let scriptVersion = "1.6";
 
-//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
@@ -217,6 +219,9 @@ function InitEnhancedValues()
     var isEarthquake = GetValue('enhancedEarthquake', 'false');
     $('input:radio[name="enhancedSelectEarthquake"]:input[value=' + isEarthquake + ']').attr("checked", true);
 
+    var isBlink = GetValue('enhancedBlink', 'false');
+    $('input:radio[name="enhancedSelectBlink"]:input[value=' + isBlink + ']').attr("checked", true);
+
     var version = scriptVersion;
     if (version != GetValue('enhancedVersion', ''))
     {
@@ -358,6 +363,8 @@ function LoadCommonEvents()
     $(document).on('keydown', '._editable', function(e) {
         if (GetValue("enhancedEarthquake", 'false') == 'true') {
             $('div[data-part-name="writing"]').addClass("shake_text");
+        }
+        if (GetValue("enhancedBlink", 'false') == 'true') {
             $('#contents_write').addClass("blink_text");
         }
     });
@@ -531,6 +538,11 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedSelectEarthquake"]',function(){
         var changed = $('[name="enhancedSelectEarthquake"]:checked').val();
         SetValue("enhancedEarthquake", changed);
+    });
+
+    $(document).on("change",'input[name="enhancedSelectBlink"]',function(){
+        var changed = $('[name="enhancedSelectBlink"]:checked').val();
+        SetValue("enhancedBlink", changed);
     });
 
     $('body').on('click', '#enhancedUpdateNoticeOK', function() {
