@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.5
+// @version      1.6
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -32,10 +32,11 @@
  * enhancedKittyMode : Kitty Mode(verycute: sound + kitty, cute: kitty, none: 적용안함)
  * enhancedLatestNotyID : 알림 마지막 ID(여러 개 창에서 중복 알림 발생 방지)
  * enhancedHideRecommendFriend : 추천친구 숨기기
+ * enhancedHideLogo : 로고 숨기기(네이버)
  */
 
 
-let scriptVersion = "1.5";
+let scriptVersion = "1.6";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
@@ -193,6 +194,9 @@ function InitEnhancedValues()
 
     var isHidden = GetValue('enhancedHideChannelButton', 'true');
     $('input:radio[name="enhancedSelectHideChannelButton"]:input[value=' + isHidden + ']').attr("checked", true);
+
+    var isHiddenLogo = GetValue('enhancedHideLogo', 'false');
+    $('input:radio[name="enhancedSelectHideLogo"]:input[value=' + isHiddenLogo + ']').attr("checked", true);
 
     var isHiddenMemorize = GetValue('enhancedHideMemorize', 'true');
     $('input:radio[name="enhnacnedSelectHideMemorize"]:input[value=' + isHiddenMemorize + ']').attr("checked", true);
@@ -490,6 +494,11 @@ function LoadSettingsPageEvents()
         var changed = $('[name="enhancedSelectHideChannelButton"]:checked').val();
         SetValue("enhancedHideChannelButton", changed);
         HideChannelButton();
+    });
+
+    $(document).on("change",'input[name="enhancedSelectHideLogo"]',function(){
+        var changed = $('[name="enhancedSelectHideLogo"]:checked').val();
+        SetValue("enhancedHideLogo", changed);
     });
 
     $(document).on("change",'input[name="enhnacnedSelectHideMemorize"]',function(){
@@ -1015,7 +1024,20 @@ function DownloadText(text, name, type) {
     var file = new Blob([text], {type: type});
     a.href = URL.createObjectURL(file);
     a.download = name;
-  }
+}
+
+function HideLogo()
+{
+    document.getElementsByTagName('title')[0].innerText = "NAVER"
+    var link = document.querySelector("link[rel~='icon']");
+    if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    }
+    link.href = resourceURL + "images/naver.ico";
+}
+
 
 (function() {
     InitEnhancedSettingsPage();
@@ -1064,6 +1086,11 @@ function DownloadText(text, name, type) {
         ViewDetailNotFriendArticle();
 
         RemoveRecommendFeed();
+
+        if (GetValue('enhancedHideLogo', 'false') == 'true')
+        {
+            setTimeout(() => HideLogo(), 750);
+        }
 
     }, 100);
 })();
