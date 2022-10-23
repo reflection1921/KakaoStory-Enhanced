@@ -33,14 +33,16 @@
  * enhancedLatestNotyID : 알림 마지막 ID(여러 개 창에서 중복 알림 발생 방지)
  * enhancedHideRecommendFriend : 추천친구 숨기기
  * enhancedHideLogo : 로고 숨기기(네이버)
+ * enhancedEarthquake : EARTHQUAKE!!!
+ * enhancedBlink : BLINK!!!
  */
 
 
 let scriptVersion = "1.6";
 
-//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
@@ -217,13 +219,19 @@ function InitEnhancedValues()
     var isEarthquake = GetValue('enhancedEarthquake', 'false');
     $('input:radio[name="enhancedSelectEarthquake"]:input[value=' + isEarthquake + ']').attr("checked", true);
 
-    var version = scriptVersion;
-    if (version != GetValue('enhancedVersion', ''))
-    {
-        ViewUpdatePage();
-        SetValue('enhancedVersion', version);
-    }
-    document.getElementById('enhancedCurrentVersion').innerText = "현재버전: " + version;
+    var isBlink = GetValue('enhancedBlink', 'false');
+    $('input:radio[name="enhancedSelectBlink"]:input[value=' + isBlink + ']').attr("checked", true);
+
+    
+
+    // old check
+    // if (latestVersion != GetValue('enhancedVersion', ''))
+    // {
+    //     ViewUpdatePage();
+    //     SetValue('enhancedVersion', version);
+    // }
+
+    document.getElementById('enhancedCurrentVersion').innerText = "현재버전: " + scriptVersion;
 
     GetCSSVersion();
     GetLatestVersion();
@@ -263,6 +271,22 @@ function GetLatestVersion() {
             var scriptData = xmlHttp.responseText;
             var latestVersion = scriptData.split("// @version      ")[1].split("\n")[0];
             document.getElementById('enhancedLatestVersion').innerText = "최신버전: " + latestVersion;
+            //Update
+            var majorLatestVersion = latestVersion.split(".")[0];
+            majorLatestVersion = Number(majorLatestVersion);
+            var minorLatestVersion = latestVersion.split(".")[1];
+            minorLatestVersion = Number(minorLatestVersion);
+
+            var majorScriptVersion = scriptVersion.split(".")[0];
+            majorScriptVersion = Number(majorScriptVersion);
+
+            var minorScriptVersion = scriptVersion.split(".")[1];
+            minorScriptVersion = Number(minorScriptVersion);
+
+            if (majorLatestVersion > majorScriptVersion || (majorLatestVersion == majorScriptVersion && minorLatestVersion > minorScriptVersion))
+            {
+                ViewUpdatePage();
+            }
         }
     }
     xmlHttp.open("GET", resourceURL + "enhanced.user.js");
@@ -279,7 +303,7 @@ function ViewUpdatePage() {
             updateNotice.className = 'cover _cover';
             updateNotice.style.cssText = 'overflow-y: scroll;';
             document.body.appendChild(updateNotice);
-            document.getElementById('updateNoticeLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="write cover_content cover_center" data-kant-group="wrt" data-part-name="view"><div class="_layerWrapper layer_write"><div class="section _dropZone account_modify"><div class="writing"><div class="inp_contents" data-part-name="editor"><strong class="subtit_modify subtit_enhanced">\' Enhanced 업데이트 내역</strong><div style="word-break: break-all">' + updatehtml + '</div></div></div><div></div><div class="inp_footer"><div class="bn_group"> <a href="#" class="_postBtn btn_com btn_or" id="enhancedUpdateNoticeOK"><em>알겠어용</em></a></div></div></div></div><div></div></div></div>';
+            document.getElementById('updateNoticeLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="write cover_content cover_center" data-kant-group="wrt" data-part-name="view"><div class="_layerWrapper layer_write"><div class="section _dropZone account_modify"><div class="writing"><div class="inp_contents" data-part-name="editor"><strong class="subtit_modify subtit_enhanced">\' Enhanced 업데이트 내역</strong><div style="word-break: break-all">' + updatehtml + '</div></div></div><div></div><div class="inp_footer"><div class="bn_group"> <a href="https://github.com/reflection1921/KakaoStory-Enhanced/raw/main/enhanced.user.js" class="_postBtn btn_com btn_or" id="enhancedUpdateNoticeOK"><em>업데이트</em></a></div></div></div></div><div></div></div></div>';
             DisableScroll();
         }
     }
@@ -358,13 +382,34 @@ function LoadCommonEvents()
     $(document).on('keydown', '._editable', function(e) {
         if (GetValue("enhancedEarthquake", 'false') == 'true') {
             $('div[data-part-name="writing"]').addClass("shake_text");
+            $('.layer_write').addClass("shake_text");
+        }
+        if (GetValue("enhancedBlink", 'false') == 'true') {
             $('#contents_write').addClass("blink_text");
         }
     });
 
+    $(document).on('keydown', '[id^=comt_view]', function(e) {
+        if (GetValue("enhancedEarthquake", 'false') == 'true') {
+            if ($(e.target).parents('._commentWriting').length > 0) {
+                $(e.target).parents('._commentWriting').addClass("shake_text");
+            }
+            //$('._commentWriting').addClass("shake_text");
+        }
+        // if (GetValue("enhancedBlink", 'false') == 'true') {
+        //     $('#contents_write').addClass("blink_text");
+        // }
+    });
+
     $(document).on('keyup', '._editable', function() {
         $('div[data-part-name="writing"]').removeClass("shake_text");
+        $('.layer_write').removeClass("shake_text");
         $('#contents_write').removeClass("blink_text");
+    });
+
+    $(document).on('keyup', '[id^=comt_view]', function() {
+        $('._commentWriting').removeClass("shake_text");
+        //$('#contents_write').removeClass("blink_text");
     });
 
     //$('body').on('input', '#contents_write', function() {
@@ -531,6 +576,11 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedSelectEarthquake"]',function(){
         var changed = $('[name="enhancedSelectEarthquake"]:checked').val();
         SetValue("enhancedEarthquake", changed);
+    });
+
+    $(document).on("change",'input[name="enhancedSelectBlink"]',function(){
+        var changed = $('[name="enhancedSelectBlink"]:checked').val();
+        SetValue("enhancedBlink", changed);
     });
 
     $('body').on('click', '#enhancedUpdateNoticeOK', function() {

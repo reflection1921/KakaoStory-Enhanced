@@ -467,8 +467,6 @@ body { color: var(--text-color) !important; }
 .wrap_itemstory .item_story .link_belong .txt_belong { color: var(--info-text-color) !important; }
 .wrap_itemstory { border-top: 1px solid var(--dark-background-color) !important; }
 .wrap_itemstory { border-bottom: 1px solid var(--dark-background-color) !important; }
-.wrap_itemstory .item_story { border-right: 1px solid var(--dark-background-color) !important; }
-.wrap_itemstory .item_story { border-bottom: 1px solid var(--dark-background-color) !important; }
 .cover_cont .info_btn .on.btn_cover2 { background: var(--discord-blue) !important; }
 .cover_cont .info_btn .on.btn_cover2 { border-color: var(--discord-blue) !important; }
 .cover_cont .info_btn .on.btn_cover2:focus, .cover_cont .info_btn .on.btn_cover2:hover { background: var(--discord-blue-hover) !important; }
