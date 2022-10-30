@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.7
+// @version      1.8
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -38,7 +38,7 @@
  */
 
 
-let scriptVersion = "1.7";
+let scriptVersion = "1.8";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
@@ -50,6 +50,9 @@ let blockedList = new Set(); //block users
 let blockedStringList = new Array(); //block strings
 let catEffect = new Audio(resourceURL + 'sounds/cat-meow.mp3');
 let jThemes;
+
+let powerComboCnt = 0;
+let powerComboTimeCnt = 0;
 
 let deletedFriendCount = 0;
 let jsonMyFriends;
@@ -383,6 +386,7 @@ function LoadCommonEvents()
         if (GetValue("enhancedEarthquake", 'false') == 'true') {
             $('div[data-part-name="writing"]').addClass("shake_text");
             $('.layer_write').addClass("shake_text");
+            VisibleEnhancedPowerModeCount();
         }
         if (GetValue("enhancedBlink", 'false') == 'true') {
             $('#contents_write').addClass("blink_text");
@@ -393,6 +397,7 @@ function LoadCommonEvents()
         if (GetValue("enhancedEarthquake", 'false') == 'true') {
             if ($(e.target).parents('._commentWriting').length > 0) {
                 $(e.target).parents('._commentWriting').addClass("shake_text");
+                VisibleEnhancedPowerModeCount();
             }
             //$('._commentWriting').addClass("shake_text");
         }
@@ -405,11 +410,13 @@ function LoadCommonEvents()
         $('div[data-part-name="writing"]').removeClass("shake_text");
         $('.layer_write').removeClass("shake_text");
         $('#contents_write').removeClass("blink_text");
+        //StopEnhancedPowerModeShake();
     });
 
     $(document).on('keyup', '[id^=comt_view]', function() {
         $('._commentWriting').removeClass("shake_text");
         //$('#contents_write').removeClass("blink_text");
+        //StopEnhancedPowerModeShake();
     });
 
     //$('body').on('input', '#contents_write', function() {
@@ -418,6 +425,51 @@ function LoadCommonEvents()
         //setTimeout(() => null, 1);
         //catEffect.play();
     //});
+}
+
+function VisibleEnhancedPowerModeCount()
+{
+    powerComboCnt += 1;
+    powerComboTimeCnt = 0;
+
+    document.getElementById("enhancedPowerModeScore").style.visibility = 'visible';
+    $('#enhancedPowerModeScore').addClass("enhanced_power_mode_score_enable");
+    document.getElementById("enhancedPowerModeScore").innerText = "COMBO " + powerComboCnt;
+    if (powerComboCnt > 100 && powerComboCnt < 300)
+    {
+        $('#enhancedPowerModeScore').addClass("shake_text_s");
+        $('#enhancedPowerModeScore').removeClass("shake_text");
+        $('#enhancedPowerModeScore').removeClass("shake_text_l");
+    }
+    else if (powerComboCnt > 300 && powerComboCnt < 500)
+    {  
+        $('#enhancedPowerModeScore').addClass("shake_text");
+        $('#enhancedPowerModeScore').removeClass("shake_text_s");
+        $('#enhancedPowerModeScore').removeClass("shake_text_l");
+    }
+    else if (powerComboCnt > 500)
+    {
+        $('#enhancedPowerModeScore').addClass("shake_text_l");
+        $('#enhancedPowerModeScore').removeClass("shake_text");
+        $('#enhancedPowerModeScore').removeClass("shake_text_s");
+    }
+}
+
+function InvisibleEnhancedPowerModeCount()
+{
+    powerComboCnt = 0;
+    document.getElementById("enhancedPowerModeScore").style.visibility = 'hidden';
+    $('#enhancedPowerModeScore').removeClass("enhanced_power_mode_score_enable");
+    $('#enhancedPowerModeScore').removeClass("shake_text_s");
+    $('#enhancedPowerModeScore').removeClass("shake_text");
+    $('#enhancedPowerModeScore').removeClass("shake_text_l");
+}
+
+function StopEnhancedPowerModeShake()
+{
+    $('#enhancedPowerModeScore').removeClass("shake_text_s");
+    $('#enhancedPowerModeScore').removeClass("shake_text");
+    $('#enhancedPowerModeScore').removeClass("shake_text_l");
 }
 
 function LoadSettingsPageEvents()
@@ -1088,6 +1140,17 @@ function HideLogo()
     link.href = resourceURL + "images/naver.ico";
 }
 
+function AddPowerModeScoreElements()
+{
+    var header = document.querySelectorAll('[data-part-name="gnbMenu"]')[0];
+    var scoreElement = document.createElement('div');
+    scoreElement.id = 'enhancedPowerModeScore';
+    scoreElement.className = 'enhanced_power_mode_score';
+    scoreElement.innerText = 'COMBO 120';
+    scoreElement.style.visibility = 'hidden';
+    header.appendChild(scoreElement);
+}
+
 
 (function() {
     InitEnhancedSettingsPage();
@@ -1097,6 +1160,7 @@ function HideLogo()
     setTimeout(() => MoveKitty(), 1000);
     setTimeout(() => GetMyID(), 3000); //for discord style mention feature
     setTimeout(() => HideChannelButton(), 500); //hide channel and teller buttons
+    setTimeout(() => AddPowerModeScoreElements(), 1000); //power mode
 
     setInterval(function() {
         if (GetValue('enhancedNotify', 'false') == 'true')
@@ -1140,6 +1204,15 @@ function HideLogo()
         if (GetValue('enhancedHideLogo', 'false') == 'true')
         {
             setTimeout(() => HideLogo(), 750);
+        }
+
+        if (GetValue('enhancedEarthquake', 'false') == 'true')
+        {
+            powerComboTimeCnt += 1;
+            if (powerComboTimeCnt > 50)
+            {
+                InvisibleEnhancedPowerModeCount();
+            }
         }
 
     }, 100);
