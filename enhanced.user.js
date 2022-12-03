@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.8
+// @version      1.9
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -35,10 +35,11 @@
  * enhancedHideLogo : 로고 숨기기(네이버)
  * enhancedEarthquake : EARTHQUAKE!!!
  * enhancedBlink : BLINK!!!
+ * enhancedBlockArticleAll : 강화된 차단의 공유글 전체 보이기 / 숨기기(현재 지원안함. 추후 지원 예정.)
  */
 
 
-let scriptVersion = "1.8";
+let scriptVersion = "1.9";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
@@ -224,6 +225,9 @@ function InitEnhancedValues()
 
     var isBlink = GetValue('enhancedBlink', 'false');
     $('input:radio[name="enhancedSelectBlink"]:input[value=' + isBlink + ']').attr("checked", true);
+
+    var isBlockAllArticle = GetValue('enhancedBlockArticleAll', 'true');
+    $('input:radio[name="enhancedSelectBlockArticleAll"]:input[value=' + isBlockAllArticle + ']').attr("checked", true);
 
     
 
@@ -635,6 +639,11 @@ function LoadSettingsPageEvents()
         SetValue("enhancedBlink", changed);
     });
 
+    $(document).on("change",'input[name="enhancedSelectBlockArticleAll"]',function(){
+        var changed = $('[name="enhancedSelectBlockArticleAll"]:checked').val();
+        SetValue("enhancedBlockArticleAll", changed);
+    });
+
     $('body').on('click', '#enhancedUpdateNoticeOK', function() {
         document.getElementById("updateNoticeLayer").remove();
         EnableScroll();
@@ -1032,6 +1041,54 @@ function HideBlockedUserComment() {
     }
 }
 
+function HideBlockedUserArticle()
+{
+    var articles = document.getElementsByClassName("section _activity");
+    for (var i = 0; i < articles.length; i++)
+    {
+        if (articles[i].getElementsByClassName("fd_cont _contentWrapper").length <= 0) //this is not article
+        {
+            continue;
+        }
+
+        var content = articles[i].getElementsByClassName("fd_cont _contentWrapper")[0];
+
+        if (content.getElementsByClassName("share_wrap share_wrap_v2").length <= 0) //this is not shared article
+        {
+            continue;
+        }
+
+        var shared_content = content.getElementsByClassName("share_wrap share_wrap_v2")[0];
+        
+        if (shared_content.getElementsByClassName("pf") <= 0) //???
+        {
+            continue;
+        }
+
+        var profile_info = shared_content.getElementsByClassName("pf")[0];
+        var bannedID = profile_info.getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
+
+        if (blockedList.has(bannedID) == true) {
+
+            //not used.
+            /*
+            if (GetValue('enhancedBlockArticleAll', 'true') == 'false')
+            {
+                shared_content.style.display = 'none';
+                continue;
+            }
+            */
+
+            articles[i].style.display = 'none';
+            /*
+            comments[i].parentElement.remove();
+            i -= 1; // only for remove()
+            */
+        }
+
+    }
+}
+
 function GetBlockedUsers() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
@@ -1188,6 +1245,7 @@ function AddPowerModeScoreElements()
         if (GetValue('enhancedBlockUser', 'true') == 'true')
         {
             HideBlockedUserComment();
+            HideBlockedUserArticle();
         }
 
         if (GetValue('enhancedHideRecommendFriend', 'false') == 'true')

@@ -116,7 +116,7 @@
                         <br>※알림 체크 주기는 20초 또는 그 이상을 권장합니다.
                     </dd>
                 </dl>
-                <strong class="subtit_modify">차단 설정</strong>
+                <strong class="subtit_modify">강화된 차단 설정</strong>
                 <dl class="list_account">
                     <dt>강화된 차단</dt>
                     <dd>
@@ -130,6 +130,22 @@
                                 <label for="enhancedBlockUserDisable">사용안함</label>
                             </div>
                         </div>
+                        ※강화된 차단을 사용하면 차단한 사용자의 글을 공유한 게시글 및 댓글을 안보이게 가려줍니다.
+                    </dd>
+                    <dt style="display: none">공유글 숨기기</dt>
+                    <dd style="display: none">
+                        <div class="option_msg">
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectBlockArticleAll" class="inp_radio _friendListExposure" id="enhancedBlockArticleAll" value="true">
+                                <label for="enhancedBlockArticleAll">해당 글 전체 안보이기</label>
+                            </div>
+                            <div class="radio_inp">
+                                <input type="radio" name="enhancedSelectBlockArticleAll" class="inp_radio _friendListExposure" id="enhancedBlockArticleInner" value="false">
+                                <label for="enhancedBlockArticleInner">차단한 유저의 글만 안보이기</label>
+                            </div>
+                        </div>
+                        ※해당 글 전체 안보이기를 선택하면 공유한 사용자의 공유글도 함께 안보입니다.<br>
+                        ※차단한 유저의 글만 안보이기를 선택하면 공유한 사용자의 공유글은 보이지만 그 안의 공유 내용은 보이지 않습니다.
                     </dd>
                     <dt>문자열 차단</dt>
                     <dd>
@@ -138,11 +154,7 @@
                                 <em>차단할 문자열 등록</em>
                             </a>
                         </div>
-                    </dd>
-                    <dt>TIP</dt>
-                    <dd>
-                        강화된 차단을 사용하면 차단한 사용자의 댓글을 안보이게 가려줍니다.<br><br>
-                        문자열 차단을 사용하면 등록한 문자열이 있는 글을 안보이게 가려줍니다.
+                        ※문자열 차단을 사용하면 등록한 문자열이 있는 글을 안보이게 가려줍니다.
                     </dd>
                 </dl>
                 <strong class="subtit_modify">기타 설정</strong>
