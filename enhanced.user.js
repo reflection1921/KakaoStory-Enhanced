@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.9
+// @version      1.10
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -39,7 +39,7 @@
  */
 
 
-let scriptVersion = "1.9";
+let scriptVersion = "1.10";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
@@ -1080,6 +1080,49 @@ function HideBlockedUserArticle()
             */
 
             articles[i].style.display = 'none';
+            /*
+            comments[i].parentElement.remove();
+            i -= 1; // only for remove()
+            */
+        }
+
+    }
+
+    var bundle_articles = document.getElementsByClassName("section section_bundle");
+    for (var i = 0; i < bundle_articles.length; i++)
+    {
+        if (bundle_articles[i].getElementsByClassName("fd_cont").length <= 0) //this is not valid bundled article
+        {
+            continue;
+        }
+
+        var content = bundle_articles[i].getElementsByClassName("fd_cont")[0];
+
+        if (content.getElementsByClassName("_bundleContainer").length <= 0) //this is not valid bundled article
+        {
+            continue;
+        }
+
+        if (content.querySelector("div[data-part-name='originalActivity']") == null) //this is not valid bundled article
+        {
+            continue;
+        }
+
+        var profile_info = content.querySelector("div[data-part-name='originalActivity']").getElementsByClassName("pf")[0];
+        var bannedID = profile_info.getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
+
+        if (blockedList.has(bannedID) == true) {
+
+            //not used.
+            /*
+            if (GetValue('enhancedBlockArticleAll', 'true') == 'false')
+            {
+                shared_content.style.display = 'none';
+                continue;
+            }
+            */
+
+            bundle_articles[i].style.display = 'none';
             /*
             comments[i].parentElement.remove();
             i -= 1; // only for remove()
