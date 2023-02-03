@@ -393,7 +393,7 @@ function LoadCommonEvents()
             VisibleEnhancedPowerModeCount();
         }
         if (GetValue("enhancedBlink", 'false') == 'true') {
-            $('#contents_write').addClass("blink_text");
+            document.getElementById("contents_write").classList.add("blink_text");
         }
     });
 
@@ -413,7 +413,7 @@ function LoadCommonEvents()
     $(document).on('keyup', '._editable', function() {
         $('div[data-part-name="writing"]').removeClass("shake_text");
         $('.layer_write').removeClass("shake_text");
-        $('#contents_write').removeClass("blink_text");
+        document.getElementById("contents_write").classList.remove("blink_text");
         //StopEnhancedPowerModeShake();
     });
 
@@ -437,25 +437,25 @@ function VisibleEnhancedPowerModeCount()
     powerComboTimeCnt = 0;
 
     document.getElementById("enhancedPowerModeScore").style.visibility = 'visible';
-    $('#enhancedPowerModeScore').addClass("enhanced_power_mode_score_enable");
+    document.getElementById("enhancedPowerModeScore").classList.add("enhanced_power_mode_score_enable");
     document.getElementById("enhancedPowerModeScore").innerText = "COMBO " + powerComboCnt;
     if (powerComboCnt > 100 && powerComboCnt < 300)
     {
-        $('#enhancedPowerModeScore').addClass("shake_text_s");
-        $('#enhancedPowerModeScore').removeClass("shake_text");
-        $('#enhancedPowerModeScore').removeClass("shake_text_l");
+        document.getElementById("enhancedPowerModeScore").classList.add("shake_text_s");
+        document.getElementById("enhancedPowerModeScore").classList.remove("shake_text");
+        document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_l");
     }
     else if (powerComboCnt > 300 && powerComboCnt < 500)
     {  
-        $('#enhancedPowerModeScore').addClass("shake_text");
-        $('#enhancedPowerModeScore').removeClass("shake_text_s");
-        $('#enhancedPowerModeScore').removeClass("shake_text_l");
+        document.getElementById("enhancedPowerModeScore").classList.add("shake_text");
+        document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_s");
+        document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_l");
     }
     else if (powerComboCnt > 500)
     {
-        $('#enhancedPowerModeScore').addClass("shake_text_l");
-        $('#enhancedPowerModeScore').removeClass("shake_text");
-        $('#enhancedPowerModeScore').removeClass("shake_text_s");
+        document.getElementById("enhancedPowerModeScore").classList.add("shake_text_l");
+        document.getElementById("enhancedPowerModeScore").classList.remove("shake_text");
+        document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_s");
     }
 }
 
@@ -463,17 +463,15 @@ function InvisibleEnhancedPowerModeCount()
 {
     powerComboCnt = 0;
     document.getElementById("enhancedPowerModeScore").style.visibility = 'hidden';
-    $('#enhancedPowerModeScore').removeClass("enhanced_power_mode_score_enable");
-    $('#enhancedPowerModeScore').removeClass("shake_text_s");
-    $('#enhancedPowerModeScore').removeClass("shake_text");
-    $('#enhancedPowerModeScore').removeClass("shake_text_l");
+    document.getElementById("enhancedPowerModeScore").classList.remove("enhanced_power_mode_score_enable");
+    StopEnhancedPowerModeShake();
 }
 
 function StopEnhancedPowerModeShake()
 {
-    $('#enhancedPowerModeScore').removeClass("shake_text_s");
-    $('#enhancedPowerModeScore').removeClass("shake_text");
-    $('#enhancedPowerModeScore').removeClass("shake_text_l");
+    document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_s");
+    document.getElementById("enhancedPowerModeScore").classList.remove("shake_text");
+    document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_l");
 }
 
 function LoadSettingsPageEvents()
