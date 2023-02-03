@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.10
+// @version      1.11
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -39,7 +39,7 @@
  */
 
 
-let scriptVersion = "1.10";
+let scriptVersion = "1.11";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
@@ -393,7 +393,7 @@ function LoadCommonEvents()
             VisibleEnhancedPowerModeCount();
         }
         if (GetValue("enhancedBlink", 'false') == 'true') {
-            $('#contents_write').addClass("blink_text");
+            document.getElementById("contents_write").classList.add("blink_text");
         }
     });
 
@@ -413,7 +413,7 @@ function LoadCommonEvents()
     $(document).on('keyup', '._editable', function() {
         $('div[data-part-name="writing"]').removeClass("shake_text");
         $('.layer_write').removeClass("shake_text");
-        $('#contents_write').removeClass("blink_text");
+        document.getElementById("contents_write").classList.remove("blink_text");
         //StopEnhancedPowerModeShake();
     });
 
@@ -437,25 +437,25 @@ function VisibleEnhancedPowerModeCount()
     powerComboTimeCnt = 0;
 
     document.getElementById("enhancedPowerModeScore").style.visibility = 'visible';
-    $('#enhancedPowerModeScore').addClass("enhanced_power_mode_score_enable");
+    document.getElementById("enhancedPowerModeScore").classList.add("enhanced_power_mode_score_enable");
     document.getElementById("enhancedPowerModeScore").innerText = "COMBO " + powerComboCnt;
     if (powerComboCnt > 100 && powerComboCnt < 300)
     {
-        $('#enhancedPowerModeScore').addClass("shake_text_s");
-        $('#enhancedPowerModeScore').removeClass("shake_text");
-        $('#enhancedPowerModeScore').removeClass("shake_text_l");
+        document.getElementById("enhancedPowerModeScore").classList.add("shake_text_s");
+        document.getElementById("enhancedPowerModeScore").classList.remove("shake_text");
+        document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_l");
     }
     else if (powerComboCnt > 300 && powerComboCnt < 500)
     {  
-        $('#enhancedPowerModeScore').addClass("shake_text");
-        $('#enhancedPowerModeScore').removeClass("shake_text_s");
-        $('#enhancedPowerModeScore').removeClass("shake_text_l");
+        document.getElementById("enhancedPowerModeScore").classList.add("shake_text");
+        document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_s");
+        document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_l");
     }
     else if (powerComboCnt > 500)
     {
-        $('#enhancedPowerModeScore').addClass("shake_text_l");
-        $('#enhancedPowerModeScore').removeClass("shake_text");
-        $('#enhancedPowerModeScore').removeClass("shake_text_s");
+        document.getElementById("enhancedPowerModeScore").classList.add("shake_text_l");
+        document.getElementById("enhancedPowerModeScore").classList.remove("shake_text");
+        document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_s");
     }
 }
 
@@ -463,17 +463,15 @@ function InvisibleEnhancedPowerModeCount()
 {
     powerComboCnt = 0;
     document.getElementById("enhancedPowerModeScore").style.visibility = 'hidden';
-    $('#enhancedPowerModeScore').removeClass("enhanced_power_mode_score_enable");
-    $('#enhancedPowerModeScore').removeClass("shake_text_s");
-    $('#enhancedPowerModeScore').removeClass("shake_text");
-    $('#enhancedPowerModeScore').removeClass("shake_text_l");
+    document.getElementById("enhancedPowerModeScore").classList.remove("enhanced_power_mode_score_enable");
+    StopEnhancedPowerModeShake();
 }
 
 function StopEnhancedPowerModeShake()
 {
-    $('#enhancedPowerModeScore').removeClass("shake_text_s");
-    $('#enhancedPowerModeScore').removeClass("shake_text");
-    $('#enhancedPowerModeScore').removeClass("shake_text_l");
+    document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_s");
+    document.getElementById("enhancedPowerModeScore").classList.remove("shake_text");
+    document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_l");
 }
 
 function LoadSettingsPageEvents()
@@ -569,6 +567,15 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on('click', '#deleteFriendConfirmOK', function() {
+        document.getElementById("deleteLayer").remove();
+        DeleteFriendsReConfirm();
+    });
+
+    $(document).on('click', '#deleteFriendReConfirmCancel', function() {
+        document.getElementById("deleteLayer").remove();
+    });
+
+    $(document).on('click', '#deleteFriendReConfirmOK', function() {
         LoadForDeleteFriends();
     });
 
@@ -697,10 +704,30 @@ function DeleteFriendsConfirm()
                                                         '<div class="cover_wrapper" style="z-index: 201;">' + 
                                                         '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
                                                                 '<div class="inner_toast_layer _toastBody">' + 
-                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
+                                                                    '<p class="txt _dialogText">정말 친구~를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
                                                                     '<div class="btn_group">' + 
                                                                         '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendConfirmCancel"><span>취소</span></a>' + 
                                                                         '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendConfirmOK"><span>확인</span></a>' +
+                                                                    '</div>' +
+                                                                '</div>' +
+                                                            '</div>' +
+                                                        '</div>';
+}
+
+function DeleteFriendsReConfirm()
+{
+    var deleteLayer = document.createElement('div');
+    deleteLayer.id = "deleteLayer";
+    deleteLayer.className = "cover _cover";
+    document.body.appendChild(deleteLayer);
+    document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' + 
+                                                        '<div class="cover_wrapper" style="z-index: 201;">' + 
+                                                        '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
+                                                                '<div class="inner_toast_layer _toastBody">' + 
+                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>진행하면 되돌릴 수 없습니다!<br>다시 한 번 신중하게 생각해주세요!</p>' +
+                                                                    '<div class="btn_group">' + 
+                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendReConfirmCancel"><span>취소</span></a>' + 
+                                                                        '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendReConfirmOK"><span>확인</span></a>' +
                                                                     '</div>' +
                                                                 '</div>' +
                                                             '</div>' +
@@ -1015,15 +1042,36 @@ function SetEmoticonSize()
     {
         SetCSS('enhancedCommentEmoticonSize', '.comment .comt_write .inp_write .inp_graphic .kakao_emoticon, .comment .list>li .txt .emoticon .kakao_emoticon { width: 64px !important; height: 64px !important; }');
         SetCSS('enhancedArticleEmoticonSize', '.fd_cont .txt_wrap .kakao_emoticon { width: 84px !important; height: 84px !important; }');
+        SetCSS('enhancedWriteEmoticonSize', '.write .inp_contents .sticon { height: 84px !important; }')
     } else if (sSize == "middle")
     {
         SetCSS('enhancedCommentEmoticonSize', '.comment .comt_write .inp_write .inp_graphic .kakao_emoticon, .comment .list>li .txt .emoticon .kakao_emoticon { width: 96px !important; height: 96px !important; }');
         SetCSS('enhancedArticleEmoticonSize', '.fd_cont .txt_wrap .kakao_emoticon { width: 96px !important; height: 96px !important; }');
+        SetCSS('enhancedWriteEmoticonSize', '.write .inp_contents .sticon { height: 96px !important; }')
     } else
     {
         SetCSS('enhancedCommentEmoticonSize', '.comment .comt_write .inp_write .inp_graphic .kakao_emoticon, .comment .list>li .txt .emoticon .kakao_emoticon { width: 128px !important; height: 128px !important; }');
         SetCSS('enhancedArticleEmoticonSize', '.fd_cont .txt_wrap .kakao_emoticon { width: 128px !important; height: 128px !important; }');
+        SetCSS('enhancedWriteEmoticonSize', '.write .inp_contents .sticon { height: 128px !important; }')
     }
+}
+
+function SetEmoticonSelectorSize()
+{
+    var sSize = GetValue("enhancedEmoticonSize", 'small');
+    console.log(sSize)
+
+    if (sSize == "middle")
+    {
+        SetCSS('enhancedEmoticonSelectorItemSize', '.emoticon_keyboard .emt_il .emt_il_item { width: 96px !important; height: 96px !important; } .emoticon_keyboard .emt_il img { width: 96px !important; height: 96px !important; }')
+        SetCSS('enhancedEmoticonSelectorBoxSize', '.write .section .inp_footer .emoticon_layer { width: 500px !important; } .emoticon_keyboard .emoticon_item_list { height: 350px !important; } .emoticon_layer { width: 500px !important; }')
+    }
+    else if (sSize == "big")
+    {
+        SetCSS('enhancedEmoticonSelectorItemSize', '.emoticon_keyboard .emt_il .emt_il_item { width: 128px !important; height: 128px !important; } .emoticon_keyboard .emt_il img { width: 128px !important; height: 128px !important; }')
+        SetCSS('enhancedEmoticonSelectorBoxSize', '.write .section .inp_footer .emoticon_layer { width: 630px !important; } .emoticon_keyboard .emoticon_item_list { height: 450px !important; } .emoticon_layer { width: 630px !important; }')
+    }
+    
 }
 
 function HideBlockedUserComment() {
@@ -1179,15 +1227,16 @@ function HideBlockStringArticle() {
 
 function MoveKitty()
 {
+    var hasKitty = document.getElementById("enhancedKittyImage") != null;
     if (GetValue('enhancedKittyMode', 'none') == 'none')
     {
-        if ($("#enhancedKittyImage").length > 0)
+        if (hasKitty)
         {
             document.getElementById("enhancedKittyImage").remove();
         }
         return;
     }
-    if ($("#enhancedKittyImage").length <= 0)
+    if (!hasKitty)
     {
         var kitty = document.createElement('img');
         kitty.id = 'enhancedKittyImage';
@@ -1251,11 +1300,24 @@ function AddPowerModeScoreElements()
     header.appendChild(scoreElement);
 }
 
+//enhancedDark2TestCSS
+function SetCSS2(elID, cssText)
+{
+    //GM_addStyle(cssText);
+    var elem = document.createElement('style');
+    elem.id = elID;
+    document.head.appendChild(elem);
+    document.getElementById(elID).innerHTML = cssText;
+}
+
 
 (function() {
     InitEnhancedSettingsPage();
     LoadCommonEvents();
     GetBlockedUsers();
+
+    SetEmoticonSelectorSize();
+
     setTimeout(() => AddEnhancedMenu(), 1000);
     setTimeout(() => MoveKitty(), 1000);
     setTimeout(() => GetMyID(), 3000); //for discord style mention feature
