@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.10
+// @version      1.11
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -39,7 +39,7 @@
  */
 
 
-let scriptVersion = "1.10";
+let scriptVersion = "1.11";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
@@ -1042,15 +1042,36 @@ function SetEmoticonSize()
     {
         SetCSS('enhancedCommentEmoticonSize', '.comment .comt_write .inp_write .inp_graphic .kakao_emoticon, .comment .list>li .txt .emoticon .kakao_emoticon { width: 64px !important; height: 64px !important; }');
         SetCSS('enhancedArticleEmoticonSize', '.fd_cont .txt_wrap .kakao_emoticon { width: 84px !important; height: 84px !important; }');
+        SetCSS('enhancedWriteEmoticonSize', '.write .inp_contents .sticon { height: 84px !important; }')
     } else if (sSize == "middle")
     {
         SetCSS('enhancedCommentEmoticonSize', '.comment .comt_write .inp_write .inp_graphic .kakao_emoticon, .comment .list>li .txt .emoticon .kakao_emoticon { width: 96px !important; height: 96px !important; }');
         SetCSS('enhancedArticleEmoticonSize', '.fd_cont .txt_wrap .kakao_emoticon { width: 96px !important; height: 96px !important; }');
+        SetCSS('enhancedWriteEmoticonSize', '.write .inp_contents .sticon { height: 96px !important; }')
     } else
     {
         SetCSS('enhancedCommentEmoticonSize', '.comment .comt_write .inp_write .inp_graphic .kakao_emoticon, .comment .list>li .txt .emoticon .kakao_emoticon { width: 128px !important; height: 128px !important; }');
         SetCSS('enhancedArticleEmoticonSize', '.fd_cont .txt_wrap .kakao_emoticon { width: 128px !important; height: 128px !important; }');
+        SetCSS('enhancedWriteEmoticonSize', '.write .inp_contents .sticon { height: 128px !important; }')
     }
+}
+
+function SetEmoticonSelectorSize()
+{
+    var sSize = GetValue("enhancedEmoticonSize", 'small');
+    console.log(sSize)
+
+    if (sSize == "middle")
+    {
+        SetCSS('enhancedEmoticonSelectorItemSize', '.emoticon_keyboard .emt_il .emt_il_item { width: 96px !important; height: 96px !important; } .emoticon_keyboard .emt_il img { width: 96px !important; height: 96px !important; }')
+        SetCSS('enhancedEmoticonSelectorBoxSize', '.write .section .inp_footer .emoticon_layer { width: 500px !important; } .emoticon_keyboard .emoticon_item_list { height: 350px !important; } .emoticon_layer { width: 500px !important; }')
+    }
+    else if (sSize == "big")
+    {
+        SetCSS('enhancedEmoticonSelectorItemSize', '.emoticon_keyboard .emt_il .emt_il_item { width: 128px !important; height: 128px !important; } .emoticon_keyboard .emt_il img { width: 128px !important; height: 128px !important; }')
+        SetCSS('enhancedEmoticonSelectorBoxSize', '.write .section .inp_footer .emoticon_layer { width: 630px !important; } .emoticon_keyboard .emoticon_item_list { height: 450px !important; } .emoticon_layer { width: 630px !important; }')
+    }
+    
 }
 
 function HideBlockedUserComment() {
@@ -1279,11 +1300,24 @@ function AddPowerModeScoreElements()
     header.appendChild(scoreElement);
 }
 
+//enhancedDark2TestCSS
+function SetCSS2(elID, cssText)
+{
+    //GM_addStyle(cssText);
+    var elem = document.createElement('style');
+    elem.id = elID;
+    document.head.appendChild(elem);
+    document.getElementById(elID).innerHTML = cssText;
+}
+
 
 (function() {
     InitEnhancedSettingsPage();
     LoadCommonEvents();
     GetBlockedUsers();
+
+    SetEmoticonSelectorSize();
+
     setTimeout(() => AddEnhancedMenu(), 1000);
     setTimeout(() => MoveKitty(), 1000);
     setTimeout(() => GetMyID(), 3000); //for discord style mention feature
