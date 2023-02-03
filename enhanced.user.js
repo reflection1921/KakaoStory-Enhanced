@@ -569,6 +569,15 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on('click', '#deleteFriendConfirmOK', function() {
+        document.getElementById("deleteLayer").remove();
+        DeleteFriendsReConfirm();
+    });
+
+    $(document).on('click', '#deleteFriendReConfirmCancel', function() {
+        document.getElementById("deleteLayer").remove();
+    });
+
+    $(document).on('click', '#deleteFriendReConfirmOK', function() {
         LoadForDeleteFriends();
     });
 
@@ -697,10 +706,30 @@ function DeleteFriendsConfirm()
                                                         '<div class="cover_wrapper" style="z-index: 201;">' + 
                                                         '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
                                                                 '<div class="inner_toast_layer _toastBody">' + 
-                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
+                                                                    '<p class="txt _dialogText">정말 친구~를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
                                                                     '<div class="btn_group">' + 
                                                                         '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendConfirmCancel"><span>취소</span></a>' + 
                                                                         '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendConfirmOK"><span>확인</span></a>' +
+                                                                    '</div>' +
+                                                                '</div>' +
+                                                            '</div>' +
+                                                        '</div>';
+}
+
+function DeleteFriendsReConfirm()
+{
+    var deleteLayer = document.createElement('div');
+    deleteLayer.id = "deleteLayer";
+    deleteLayer.className = "cover _cover";
+    document.body.appendChild(deleteLayer);
+    document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' + 
+                                                        '<div class="cover_wrapper" style="z-index: 201;">' + 
+                                                        '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
+                                                                '<div class="inner_toast_layer _toastBody">' + 
+                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>진행하면 되돌릴 수 없습니다!<br>다시 한 번 신중하게 생각해주세요!</p>' +
+                                                                    '<div class="btn_group">' + 
+                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendReConfirmCancel"><span>취소</span></a>' + 
+                                                                        '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendReConfirmOK"><span>확인</span></a>' +
                                                                     '</div>' +
                                                                 '</div>' +
                                                             '</div>' +
@@ -1179,15 +1208,16 @@ function HideBlockStringArticle() {
 
 function MoveKitty()
 {
+    var hasKitty = document.getElementById("enhancedKittyImage") != null;
     if (GetValue('enhancedKittyMode', 'none') == 'none')
     {
-        if ($("#enhancedKittyImage").length > 0)
+        if (hasKitty)
         {
             document.getElementById("enhancedKittyImage").remove();
         }
         return;
     }
-    if ($("#enhancedKittyImage").length <= 0)
+    if (!hasKitty)
     {
         var kitty = document.createElement('img');
         kitty.id = 'enhancedKittyImage';
