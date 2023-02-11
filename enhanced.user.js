@@ -554,6 +554,10 @@ function LoadSettingsPageEvents()
         BackupFriendsList();
     });
 
+    $(document).on('click', '#enhancedBtnBackupBannedUserList', function() {
+        BackupBannedUserList();
+    });
+
     $(document).on('click', '#enhancedBtnUpdateInfo', function() {
         ViewUpdateAllPage();
     });
@@ -1006,6 +1010,27 @@ function BackupFriendsList() {
     xmlHttp.send();
 }
 
+function BackupBannedUserList() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            var jsonFriends = JSON.parse(xmlHttp.responseText);
+            var friendsText = '';
+            for (var i = 0; i < jsonFriends.profiles.length; i ++) {
+                friendsText = friendsText + String(jsonFriends.profiles[i]["display_name"]) + " : " + String(jsonFriends.profiles[i]["id"]) + '\n';
+            }
+            document.getElementById("enhancedFriendsBackupDescription").innerHTML = "※백업 데이터가 생성 되었습니다! 한번 더 클릭하여 다운로드를 진행하세요.<br>만약 다운로드가 진행되지 않을 경우, 우클릭하여 다른 이름으로 링크 저장을 사용해보세요.<br>다시 새로운 정보로 다운로드 하시려면, 새로고침이 필요합니다.";
+            SaveText(friendsText, "차단목록백업.txt", "text/plain");
+        }
+    }
+    xmlHttp.open("GET", "https://story.kakao.com/a/bans");
+    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+    xmlHttp.setRequestHeader("Accept", "application/json");
+    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xmlHttp.send();
+}
+
 function AddDownloadVideoButton() {
     var videoControl = document.getElementsByClassName("mejs-controls");
     for (var i = 0; i < videoControl.length; i++) {
@@ -1279,6 +1304,11 @@ function DownloadText(text, name, type) {
 
 function HideLogo()
 {
+    if (document.getElementsByTagName('title')[0].innerText == "NAVER")
+    {
+        return;
+    }
+
     document.getElementsByTagName('title')[0].innerText = "NAVER"
     var link = document.querySelector("link[rel~='icon']");
     if (!link) {
