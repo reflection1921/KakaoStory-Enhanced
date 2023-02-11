@@ -982,8 +982,8 @@ function DEPRECATEDSaveText(str, fileName) {
     saveAs(blob, fileName);
 }
 
-function SaveText(text, name, type) {
-    var btnEl = document.getElementById("enhancedBtnBackupFriendsList");
+function SaveText(text, name, type, btnID) {
+    var btnEl = document.getElementById(btnID);
     var file = new Blob([text], {type: type});
     btnEl.href = URL.createObjectURL(file);
     btnEl.download = name;
@@ -999,7 +999,7 @@ function BackupFriendsList() {
                 friendsText = friendsText + String(jsonFriends.profiles[i]["display_name"]) + " : " + String(jsonFriends.profiles[i]["id"]) + '\n';
             }
             document.getElementById("enhancedFriendsBackupDescription").innerHTML = "※백업 데이터가 생성 되었습니다! 한번 더 클릭하여 다운로드를 진행하세요.<br>만약 다운로드가 진행되지 않을 경우, 우클릭하여 다른 이름으로 링크 저장을 사용해보세요.<br>다시 새로운 정보로 다운로드 하시려면, 새로고침이 필요합니다.";
-            SaveText(friendsText, "친구목록백업.txt", "text/plain");
+            SaveText(friendsText, "친구목록백업.txt", "text/plain", "enhancedBtnBackupFriendsList");
         }
     }
     xmlHttp.open("GET", "https://story.kakao.com/a/friends");
@@ -1014,13 +1014,13 @@ function BackupBannedUserList() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-            var jsonFriends = JSON.parse(xmlHttp.responseText);
-            var friendsText = '';
-            for (var i = 0; i < jsonFriends.profiles.length; i ++) {
-                friendsText = friendsText + String(jsonFriends.profiles[i]["display_name"]) + " : " + String(jsonFriends.profiles[i]["id"]) + '\n';
+            var jsonBannedUsers = JSON.parse(xmlHttp.responseText);
+            var bannedUsersText = '';
+            for (var i = 0; i < jsonBannedUsers.length; i ++) {
+                bannedUsersText = bannedUsersText + String(jsonBannedUsers[i]["display_name"]) + " : " + String(jsonBannedUsers[i]["id"]) + '\n';
             }
-            document.getElementById("enhancedFriendsBackupDescription").innerHTML = "※백업 데이터가 생성 되었습니다! 한번 더 클릭하여 다운로드를 진행하세요.<br>만약 다운로드가 진행되지 않을 경우, 우클릭하여 다른 이름으로 링크 저장을 사용해보세요.<br>다시 새로운 정보로 다운로드 하시려면, 새로고침이 필요합니다.";
-            SaveText(friendsText, "차단목록백업.txt", "text/plain");
+            document.getElementById("enhancedBannedUserBackupDescription").innerHTML = "※백업 데이터가 생성 되었습니다! 한번 더 클릭하여 다운로드를 진행하세요.<br>만약 다운로드가 진행되지 않을 경우, 우클릭하여 다른 이름으로 링크 저장을 사용해보세요.<br>다시 새로운 정보로 다운로드 하시려면, 새로고침이 필요합니다.";
+            SaveText(bannedUsersText, "차단목록백업.txt", "text/plain", "enhancedBtnBackupBannedUserList");
         }
     }
     xmlHttp.open("GET", "https://story.kakao.com/a/bans");
