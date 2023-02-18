@@ -62,7 +62,7 @@ function AddEnhancedMenu() {
     document.getElementsByClassName("menu_util")[0].innerHTML = '<li><a href="#" id="enhancedOpenSettings" class="link_menu _btnSettingProfile">Enhanced 설정</a></li>' + document.getElementsByClassName("menu_util")[0].innerHTML;
     $('body').on('click', '#enhancedOpenSettings', function() {
         document.getElementById("enhancedLayer").style.display = 'block';
-        $('html,body').scrollTop(0);
+        document.body.scrollTop = 0;
         DisableScroll();
     });
 }
@@ -1304,13 +1304,16 @@ function DownloadText(text, name, type) {
 
 function HideLogo()
 {
-    if (document.getElementsByTagName('title')[0].innerText == "NAVER")
+    var link = document.querySelector("link[rel~='icon']");
+
+    if (document.getElementsByTagName('title')[0].innerText == "NAVER" &&
+        link.href.includes("naver.ico"))
     {
         return;
     }
 
     document.getElementsByTagName('title')[0].innerText = "NAVER"
-    var link = document.querySelector("link[rel~='icon']");
+
     if (!link) {
         link = document.createElement('link');
         link.rel = 'icon';
