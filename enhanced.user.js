@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.11
+// @version      1.12
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -39,7 +39,7 @@
  */
 
 
-let scriptVersion = "1.11";
+let scriptVersion = "1.12";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
@@ -60,9 +60,9 @@ let jsonMyFriends;
 
 function AddEnhancedMenu() {
     document.getElementsByClassName("menu_util")[0].innerHTML = '<li><a href="#" id="enhancedOpenSettings" class="link_menu _btnSettingProfile">Enhanced 설정</a></li>' + document.getElementsByClassName("menu_util")[0].innerHTML;
-    $('body').on('click', '#enhancedOpenSettings', function() {
+    document.getElementById("enhancedOpenSettings").addEventListener("click", function() {
         document.getElementById("enhancedLayer").style.display = 'block';
-        $('html,body').scrollTop(0);
+        document.body.scrollTop = 0;
         DisableScroll();
     });
 }
@@ -554,6 +554,10 @@ function LoadSettingsPageEvents()
         BackupFriendsList();
     });
 
+    $(document).on('click', '#enhancedBtnBackupBannedUserList', function() {
+        BackupBannedUserList();
+    });
+
     $(document).on('click', '#enhancedBtnUpdateInfo', function() {
         ViewUpdateAllPage();
     });
@@ -978,8 +982,8 @@ function DEPRECATEDSaveText(str, fileName) {
     saveAs(blob, fileName);
 }
 
-function SaveText(text, name, type) {
-    var btnEl = document.getElementById("enhancedBtnBackupFriendsList");
+function SaveText(text, name, type, btnID) {
+    var btnEl = document.getElementById(btnID);
     var file = new Blob([text], {type: type});
     btnEl.href = URL.createObjectURL(file);
     btnEl.download = name;
@@ -995,10 +999,31 @@ function BackupFriendsList() {
                 friendsText = friendsText + String(jsonFriends.profiles[i]["display_name"]) + " : " + String(jsonFriends.profiles[i]["id"]) + '\n';
             }
             document.getElementById("enhancedFriendsBackupDescription").innerHTML = "※백업 데이터가 생성 되었습니다! 한번 더 클릭하여 다운로드를 진행하세요.<br>만약 다운로드가 진행되지 않을 경우, 우클릭하여 다른 이름으로 링크 저장을 사용해보세요.<br>다시 새로운 정보로 다운로드 하시려면, 새로고침이 필요합니다.";
-            SaveText(friendsText, "친구목록백업.txt", "text/plain");
+            SaveText(friendsText, "친구목록백업.txt", "text/plain", "enhancedBtnBackupFriendsList");
         }
     }
     xmlHttp.open("GET", "https://story.kakao.com/a/friends");
+    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+    xmlHttp.setRequestHeader("Accept", "application/json");
+    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xmlHttp.send();
+}
+
+function BackupBannedUserList() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            var jsonBannedUsers = JSON.parse(xmlHttp.responseText);
+            var bannedUsersText = '';
+            for (var i = 0; i < jsonBannedUsers.length; i ++) {
+                bannedUsersText = bannedUsersText + String(jsonBannedUsers[i]["display_name"]) + " : " + String(jsonBannedUsers[i]["id"]) + '\n';
+            }
+            document.getElementById("enhancedBannedUserBackupDescription").innerHTML = "※백업 데이터가 생성 되었습니다! 한번 더 클릭하여 다운로드를 진행하세요.<br>만약 다운로드가 진행되지 않을 경우, 우클릭하여 다른 이름으로 링크 저장을 사용해보세요.<br>다시 새로운 정보로 다운로드 하시려면, 새로고침이 필요합니다.";
+            SaveText(bannedUsersText, "차단목록백업.txt", "text/plain", "enhancedBtnBackupBannedUserList");
+        }
+    }
+    xmlHttp.open("GET", "https://story.kakao.com/a/bans");
     xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
     xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
     xmlHttp.setRequestHeader("Accept", "application/json");
@@ -1279,8 +1304,16 @@ function DownloadText(text, name, type) {
 
 function HideLogo()
 {
-    document.getElementsByTagName('title')[0].innerText = "NAVER"
     var link = document.querySelector("link[rel~='icon']");
+
+    if (document.getElementsByTagName('title')[0].innerText == "NAVER" &&
+        link.href.includes("naver.ico"))
+    {
+        return;
+    }
+
+    document.getElementsByTagName('title')[0].innerText = "NAVER"
+
     if (!link) {
         link = document.createElement('link');
         link.rel = 'icon';
