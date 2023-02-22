@@ -1,7 +1,7 @@
 body, button, input, select, td, textarea, th  { font-size: 14px !important; }
 .ico_badge  { font-size: 11px !important; }
 .btn_refresh  { font-size: 12px !important; }
-.bg_file_upload, .swfupload  { font-size: 99px!important !important; }
+.bg_file_upload, .swfupload  { font-size: 99px !important; }
 .head_story .link_logo  { font-size: 24px !important; }
 #kakaoRelServices .link_services  { font-size: 19px !important; }
 .head_story .login_btn .ing  { font-size: 14px !important; }

@@ -663,6 +663,8 @@ body { color: var(--text-color) !important; }
 .profile_collection .addition_layer .active .link_home, .profile_collection .addition_layer .link_home:hover { color: var(--text-highlight-color) !important; }
 .profile_collection .addition_layer .link_home { color: var(--text-color) !important; }
 .fd_cont .img .desc_detail { color: var(--text-desc-color) !important; }
+.fd_cont .movie_wrap .desc { color: var(--text-desc-color) !important; }
+.fd_cont .movie_wrap .desc { background-color: var(--light-background-color) !important; }
 .comment .list>li .txt .data_like.on { color: var(--discord-blue) !important; }
 .info_error .tit_error { color: var(--text-highlight-color) !important; }
 .info_error .desc_error { color: var(--text-color) !important; }
