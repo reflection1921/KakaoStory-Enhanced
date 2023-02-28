@@ -863,8 +863,10 @@ function LoadThemeList() {
             var authorLink = jThemes.themes[authorIdx].url;
             authorEl.innerText = jThemes.themes[authorIdx].author;
             authorEl.href = authorLink;
-            SetDarkThemeStyle(selectedDarkStyle);
-            
+            if (GetValue('enhancedSelectTheme', 'dark') == 'dark')
+            {
+                SetDarkThemeStyle(selectedDarkStyle);
+            }
         }
     }
     xmlHttp.open("GET", resourceURL + "theme_colors/themes.json");
@@ -900,10 +902,14 @@ function ChangeTheme(styleName)
     if (styleName == 'dark')
     {
         LoadDarkThemeCSS();
+        SetDarkThemeStyle(GetValue('enhancedDarkThemeStyle', 'discord'));
     }
     else
     {
         $('style').remove(); //Remove Dark Theme CSS
+        document.documentElement.style.setProperty('--lighter-background-color', '#dddddd'); //enhanced setting page textbox background
+        document.documentElement.style.setProperty('--text-color', '#000000'); //enhanced setting page textbox color
+
         SetFont();
         SetFontSize();
         //SettingsV2 //Reload font css changed
