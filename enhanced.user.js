@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.12
+// @version      1.13
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
+// @match        https://accounts.kakao.com/*
 // @icon         https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/story_favicon.ico
 // @downloadURL  https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/enhanced.user.js
 // @updateURL    https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/enhanced.user.js
@@ -38,8 +39,14 @@
  * enhancedBlockArticleAll : 강화된 차단의 공유글 전체 보이기 / 숨기기(현재 지원안함. 추후 지원 예정.)
  */
 
+/*
+ * Settings Parameters for Login Page
+ * enhancedSelectThemeLogin : 선택한 테마(Light, Dark)
+ * 
+ */
 
-let scriptVersion = "1.12";
+
+let scriptVersion = "1.13";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
@@ -863,8 +870,10 @@ function LoadThemeList() {
             var authorLink = jThemes.themes[authorIdx].url;
             authorEl.innerText = jThemes.themes[authorIdx].author;
             authorEl.href = authorLink;
-            SetDarkThemeStyle(selectedDarkStyle);
-            
+            if (GetValue('enhancedSelectTheme', 'dark') == 'dark')
+            {
+                SetDarkThemeStyle(selectedDarkStyle);
+            }
         }
     }
     xmlHttp.open("GET", resourceURL + "theme_colors/themes.json");
@@ -900,10 +909,14 @@ function ChangeTheme(styleName)
     if (styleName == 'dark')
     {
         LoadDarkThemeCSS();
+        SetDarkThemeStyle(GetValue('enhancedDarkThemeStyle', 'discord'));
     }
     else
     {
         $('style').remove(); //Remove Dark Theme CSS
+        document.documentElement.style.setProperty('--lighter-background-color', '#dddddd'); //enhanced setting page textbox background
+        document.documentElement.style.setProperty('--text-color', '#000000'); //enhanced setting page textbox color
+
         SetFont();
         SetFontSize();
         //SettingsV2 //Reload font css changed
@@ -1343,8 +1356,88 @@ function SetCSS2(elID, cssText)
     document.getElementById(elID).innerHTML = cssText;
 }
 
+/* For Login */
+function LoadLoginDarkThemeCSS()
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            var darkcss = xmlHttp.responseText;
+            SetCSS("enhancedLoginDarkCSS", darkcss);
+        }
+    }
+    xmlHttp.open("GET", resourceURL + "css/login_darktheme.css");
+    xmlHttp.send();
+}
+
+function ChangeLoginTheme(theme)
+{
+    var btnElem = document.getElementById('enhancedLoginThemeChangeBtn');
+    if (theme == 'dark')
+    {
+        LoadLoginDarkThemeCSS();
+        SetValue('enhancedSelectThemeLogin', 'dark');
+        btnElem.style.background = 'url(' + resourceURL + 'images/light.svg) no-repeat';
+    }
+    else if (theme == 'light')
+    {
+        document.querySelector('style').remove(); //Remove Dark Theme CSS
+        SetValue('enhancedSelectThemeLogin', 'light');
+        btnElem.style.background = 'url(' + resourceURL + 'images/dark.svg) no-repeat';
+    }
+}
+
+function AddLoginThemeSelectButtonUI()
+{
+    var body = document.body;
+    var btnElem = document.createElement('button');
+    btnElem.id = 'enhancedLoginThemeChangeBtn';
+    btnElem.className = 'enhanced_power_mode_score';
+    btnElem.style.height = '64px';
+    btnElem.style.width = '64px';
+    btnElem.style.background = 'red';
+    btnElem.style.position = 'absolute';
+    btnElem.style.right = '10px';
+    btnElem.style.bottom = '10px';
+
+    var theme = GetValue('enhancedSelectThemeLogin', 'dark');
+
+    if (theme == 'dark')
+    {
+        btnElem.style.background = 'url(' + resourceURL + 'images/light.svg) no-repeat';
+    }
+    else if (theme == 'light')
+    {
+        btnElem.style.background = 'url(' + resourceURL + 'images/dark.svg) no-repeat';
+    }
+    btnElem.onclick = function() {
+        if (theme == 'dark')
+        {
+            theme = 'light';
+        }
+        else if (theme == 'light')
+        {
+            theme = 'dark';
+        }
+
+        ChangeLoginTheme(theme);
+    }
+
+    body.appendChild(btnElem);
+}
+
 
 (function() {
+    if (window.location.href.includes("accounts.kakao.com/"))
+    {
+        AddLoginThemeSelectButtonUI();
+        if (GetValue('enhancedSelectThemeLogin', 'dark') == 'dark')
+        {
+            ChangeLoginTheme('dark');
+        }
+        
+        return;
+    }
     InitEnhancedSettingsPage();
     LoadCommonEvents();
     GetBlockedUsers();
