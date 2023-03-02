@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.13
+// @version      1.14
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -46,7 +46,7 @@
  */
 
 
-let scriptVersion = "1.13";
+let scriptVersion = "1.14";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
@@ -64,6 +64,10 @@ let powerComboTimeCnt = 0;
 
 let deletedFriendCount = 0;
 let jsonMyFriends;
+
+/* For Login Page */
+let svgDark = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+let svgLight = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
 
 function AddEnhancedMenu() {
     document.getElementsByClassName("menu_util")[0].innerHTML = '<li><a href="#" id="enhancedOpenSettings" class="link_menu _btnSettingProfile">Enhanced 설정</a></li>' + document.getElementsByClassName("menu_util")[0].innerHTML;
@@ -1359,15 +1363,31 @@ function SetCSS2(elID, cssText)
 /* For Login */
 function LoadLoginDarkThemeCSS()
 {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-            var darkcss = xmlHttp.responseText;
-            SetCSS("enhancedLoginDarkCSS", darkcss);
-        }
-    }
-    xmlHttp.open("GET", resourceURL + "css/login_darktheme.css");
-    xmlHttp.send();
+    document.documentElement.style.setProperty('--background-color', '#2f3136');
+    document.documentElement.style.setProperty('--text-color', '#dcddde');
+    document.documentElement.style.setProperty('--text-highlight-color', '#fff');
+    document.documentElement.style.setProperty('--text-menu-color', '#b9bbbe');
+    document.documentElement.style.setProperty('--discord-blue', '#7289da');
+    document.documentElement.style.setProperty('--dark-background-color', '#202225');
+
+    var elem = document.createElement('style');
+    elem.id = 'enhancedLoginDarkThemeCSS';
+    document.head.appendChild(elem);
+    document.getElementById('enhancedLoginDarkThemeCSS').innerHTML =
+        'body { background: var(--background-color) !important; }' +
+        '.set_login .lab_choice { color: var(--text-color) !important; }' +
+        '.doc-footer .txt_copyright { color: var(--text-color) !important; }' +
+        'a { color: var(--text-highlight-color) !important; }' +
+        '.cont_login a { color: var(--text-menu-color) !important; }' +
+        '.doc-footer .service_info .link_info { color: var(--text-menu-color) !important; }' +
+        '.item_select .link_selected { color: var(--text-menu-color) !important; }' +
+        '.box_tf { border: solid 0px var(--text-highlight-color) !important; background: var(--dark-background-color) !important; padding-left: 10px; padding-right: 10px; }' +
+        '.box_tf .tf_g { color: var(--text-color) !important; }' +
+        '.info_tip, .line_or .txt_or { color: var(--text-color) !important;}' +
+        '.info_tip .txt_tip { color: var(--discord-blue) !important; }' +
+        '.box_tf .txt_mail { color: var(--text-color) !important; margin-right: 10px !important }' +
+        '.doc-title .tit_service .logo_kakao { background: var(--background-color) url(/images/pc/logo_kakao.png) no-repeat 0 0 !important; background-size: 100px 80px !important; background-position: 0 -41px !important};';
+
 }
 
 function ChangeLoginTheme(theme)
@@ -1377,13 +1397,13 @@ function ChangeLoginTheme(theme)
     {
         LoadLoginDarkThemeCSS();
         SetValue('enhancedSelectThemeLogin', 'dark');
-        btnElem.style.background = 'url(' + resourceURL + 'images/light.svg) no-repeat';
+        btnElem.innerHTML = svgLight;
     }
     else if (theme == 'light')
     {
         document.querySelector('style').remove(); //Remove Dark Theme CSS
         SetValue('enhancedSelectThemeLogin', 'light');
-        btnElem.style.background = 'url(' + resourceURL + 'images/dark.svg) no-repeat';
+        btnElem.innerHTML = svgDark;
     }
 }
 
@@ -1392,10 +1412,10 @@ function AddLoginThemeSelectButtonUI()
     var body = document.body;
     var btnElem = document.createElement('button');
     btnElem.id = 'enhancedLoginThemeChangeBtn';
-    btnElem.className = 'enhanced_power_mode_score';
+    btnElem.innerHTML = svgDark;
     btnElem.style.height = '64px';
     btnElem.style.width = '64px';
-    btnElem.style.background = 'red';
+    btnElem.style.background = 'none';
     btnElem.style.position = 'absolute';
     btnElem.style.right = '10px';
     btnElem.style.bottom = '10px';
@@ -1404,11 +1424,11 @@ function AddLoginThemeSelectButtonUI()
 
     if (theme == 'dark')
     {
-        btnElem.style.background = 'url(' + resourceURL + 'images/light.svg) no-repeat';
+        btnElem.innerHTML = svgLight;
     }
     else if (theme == 'light')
     {
-        btnElem.style.background = 'url(' + resourceURL + 'images/dark.svg) no-repeat';
+        btnElem.innerHTML = svgDark;
     }
     btnElem.onclick = function() {
         if (theme == 'dark')
