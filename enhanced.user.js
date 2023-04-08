@@ -37,6 +37,7 @@
  * enhancedEarthquake : EARTHQUAKE!!!
  * enhancedBlink : BLINK!!!
  * enhancedBlockArticleAll : 강화된 차단의 공유글 전체 보이기 / 숨기기(현재 지원안함. 추후 지원 예정.)
+ * enhancedFaviconClassic : 옛날 파비콘으로 되돌리기
  */
 
 /*
@@ -71,6 +72,10 @@ let changeInternalPermCount = 0;
 let changePermUserID;
 //let selCurPerm = 'Z'; //A = 전체공개, F = 친구공개, M = 나만보기, Z = 기본설정(모든 게시글)
 //let selNewPerm = 'F'; //A = 전체공개, F = 친구공개, M = 나만보기
+
+//konami command to restore kakaostory favicon classic
+let konami = [38,38,40,40,37,39,37,39,66,65];
+let konamiCount = 0;
 
 /* For Login Page */
 let svgDark = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
@@ -439,6 +444,19 @@ function LoadCommonEvents()
         $('._commentWriting').removeClass("shake_text");
         //$('#contents_write').removeClass("blink_text");
         //StopEnhancedPowerModeShake();
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.keyCode == konami[konamiCount]) {
+            konamiCount++;
+            if (konamiCount >= 10) {
+                konamiCount = 0;
+                var faviconClassic = GetValue("enhancedFaviconClassic", "false") == "true";
+                SetValue("enhancedFaviconClassic", (faviconClassic)? "false" : "true");
+            }
+        } else {
+            konamiCount = 0;
+        }
     });
 
     //$('body').on('input', '#contents_write', function() {
@@ -1486,6 +1504,31 @@ function HideLogo()
     link.href = resourceURL + "images/naver.ico";
 }
 
+function SetClassicFavicon()
+{
+    var link = document.querySelector("link[rel~='icon']");
+
+    if (link.href.includes("classic.ico") || link.href.includes("classic_noty.ico"))
+    {
+        return;
+    }
+
+    var faviLink = resourceURL + "images/classic.ico";
+
+    if (document.getElementsByTagName('title')[0].innerText.includes("(N)"))
+    {
+        faviLink = resourceURL + "images/classic_noty.ico";
+    }
+    //document.getElementsByTagName('title')[0].innerText = "NAVER"
+
+    if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    }
+    link.href = faviLink;
+}
+
 function AddPowerModeScoreElements()
 {
     var header = document.querySelectorAll('[data-part-name="gnbMenu"]')[0];
@@ -1657,9 +1700,16 @@ function AddLoginThemeSelectButtonUI()
 
         RemoveRecommendFeed();
 
-        if (GetValue('enhancedHideLogo', 'false') == 'true')
+        var hideLogoEnabled = (GetValue('enhancedHideLogo', 'false') == 'true');
+
+        if (hideLogoEnabled == true)
         {
             setTimeout(() => HideLogo(), 750);
+        }
+
+        if (GetValue("enhancedFaviconClassic", "false") == "true" && !hideLogoEnabled)
+        {
+            setTimeout(() => SetClassicFavicon(), 750);
         }
 
         if (GetValue('enhancedEarthquake', 'false') == 'true')
