@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.14
+// @version      1.15
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -37,6 +37,7 @@
  * enhancedEarthquake : EARTHQUAKE!!!
  * enhancedBlink : BLINK!!!
  * enhancedBlockArticleAll : 강화된 차단의 공유글 전체 보이기 / 숨기기(현재 지원안함. 추후 지원 예정.)
+ * enhancedFaviconClassic : 옛날 파비콘으로 되돌리기
  */
 
 /*
@@ -46,7 +47,7 @@
  */
 
 
-let scriptVersion = "1.14";
+let scriptVersion = "1.15";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
@@ -64,6 +65,17 @@ let powerComboTimeCnt = 0;
 
 let deletedFriendCount = 0;
 let jsonMyFriends;
+
+let jsonPermActivities;
+let changePermCount = 0;
+let changeInternalPermCount = 0;
+let changePermUserID;
+//let selCurPerm = 'Z'; //A = 전체공개, F = 친구공개, M = 나만보기, Z = 기본설정(모든 게시글)
+//let selNewPerm = 'F'; //A = 전체공개, F = 친구공개, M = 나만보기
+
+//konami command to restore kakaostory favicon classic
+let konami = [38,38,40,40,37,39,37,39,66,65];
+let konamiCount = 0;
 
 /* For Login Page */
 let svgDark = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
@@ -434,6 +446,19 @@ function LoadCommonEvents()
         //StopEnhancedPowerModeShake();
     });
 
+    document.addEventListener('keydown', function(e) {
+        if (e.keyCode == konami[konamiCount]) {
+            konamiCount++;
+            if (konamiCount >= 10) {
+                konamiCount = 0;
+                var faviconClassic = GetValue("enhancedFaviconClassic", "false") == "true";
+                SetValue("enhancedFaviconClassic", (faviconClassic)? "false" : "true");
+            }
+        } else {
+            konamiCount = 0;
+        }
+    });
+
     //$('body').on('input', '#contents_write', function() {
         //catEffect.pause();
         //catEffect.currentTime = 0;
@@ -592,6 +617,29 @@ function LoadSettingsPageEvents()
 
     $(document).on('click', '#deleteFriendReConfirmOK', function() {
         LoadForDeleteFriends();
+    });
+
+    $(document).on('click', '#deleteFriendComplete', function() {
+        document.getElementById("deleteLayer").remove();
+        document.getElementById("deleteCountLayer").remove();
+    });
+
+    //Permission Maker
+    $(document).on('click', '#enhancedBtnChangePermConfirm', function() {
+        ChangePermissionConfirm();
+    });
+
+    $(document).on('click', '#changePermissionConfirmOK', function() {
+        PrepareChangePermission();
+    });
+
+    $(document).on('click', '#changePermissionConfirmCancel', function() {
+        document.getElementById("changePermLayer").remove();
+    });
+
+    $(document).on('click', '#changePermissionBtnOK', function() {
+        document.getElementById("changePermLayer").remove();
+        document.getElementById("changePermissionCountLayer").remove();
     });
 
     $(document).on("change",'input[name="enhancedSelectNotifyUse"]',function(){
@@ -771,6 +819,123 @@ function _DeleteFriend(userid) {
         }
     }
     xmlHttp.open("DELETE", "https://story.kakao.com/a/friends/" + userid);
+    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+    xmlHttp.setRequestHeader("Accept", "application/json");
+    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xmlHttp.send();
+}
+
+function ChangePermissionConfirm()
+{
+    var changePermLayer = document.createElement('div');
+    changePermLayer.id = "changePermLayer";
+    changePermLayer.className = "cover _cover";
+    document.body.appendChild(changePermLayer);
+    document.getElementById('changePermLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' + 
+                                                        '<div class="cover_wrapper" style="z-index: 201;">' + 
+                                                        '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
+                                                                '<div class="inner_toast_layer _toastBody">' + 
+                                                                    '<p class="txt _dialogText">전체 게시글을 나만보기로 변경할까요? 취소하시려면 새로고침해야 합니다.</p>' +
+                                                                    '<div class="btn_group">' + 
+                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="changePermissionConfirmCancel"><span>취소</span></a>' + 
+                                                                        '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionConfirmOK"><span>확인</span></a>' +
+                                                                    '</div>' +
+                                                                '</div>' +
+                                                            '</div>' +
+                                                        '</div>';
+}
+
+function _ChangePermission(articleID/*, perm, enableShare, commentWriteable, isMustRead*/)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            //Changed
+        }
+    }
+    xmlHttp.open("PUT", "https://story.kakao.com/a/activities/" + articleID);
+    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+    xmlHttp.setRequestHeader("Accept", "application/json");
+    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xmlHttp.setRequestHeader("Accept-Language", "ko");
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+    xmlHttp.send("permission=M&enable_share=false&comment_all_writable=true&is_must_read=false");
+}
+
+function LoadActivitiesForPermission(userID, lastArticleID) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            var activities = JSON.parse(xmlHttp.responseText);
+
+            if (activities.length == 0) {
+                jsonPermActivities = null;
+                document.getElementById('changePermissionText').innerHTML = '게시글 권한이 성공적으로 변경되었습니다.';
+                document.getElementById('changePermissionBtnOK').style.display = 'block';
+                return;
+            }
+
+            jsonPermActivities = activities;
+
+            SetPermissionActivities();
+        }
+    }
+    xmlHttp.open("GET", "https://story.kakao.com/a/profiles/" + userID + "/activities?ag=false&since=" + lastArticleID);
+    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+    xmlHttp.setRequestHeader("Accept", "application/json");
+    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xmlHttp.send();
+}
+
+function SetPermissionActivities()
+{
+    setTimeout(function() {
+        if (changeInternalPermCount < jsonPermActivities.length)
+        {
+            var activity = jsonPermActivities[changeInternalPermCount];
+            
+            var lArticleID = activity["sid"];
+            /* For user-set permissions */
+            //var isMustRead = activity["is_must_read"];
+            //var commentWriteable = activity["comment_all_writable"];
+            //var shareable = activity["shareable"];
+            _ChangePermission(lArticleID/*, selNewPerm, shareable, commentWriteable, isMustRead*/);
+            document.getElementById('changePermissionText').innerHTML = '게시글 권한 변경 중... (' + (changePermCount + 1) + '개 완료)';
+            changePermCount++;
+            changeInternalPermCount++;
+            SetPermissionActivities();
+        }
+        else
+        {
+            changeInternalPermCount = 0;
+            LoadActivitiesForPermission(changePermUserID, jsonPermActivities[jsonPermActivities.length - 1]["sid"]);
+        }
+    }, 750);
+    
+}
+
+function PrepareChangePermission() {
+
+    changePermCount = 0; //reset count
+
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            var jsonProfile = JSON.parse(xmlHttp.responseText);
+            changePermUserID = jsonProfile.id;
+
+            var permissionCountLayer = document.createElement('div');
+            permissionCountLayer.id = "changePermissionCountLayer";
+            permissionCountLayer.className = "cover _cover";
+            document.body.appendChild(permissionCountLayer);
+            document.getElementById('changePermissionCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="changePermissionText">게시글 권한 변경 중... (0 / 0)</p><div>※정책상 삭제 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionBtnOK" style="display: none;"><span>확인</span></a> </div></div></div></div>';
+            LoadActivitiesForPermission(changePermUserID, "");
+        }
+    }
+    xmlHttp.open("GET", "https://story.kakao.com/a/settings/profile");
     xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
     xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
     xmlHttp.setRequestHeader("Accept", "application/json");
@@ -1339,6 +1504,31 @@ function HideLogo()
     link.href = resourceURL + "images/naver.ico";
 }
 
+function SetClassicFavicon()
+{
+    var link = document.querySelector("link[rel~='icon']");
+
+    if (link.href.includes("classic.ico") || link.href.includes("classic_noty.ico"))
+    {
+        return;
+    }
+
+    var faviLink = resourceURL + "images/classic.ico";
+
+    if (document.getElementsByTagName('title')[0].innerText.includes("(N)"))
+    {
+        faviLink = resourceURL + "images/classic_noty.ico";
+    }
+    //document.getElementsByTagName('title')[0].innerText = "NAVER"
+
+    if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    }
+    link.href = faviLink;
+}
+
 function AddPowerModeScoreElements()
 {
     var header = document.querySelectorAll('[data-part-name="gnbMenu"]')[0];
@@ -1510,9 +1700,16 @@ function AddLoginThemeSelectButtonUI()
 
         RemoveRecommendFeed();
 
-        if (GetValue('enhancedHideLogo', 'false') == 'true')
+        var hideLogoEnabled = (GetValue('enhancedHideLogo', 'false') == 'true');
+
+        if (hideLogoEnabled == true)
         {
             setTimeout(() => HideLogo(), 750);
+        }
+
+        if (GetValue("enhancedFaviconClassic", "false") == "true" && !hideLogoEnabled)
+        {
+            setTimeout(() => SetClassicFavicon(), 750);
         }
 
         if (GetValue('enhancedEarthquake', 'false') == 'true')
