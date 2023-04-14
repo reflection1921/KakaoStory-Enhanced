@@ -809,7 +809,7 @@ function DeleteFriends() {
             document.getElementById('deleteFriendText').innerHTML = '전체 삭제 완료';
             document.getElementById('deleteFriendComplete').style.display = 'block';
         }
-    }, 750);
+    }, 300);
 }
 
 function _DeleteFriend(userid) {
@@ -923,7 +923,7 @@ function SetPermissionActivities()
             changeInternalPermCount = 0;
             LoadActivitiesForPermission(changePermUserID, jsonPermActivities[jsonPermActivities.length - 1]["sid"]);
         }
-    }, 750);
+    }, 550);
     
 }
 
