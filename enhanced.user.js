@@ -49,9 +49,9 @@
 
 let scriptVersion = "1.15";
 
-//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
@@ -70,6 +70,7 @@ let jsonPermActivities;
 let changePermCount = 0;
 let changeInternalPermCount = 0;
 let changePermUserID;
+let changePermActivityCount;
 //let selCurPerm = 'Z'; //A = 전체공개, F = 친구공개, M = 나만보기, Z = 기본설정(모든 게시글)
 //let selNewPerm = 'F'; //A = 전체공개, F = 친구공개, M = 나만보기
 
@@ -828,6 +829,9 @@ function _DeleteFriend(userid) {
 
 function ChangePermissionConfirm()
 {
+    var sourcePermissionElem = document.getElementById("enhancedOptionSourcePerm");
+    var sourcePermissionText = sourcePermissionElem.options[sourcePermissionElem.selectedIndex].text;
+
     var changePermLayer = document.createElement('div');
     changePermLayer.id = "changePermLayer";
     changePermLayer.className = "cover _cover";
@@ -836,7 +840,7 @@ function ChangePermissionConfirm()
                                                         '<div class="cover_wrapper" style="z-index: 201;">' + 
                                                         '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
                                                                 '<div class="inner_toast_layer _toastBody">' + 
-                                                                    '<p class="txt _dialogText">전체 게시글을 나만보기로 변경할까요? 취소하시려면 새로고침해야 합니다.</p>' +
+                                                                    '<p class="txt _dialogText">' + sourcePermissionText + ' 권한 게시글을 나만보기로 변경할까요? 취소하시려면 새로고침해야 합니다.</p>' +
                                                                     '<div class="btn_group">' + 
                                                                         '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="changePermissionConfirmCancel"><span>취소</span></a>' + 
                                                                         '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionConfirmOK"><span>확인</span></a>' +
@@ -898,12 +902,18 @@ function SetPermissionActivities()
             var activity = jsonPermActivities[changeInternalPermCount];
             
             var lArticleID = activity["sid"];
+            var permission = activity["permission"];
+            var sourcePermission = document.getElementById("enhancedOptionSourcePerm").value;
             /* For user-set permissions */
             //var isMustRead = activity["is_must_read"];
             //var commentWriteable = activity["comment_all_writable"];
             //var shareable = activity["shareable"];
-            _ChangePermission(lArticleID/*, selNewPerm, shareable, commentWriteable, isMustRead*/);
-            document.getElementById('changePermissionText').innerHTML = '게시글 권한 변경 중... (' + (changePermCount + 1) + '개 완료)';
+            if (permission != 'M' && (permission == sourcePermission || sourcePermission == 'N'))
+            {
+                _ChangePermission(lArticleID/*, selNewPerm, shareable, commentWriteable, isMustRead*/);
+            }
+
+            document.getElementById('changePermissionText').innerHTML = '게시글 권한 변경 중... (' + (changePermCount + 1) + '/' + changePermActivityCount + '개 완료)';
             changePermCount++;
             changeInternalPermCount++;
             SetPermissionActivities();
@@ -926,6 +936,7 @@ function PrepareChangePermission() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             var jsonProfile = JSON.parse(xmlHttp.responseText);
             changePermUserID = jsonProfile.id;
+            changePermActivityCount = jsonProfile.activity_count;
 
             var permissionCountLayer = document.createElement('div');
             permissionCountLayer.id = "changePermissionCountLayer";
