@@ -9,6 +9,7 @@
 // @icon         https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/story_favicon.ico
 // @downloadURL  https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/enhanced.user.js
 // @updateURL    https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/enhanced.user.js
+// @require      https://cdn.jsdelivr.net/npm/chart.js
 // ==/UserScript==
 
 /*
@@ -1170,11 +1171,6 @@ function SetNotify(content, title_, url)
 //     });
 // }
 
-function DEPRECATEDSaveText(str, fileName) {
-    var blob = new Blob([str], { type: "text/plain;charset=utf-8" });
-    saveAs(blob, fileName);
-}
-
 function SaveText(text, name, type, btnID) {
     var btnEl = document.getElementById(btnID);
     var file = new Blob([text], {type: type});
@@ -1277,7 +1273,6 @@ function SetEmoticonSize()
 function SetEmoticonSelectorSize()
 {
     var sSize = GetValue("enhancedEmoticonSize", 'small');
-    console.log(sSize)
 
     if (sSize == "middle")
     {
@@ -1608,6 +1603,112 @@ function ChangeLoginTheme(theme)
     }
 }
 
+function AddVisitorCountLayer()
+{
+    var visitorCountLayer = document.createElement("div");
+    visitorCountLayer.id = "enhancedVisitorCountLayer";
+    visitorCountLayer.className = "profile_collection visitor_count_layer";
+    document.getElementsByClassName("profile_collection")[0].parentElement.appendChild(visitorCountLayer);
+    visitorCountLayer.innerHTML = '<fieldset><h4 class="tit_collection">방문자수</h4></br><div style=""><canvas id="visitorChartCanvas"></canvas></div></fieldset>';
+}
+
+function ParseVisitorCount(jsonData)
+{
+    var counterJSON = null;
+    for (var i = 0; i < jsonData.length; i++)
+    {
+        if (jsonData[i].type == "visit_counter")
+        {
+            counterJSON = jsonData[i].object.items;
+            break;
+        }
+    }
+
+    if (counterJSON == null)
+    {
+        return;
+    }
+
+    var labelData = ['', '', '', '', '', '', ''];
+    var countData = [0, 0, 0, 0, 0, 0, 0];
+
+    for (var i = 0; i < counterJSON.length; i++)
+    {
+        labelData[i] = counterJSON[i].date;
+        countData[i] = (counterJSON[i].count == -1? 0 : counterJSON[i].count);
+    }
+
+    var chartCanvas = document.getElementById('visitorChartCanvas').getContext('2d');
+
+    var visitChart = new Chart(chartCanvas, {
+        type: 'line',
+        data: {
+            labels: labelData,
+            datasets: [
+                {
+                    fill: false,
+                    data: countData,
+                    backgroundColor: [
+                        //색상
+                        'rgba(255, 99, 132, 0.2)',
+                    ],
+                    borderColor: [
+                        //경계선 색상
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    borderWidth: 1 //경계선 굵기
+                }
+            ]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    })
+}
+
+function ViewVisitorChart()
+{
+    if (document.getElementById("enhancedVisitorCountLayer") != null)
+    {
+        return;
+    }
+
+    if (document.getElementsByClassName("profile_collection").length < 1)
+    {
+        return;
+    }
+
+    var pathname = window.location.pathname;
+    var pathList = pathname.split("/");
+    if (pathList.length < 3)
+    {
+        return;
+    }
+
+    var curUserID = pathList[1];
+
+    AddVisitorCountLayer();
+
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            var highlights = JSON.parse(xmlHttp.responseText);
+            
+            ParseVisitorCount(highlights.highlight);
+        }
+    }
+    xmlHttp.open("GET", "https://story.kakao.com/a/profiles/" + curUserID + "/highlight");
+    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+    xmlHttp.setRequestHeader("Accept", "application/json");
+    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xmlHttp.send();
+}
+
 function AddLoginThemeSelectButtonUI()
 {
     var body = document.body;
@@ -1646,7 +1747,6 @@ function AddLoginThemeSelectButtonUI()
 
     body.appendChild(btnElem);
 }
-
 
 (function() {
     if (window.location.href.includes("accounts.kakao.com/"))
@@ -1722,6 +1822,8 @@ function AddLoginThemeSelectButtonUI()
         {
             setTimeout(() => SetClassicFavicon(), 750);
         }
+
+        setTimeout(() => ViewVisitorChart(), 1000);
 
         if (GetValue('enhancedEarthquake', 'false') == 'true')
         {
