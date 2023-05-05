@@ -1626,6 +1626,7 @@ function ParseVisitorCount(jsonData)
 
     if (counterJSON == null)
     {
+        document.getElementById("enhancedVisitorCountLayer").style.display = 'none';
         return;
     }
 
@@ -1649,14 +1650,12 @@ function ParseVisitorCount(jsonData)
                     fill: false,
                     data: countData,
                     backgroundColor: [
-                        //색상
                         'rgba(255, 99, 132, 0.2)',
                     ],
                     borderColor: [
-                        //경계선 색상
                         'rgba(255, 99, 132, 1)',
                     ],
-                    borderWidth: 1 //경계선 굵기
+                    borderWidth: 1
                 }
             ]
         },
