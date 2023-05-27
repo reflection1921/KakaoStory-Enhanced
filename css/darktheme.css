@@ -724,7 +724,7 @@ body { color: var(--text-color) !important; }
 .friend_cate_top .catetab_up .tit_cate { border-top: 1px solid rgba(255, 255, 255, 0) !important; }
 .section_birth .link_name { color: var(--text-color) !important; }
 .section_birth .tit_birth { color: var(--text-highlight-color) !important; }
-.section_birth .box_birth { color: var(--background-border-color) !important; }
+.section_birth .box_birth { border: 1px solid var(--lighter-border-color) !important; }
 .__tablet__ .tit_show, .desktop_s .tit_show { color: var(--text-highlight-color) !important; }
 .__tablet__ .mystory_menu .layer_mystory .tit_show, .desktop_s .mystory_menu .layer_mystory .tit_show { border-bottom: 1px solid var(--background-border-color) !important; }
 .__tablet__ .mystory_menu .layer_mystory, .desktop_s .mystory_menu .layer_mystory {border-left: 1px solid var(--light-background-color) !important; }
