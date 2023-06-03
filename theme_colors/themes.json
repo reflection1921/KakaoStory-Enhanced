@@ -29,6 +29,12 @@
       "name": "Visual Studio",
       "author": "KakaoStory Enhanced",
       "url": ""
+    },
+    {
+      "id": "chromaglow",
+      "name": "Discord Chroma Glow",
+      "author": "KakaoStory Enhanced",
+      "url": ""
     }
   ]
 }
