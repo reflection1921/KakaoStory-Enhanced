@@ -769,7 +769,7 @@ function DeleteFriendsConfirm()
                                                         '<div class="cover_wrapper" style="z-index: 201;">' + 
                                                         '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
                                                                 '<div class="inner_toast_layer _toastBody">' + 
-                                                                    '<p class="txt _dialogText">정말 친구~를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
+                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
                                                                     '<div class="btn_group">' + 
                                                                         '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendConfirmCancel"><span>취소</span></a>' + 
                                                                         '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendConfirmOK"><span>확인</span></a>' +
