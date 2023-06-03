@@ -41,6 +41,30 @@
       "name": "Discord Forest",
       "author": "KakaoStory Enhanced",
       "url": ""
+    },
+    {
+      "id": "aurora",
+      "name": "Discord Aurora",
+      "author": "KakaoStory Enhanced",
+      "url": ""
+    },
+    {
+      "id": "dusk",
+      "name": "Discord Dusk",
+      "author": "KakaoStory Enhanced",
+      "url": ""
+    },
+    {
+      "id": "under_the_sea",
+      "name": "Discord Under The Sea",
+      "author": "KakaoStory Enhanced",
+      "url": ""
+    },
+    {
+      "id": "retro_storm",
+      "name": "Discord Retro Storm",
+      "author": "KakaoStory Enhanced",
+      "url": ""
     }
   ]
 }
