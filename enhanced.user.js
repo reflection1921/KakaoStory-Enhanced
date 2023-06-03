@@ -50,9 +50,9 @@
 
 let scriptVersion = "1.17";
 
-//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
@@ -604,6 +604,10 @@ function LoadSettingsPageEvents()
         DeleteFriendsConfirm();
     });
 
+    $(document).on('click', '#enhancedBtnDeleteBlockedFriendConfirm', function() {
+        DeleteBlockedFriendsConfirm();
+    });
+
     $(document).on('click', '#deleteFriendConfirmCancel', function() {
         document.getElementById("deleteLayer").remove();
     });
@@ -613,12 +617,20 @@ function LoadSettingsPageEvents()
         DeleteFriendsReConfirm();
     });
 
+    $(document).on('click', '#deleteBlockedFriendConfirmCancel', function() {
+        document.getElementById("deleteBlockedLayer").remove();
+    });
+
+    $(document).on('click', '#deleteBlockedFriendConfirmOK', function() {
+        LoadForDeleteFriends(true);
+    });
+
     $(document).on('click', '#deleteFriendReConfirmCancel', function() {
         document.getElementById("deleteLayer").remove();
     });
 
     $(document).on('click', '#deleteFriendReConfirmOK', function() {
-        LoadForDeleteFriends();
+        LoadForDeleteFriends(false);
     });
 
     $(document).on('click', '#deleteFriendComplete', function() {
@@ -736,7 +748,7 @@ function LoadSettingsPageEvents()
     });
 }
 
-function LoadForDeleteFriends() {
+function LoadForDeleteFriends(blockedUserOnly) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
@@ -748,6 +760,10 @@ function LoadForDeleteFriends() {
             document.body.appendChild(deleteCountLayer);
             document.getElementById('deleteCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="deleteFriendText">친구 삭제 중... (0 / 0)</p><div>※정책상 삭제 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendComplete" style="display: none;"><span>확인</span></a> </div></div></div></div>';
             //deletedFriendCount = 0;
+            if (blockedUserOnly)
+            {
+                VerifyBlockedUserForDeleteFriends();
+            }
             DeleteFriends();
         }
     }
@@ -757,6 +773,38 @@ function LoadForDeleteFriends() {
     xmlHttp.setRequestHeader("Accept", "application/json");
     xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xmlHttp.send();
+}
+
+function VerifyBlockedUserForDeleteFriends()
+{
+    for (var i = 0; i < jsonMyFriends.profiles.length; i++)
+    {
+        if (!jsonMyFriends.profiles[i].hasOwnProperty("blocked") || jsonMyFriends.profiles[i]["blocked"] == false)
+        {
+            jsonMyFriends.profiles.splice(i, 1);
+            i--;
+        }
+    }
+}
+
+function DeleteBlockedFriendsConfirm()
+{
+    var deleteLayer = document.createElement('div');
+    deleteLayer.id = "deleteBlockedLayer";
+    deleteLayer.className = "cover _cover";
+    document.body.appendChild(deleteLayer);
+    document.getElementById('deleteBlockedLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' + 
+                                                        '<div class="cover_wrapper" style="z-index: 201;">' + 
+                                                        '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
+                                                                '<div class="inner_toast_layer _toastBody">' + 
+                                                                    '<p class="txt _dialogText">정말 제한된 사용자를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
+                                                                    '<div class="btn_group">' + 
+                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteBlockedFriendConfirmCancel"><span>취소</span></a>' + 
+                                                                        '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteBlockedFriendConfirmOK"><span>확인</span></a>' +
+                                                                    '</div>' +
+                                                                '</div>' +
+                                                            '</div>' +
+                                                        '</div>';
 }
 
 function DeleteFriendsConfirm()
@@ -789,7 +837,7 @@ function DeleteFriendsReConfirm()
                                                         '<div class="cover_wrapper" style="z-index: 201;">' + 
                                                         '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
                                                                 '<div class="inner_toast_layer _toastBody">' + 
-                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>진행하면 되돌릴 수 없습니다!<br>다시 한 번 신중하게 생각해주세요!</p>' +
+                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>진행하면 되돌릴 수 없습니다!<br>다시 한 번 신중하게 생각해주세요!<br>취소하시려면 새로고침해야 합니다.</p>' +
                                                                     '<div class="btn_group">' + 
                                                                         '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendReConfirmCancel"><span>취소</span></a>' + 
                                                                         '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendReConfirmOK"><span>확인</span></a>' +
