@@ -22,13 +22,13 @@
 --info-text-color: #afb0b2;
 --scrap-text-color: #00b5ff;
 --menu-text-color: #b9bbbe;
---emoticon-background-color: #4f545c;
+--emoticon-background-color: linear-gradient(rgb(0 0 0/0.7),rgb(0 0 0/0.7)) fixed 0 0/cover,var(--custom-background-color) fixed 0 0/cover;
 --discord-blue: #7289da;
 --discord-blue-disable: #a0b2f4;
 --discord-blue-hover: #677bc4;
 --black: #000;
 --lighter-border-color: rgba(0,0,0,0);
 --header-border-color: #222427;
---mention-background-color: #48516e;
---mention-color: #e3e7ec;
+--mention-background-color: #5865f24c;
+--mention-color: #c9cdfb;
 --background-hover-color: linear-gradient(rgb(255 255 255/0.08),rgb(255 255 255/0.08)) fixed 0 0/cover,var(--custom-background-color) fixed 0 0/cover;

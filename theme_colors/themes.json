@@ -107,6 +107,36 @@
       "name": "Discord Crimson Moon",
       "author": "KakaoStory Enhanced",
       "url": ""
+    },
+    {
+      "id": "mint_apple",
+      "name": "Discord Mint Apple",
+      "author": "KakaoStory Enhanced",
+      "url": ""
+    },
+    {
+      "id": "desert_khaki",
+      "name": "Discord Desert Khaki",
+      "author": "KakaoStory Enhanced",
+      "url": ""
+    },
+    {
+      "id": "hanami",
+      "name": "Discord Hanami",
+      "author": "KakaoStory Enhanced",
+      "url": ""
+    },
+    {
+      "id": "lofi_vibes",
+      "name": "Discord LoFi Vibes",
+      "author": "KakaoStory Enhanced",
+      "url": ""
+    },
+    {
+      "id": "citrus_sherbert",
+      "name": "Discord Citrus Sherbert",
+      "author": "KakaoStory Enhanced",
+      "url": ""
     }
   ]
 }
