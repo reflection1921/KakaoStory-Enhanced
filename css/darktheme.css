@@ -1,6 +1,8 @@
 :root {
     --dark-theme-ico-ks-url: url('https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/ico_ks.png');
     --dark-theme-ico-ks2-url: url('https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/ico_ks2.png');
+    --dark-theme-ks-logo: url('https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/logo_kseh_dark.png');
+    --loading-circle-url: url('https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/loading_bar_transparent.png');
     --right-background-color: #292b2f;
     --background-color: #2f3136;
     --light-background-color: #36393f;
@@ -49,9 +51,9 @@
 .story_inflow .comment .comt_write .bn_photo {background-repeat: no-repeat !important;}
 .story_inflow .feed .add_top .btn_top_group .ico_ks { background-image: var(--dark-theme-ico-ks2-url) !important; }
 .story_inflow .add_top .save .inner_save .ico_ks { background-image: var(--dark-theme-ico-ks2-url) !important; }
-.feed .loading_wrap { background-image: url(https://i.imgur.com/GPJrniq.gif) !important; } /*Circle Loading Bar*/
+.feed .loading_wrap { background-image: var(--loading-circle-url) !important; } /*Circle Loading Bar*/
 .write .music .preview .img_album .cover_frame { background-image: url('https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/cover_music.png') !important; } /*Album Cover*/
-.head_story .tit_kakaostory .link_kakaostory { background: url('https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/logo_kseh_dark.png'); } /*KakaoStory Logo*/
+.head_story .tit_kakaostory .link_kakaostory { background: var(--dark-theme-ks-logo); } /*KakaoStory Logo*/
 .list_cate .thumb_user .ico_bsfriend { background: url('https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/star_friend.png') !important; } /*친구창 관심친구*/
 .frinfo_wrap .list_frinfo .pf_thumb .ico_bsfr { background: url('https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/star_friend_small_disabled.png') !important; } /*더보기 친구창 관친*/
 .frinfo_wrap .list_frinfo .pf_thumb .ico_bsfr.bsfr_on { background: url('https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/star_friend_small.png') !important; } /*더보기 친구창 관친*/
@@ -176,13 +178,13 @@ body { color: var(--text-color) !important; }
 .feed .loading_wrap { width: 24px !important; }
 .feed .loading_wrap { height: 24px !important; }
 .feed .loading_wrap img { margin: -9999px 0 0 -9999px !important; }
-.image_collection.photo_collection .loading_wrap { background: url(https://i.imgur.com/GPJrniq.gif) no-repeat !important;}
+.image_collection.photo_collection .loading_wrap { background: var(--loading-circle-url) no-repeat !important;}
 .image_collection.photo_collection .loading_wrap { height: 24px !important; }
 .image_collection.photo_collection .loading_wrap { background-position: center !important; }
 .image_collection.photo_collection .loading_wrap { padding: 0px !important; }
 .image_collection.photo_collection .loading_wrap img { margin: -9999px 0 0 -9999px !important; }
 /* All loading circle is changed maybe... */
-.loading_wrap { background: url(https://i.imgur.com/GPJrniq.gif) no-repeat !important;}
+.loading_wrap { background: var(--loading-circle-url) no-repeat !important;}
 .loading_wrap { height: 24px !important; }
 .loading_wrap { background-position: center !important; }
 .loading_wrap img { margin: -9999px 0 0 -9999px !important; }
