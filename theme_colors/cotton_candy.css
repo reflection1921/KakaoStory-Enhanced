@@ -10,7 +10,7 @@
 --lighter-background-color: linear-gradient(rgb(255 255 255/0.7),rgb(255 255 255/0.7)) fixed 0 0/cover,var(--custom-background-color) fixed 0 0/cover;
 --comment-background-color: linear-gradient(rgb(255 255 255/0.6),rgb(255 255 255/0.6)) fixed 0 0/cover,var(--custom-background-color) fixed 0 0/cover;
 --dark-background-color: linear-gradient(rgb(255 255 255/0.9),rgb(255 255 255/0.9)) fixed 0 0/cover,var(--custom-background-color) fixed 0 0/cover;
---dark-border-color: ##d0d0d0;
+--dark-border-color: #d0d0d0;
 --darker-background-color: linear-gradient(rgb(255 255 255/0.9),rgb(255 255 255/0.9)) fixed 0 0/cover,var(--custom-background-color) fixed 0 0/cover;
 --background-border-color: #d9d9d9;
 --text-color: #000;
