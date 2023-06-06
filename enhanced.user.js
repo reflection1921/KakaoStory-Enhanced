@@ -398,6 +398,13 @@ function LoadCommonEvents()
         blockedList.delete(userID);
     });
 
+    $('body').on('click', '#enhancedBtnSaveBlockString', function() {
+        var blockStrings = document.getElementById("textBlockString").value;
+        SetValue('enhancedBlockStringList', blockStrings);
+        CreateBlockStringList();
+        document.getElementById("banStringLayer").remove();
+    });
+
     $('body').on('click', '#enhancedBtnCancelBlockString', function() {
         document.getElementById("banStringLayer").remove();
     });
@@ -428,24 +435,18 @@ function LoadCommonEvents()
                 $(e.target).parents('._commentWriting').addClass("shake_text");
                 VisibleEnhancedPowerModeCount();
             }
-            //$('._commentWriting').addClass("shake_text");
         }
-        // if (GetValue("enhancedBlink", 'false') == 'true') {
-        //     $('#contents_write').addClass("blink_text");
-        // }
+
     });
 
     $(document).on('keyup', '._editable', function() {
         $('div[data-part-name="writing"]').removeClass("shake_text");
         $('.layer_write').removeClass("shake_text");
         document.getElementById("contents_write").classList.remove("blink_text");
-        //StopEnhancedPowerModeShake();
     });
 
     $(document).on('keyup', '[id^=comt_view]', function() {
         $('._commentWriting').removeClass("shake_text");
-        //$('#contents_write').removeClass("blink_text");
-        //StopEnhancedPowerModeShake();
     });
 
     document.addEventListener('keydown', function(e) {
