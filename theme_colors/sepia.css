@@ -32,3 +32,4 @@
 --mention-background-color: #5865f24c;
 --mention-color: #c9cdfb;
 --background-hover-color: linear-gradient(rgb(255 255 255/0.08),rgb(255 255 255/0.08)) fixed 0 0/cover,var(--custom-background-color) fixed 0 0/cover;
+--dark-theme-ks-logo: url('https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/logo_kseh_dark.png');
