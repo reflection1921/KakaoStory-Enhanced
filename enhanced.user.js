@@ -1627,7 +1627,7 @@ function LoadLoginDarkThemeCSS()
         '.doc-footer .service_info .link_info { color: var(--text-menu-color) !important; }' +
         '.item_select .link_selected { color: var(--text-menu-color) !important; }' +
         '.box_tf { border: solid 0px var(--text-highlight-color) !important; background: var(--dark-background-color) !important; padding-left: 10px; padding-right: 10px; }' +
-        '.box_tf .tf_g { color: var(--text-color) !important; }' +
+        '.box_tf .tf_g { color: var(--text-color) !important; caret-color: auto !important; }' +
         '.info_tip, .line_or .txt_or { color: var(--text-color) !important;}' +
         '.info_tip .txt_tip { color: var(--discord-blue) !important; }' +
         '.box_tf .txt_mail { color: var(--text-color) !important; margin-right: 10px !important }' +
