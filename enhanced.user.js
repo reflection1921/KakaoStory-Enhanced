@@ -34,7 +34,8 @@
  * enhancedKittyMode : Kitty Mode(verycute: sound + kitty, cute: kitty, none: 적용안함)
  * enhancedLatestNotyID : 알림 마지막 ID(여러 개 창에서 중복 알림 발생 방지)
  * enhancedHideRecommendFriend : 추천친구 숨기기
- * enhancedHideLogo : 로고 숨기기(네이버)
+ * enhancedHideLogo : 로고 숨기기
+ * enhancedHideLogoIcon : 로고 숨기기 아이콘 선택(네이버, 유튜브, 인스타그램)
  * enhancedEarthquake : EARTHQUAKE!!!
  * enhancedBlink : BLINK!!!
  * enhancedBlockArticleAll : 강화된 차단의 공유글 전체 보이기 / 숨기기(현재 지원안함. 추후 지원 예정.)
@@ -50,9 +51,9 @@
 
 let scriptVersion = "1.19";
 
-//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
@@ -72,6 +73,8 @@ let changePermCount = 0;
 let changeInternalPermCount = 0;
 let changePermUserID;
 let changePermActivityCount;
+let currentFavicon = "naver";
+let currentTitle = "NAVER";
 //let selCurPerm = 'Z'; //A = 전체공개, F = 친구공개, M = 나만보기, Z = 기본설정(모든 게시글)
 //let selNewPerm = 'F'; //A = 전체공개, F = 친구공개, M = 나만보기
 
@@ -228,6 +231,11 @@ function InitEnhancedValues()
 
     var isHiddenLogo = GetValue('enhancedHideLogo', 'false');
     $('input:radio[name="enhancedSelectHideLogo"]:input[value=' + isHiddenLogo + ']').attr("checked", true);
+
+    var hiddenLogoIcon = GetValue('enhancedHideLogoIcon', 'naver');
+    $('input:radio[name="enhancedSelectLogoIcon"]:input[value=' + hiddenLogoIcon + ']').attr("checked", true);
+    currentFavicon = hiddenLogoIcon;
+    currentTitle = GetHideLogoIconTitle();
 
     var isHiddenMemorize = GetValue('enhancedHideMemorize', 'true');
     $('input:radio[name="enhnacnedSelectHideMemorize"]:input[value=' + isHiddenMemorize + ']').attr("checked", true);
@@ -685,6 +693,13 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedSelectHideLogo"]',function(){
         var changed = $('[name="enhancedSelectHideLogo"]:checked').val();
         SetValue("enhancedHideLogo", changed);
+    });
+
+    $(document).on("change",'input[name="enhancedSelectLogoIcon"]',function(){
+        var iconName = $('[name="enhancedSelectLogoIcon"]:checked').val();
+        SetValue("enhancedHideLogoIcon", iconName);
+        currentFavicon = iconName;
+        currentTitle = GetHideLogoIconTitle();
     });
 
     $(document).on("change",'input[name="enhnacnedSelectHideMemorize"]',function(){
@@ -1539,24 +1554,46 @@ function DownloadText(text, name, type) {
     a.download = name;
 }
 
+function GetHideLogoIconTitle()
+{
+    var val = GetValue('enhancedHideLogoIcon', 'naver');
+    if (val == 'naver')
+    {
+        return 'NAVER';
+    }
+    else if (val == 'youtube')
+    {
+        return 'YouTube';
+    }
+    else if (val == 'instagram')
+    {
+        return 'Instagram';
+    }
+    else
+    {
+        return 'NAVER';
+    }
+}
+
 function HideLogo()
 {
     var link = document.querySelector("link[rel~='icon']");
+    var icon = currentFavicon + ".ico";
 
-    if (document.getElementsByTagName('title')[0].innerText == "NAVER" &&
-        link.href.includes("naver.ico"))
+    if (document.getElementsByTagName('title')[0].innerText == currentTitle &&
+        link.href.includes(icon))
     {
         return;
     }
 
-    document.getElementsByTagName('title')[0].innerText = "NAVER"
+    document.getElementsByTagName('title')[0].innerText = currentTitle;
 
     if (!link) {
         link = document.createElement('link');
         link.rel = 'icon';
         document.getElementsByTagName('head')[0].appendChild(link);
     }
-    link.href = resourceURL + "images/naver.ico";
+    link.href = resourceURL + "images/" + icon;
 }
 
 function SetClassicFavicon()
