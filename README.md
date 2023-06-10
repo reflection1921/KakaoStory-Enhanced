@@ -2,7 +2,7 @@
 
 ## 소개
 KakaoStory Enhanced는 Discord 스타일의 다크 테마를 구현하기 위해 시작한 프로젝트 입니다.
-현재는 Discord 스타일의 다크 테마 외에도 다양한 기능들이 추가되었습니다.
+현재는 Discord 스타일의 다크 테마 외에도 유용한 기능들이 추가되었습니다.
 
 ## 사용가능한 브라우저
 - 최신버전의 Chrome
@@ -10,11 +10,11 @@ KakaoStory Enhanced는 Discord 스타일의 다크 테마를 구현하기 위해
 - 최신버전의 Safari(일부 기능 미지원)
 
 ## 기능
-- 다양한 스타일의 다크테마 지원(Discord, Visual Studio 등)
+- 다양한 스타일의 다크테마 지원(Discord, Visual Studio, Discord Aurora 등 26가지 테마)
 - 폰트 및 폰트 크기 설정
 - 알림
 - 강화된 차단(차단한 사용자의 게시글 및 댓글 숨기기)
-- 저 네이버 해요(favicon 및 타이틀 네이버로 숨기기)
+- 일반인 모드(favicon 및 타이틀 타 사이트처럼 보이기)
 - 이모티콘 크기 설정
 - 이외 기타 유용한 기능들 제공
 

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.20
+// @version      1.21
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
