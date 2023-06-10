@@ -757,6 +757,15 @@ function LoadSettingsPageEvents()
         ShowBlockStringPage();
     });
 
+    $('body').on('click', '#enhancedFastDeleteClose', function() {
+        document.getElementById("fastDeleteLayer").remove();
+        EnableScroll();
+    });
+
+    $('body').on('click', '#enhancedBtnFastDeleteFriendConfirm', function() {
+        OpenFastDeleteFriend();
+    });
+
     $('body').on('click', '#enhancedKittyImage', function() {
         if (GetValue('enhancedKittyMode', 'none') == 'verycute') {
             catEffect.play();
@@ -1792,6 +1801,53 @@ function ViewVisitorChart()
     xmlHttp.setRequestHeader("Accept", "application/json");
     xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xmlHttp.send();
+}
+
+function OpenFastDeleteFriend()
+{
+    var fastDeleteLayer = document.createElement('div');
+    fastDeleteLayer.id = "fastDeleteLayer";
+    fastDeleteLayer.className = "cover _cover";
+    document.body.appendChild(fastDeleteLayer);
+    document.getElementById('fastDeleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="story_layer story_feed_layer cover_content cover_center" data-kant-group="like"><div class="inner_story_layer _layerContainer" style="top: 630px;"><div class="layer_head"><strong class="tit_story">빠른 친구삭제</strong></div><div class="layer_body"><div class="fake_scroll"><ul id="enhancedFastDeleteTable" class="list_people list_people_v2 _listContainer" style="overflow-y: scroll;"></ul><div class="scroll" style="display: none; height: 60px;"><span class="top"></span><span class="bottom"></span></div></div></div><div class="layer_foot"><a href="#" class="btn_close _close" data-kant-id="false"><span id="enhancedFastDeleteClose" class="ico_ks ico_close">닫기</span></a></div></div></div></div>';
+    document.body.scrollTop = 0;
+    DisableScroll();
+
+    var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                var friends = JSON.parse(xmlHttp.responseText);
+                console.log("LOG1");
+                for (var i = 0; i < friends.profiles.length; i++)
+                {
+                    console.log("WORKING");
+                    let friendli = document.createElement('li');
+                    var friendProfileImageL = friends['profiles'][i]['profile_image_url'];
+                    var friendProfileImageS = friends['profiles'][i]['profile_thumbnail_url'];
+                    var friendName = friends['profiles'][i]['display_name'];
+                    let friendID = friends['profiles'][i]['id'];
+                    friendli.id = "enhancedFastDelFriend_" + friendID;
+                    document.getElementById("enhancedFastDeleteTable").appendChild(friendli);
+                    document.getElementById("enhancedFastDelFriend_" + friendID).innerHTML = '<a href="/' + friendID + '" class="link_people"><span class="thumb_user"><span class="img_profile thumb_img"><img src="' + friendProfileImageL + '" width="36" height="36" data-image-src="' + friendProfileImageS + '" data-movie-src="" class="img_thumb" alt=""></span></span> <span class="info_user"><span class="inner_user"><span class="txt_user"><em class="tit_userinfo">' + friendName + '</em></span></span></span></a><div class="btn_group btn_group_v2"><a href="#" id="' + 'btnEnhancedFastDelFriend_' + friendID + '"class="btn_com btn_wh _acceptFriend fastDelBtn"><span>삭제</span></a></div>';
+                    document.getElementById("btnEnhancedFastDelFriend_" + friendID).addEventListener("click", function() {
+                        _DeleteFriend(friendID);
+                        friendli.remove();
+                    });
+                    
+                }
+            }
+        }
+        xmlHttp.open("GET", "https://story.kakao.com/a/friends");
+        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+        xmlHttp.setRequestHeader("Accept", "application/json");
+        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xmlHttp.send();
+}
+
+function _testLog(userID)
+{
+    console.log(userID);
 }
 
 function AddLoginThemeSelectButtonUI()
