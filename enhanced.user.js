@@ -1015,7 +1015,7 @@ function PrepareChangePermission() {
             permissionCountLayer.id = "changePermissionCountLayer";
             permissionCountLayer.className = "cover _cover";
             document.body.appendChild(permissionCountLayer);
-            document.getElementById('changePermissionCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="changePermissionText">게시글 권한 변경 중... (0 / 0)</p><div>※정책상 삭제 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionBtnOK" style="display: none;"><span>확인</span></a> </div></div></div></div>';
+            document.getElementById('changePermissionCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="changePermissionText">게시글 권한 변경 중... (0 / 0)</p><div>※정책상 변경 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionBtnOK" style="display: none;"><span>확인</span></a> </div></div></div></div>';
             LoadActivitiesForPermission(changePermUserID, "");
         }
     }
@@ -1066,7 +1066,7 @@ function SetFontSize() {
             var lines = xmlHttp.responseText.split("\n");
             for (var i = 0; i < lines.length; i++) {
 
-                var originSize = parseInt(lines[i].split("font-size: ")[1].split("px")[0]);
+                var originSize = parseInt(lines[i].split("font-size:")[1].split("px")[0]);
                 var changedSize = originSize + parseInt(GetValue('enhancedFontSize', '0'));
                 var modifiedCSS = lines[i].replace( originSize , changedSize);
                 SetCSS('enhancedFontSizeCSS' + i, modifiedCSS);
