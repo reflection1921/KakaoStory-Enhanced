@@ -1499,6 +1499,7 @@ function ChangeTheme(styleName)
         $('style').remove(); //Remove Dark Theme CSS
         document.documentElement.style.setProperty('--lighter-background-color', '#dddddd'); //enhanced setting page textbox background
         document.documentElement.style.setProperty('--text-color', '#000000'); //enhanced setting page textbox color
+        document.documentElement.style.setProperty('--text-highlight-color', '#000000'); //enhanced feature
 
         SetFont();
         SetFontSize();
