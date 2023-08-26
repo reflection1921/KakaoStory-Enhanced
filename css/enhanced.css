@@ -41,3 +41,4 @@
     text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000;
 }
 .enhanced_power_mode_score_enable { height: 64px; }
+.enhanced_activty_selected { border: 1px solid var(--text-highlight-color) !important; }

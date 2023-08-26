@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.22
+// @version      1.23
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -38,6 +38,7 @@
  * enhancedHideLogoIcon : 로고 숨기기 아이콘 선택(네이버, 유튜브, 인스타그램)
  * enhancedEarthquake : EARTHQUAKE!!!
  * enhancedBlink : BLINK!!!
+ * enhancedKeyboard : 키보드 단축키 사용 여부
  * enhancedBlockArticleAll : 강화된 차단의 공유글 전체 보이기 / 숨기기(현재 지원안함. 추후 지원 예정.)
  * enhancedFaviconClassic : 옛날 파비콘으로 되돌리기
  */
@@ -49,7 +50,7 @@
  */
 
 
-let scriptVersion = "1.22";
+let scriptVersion = "1.23";
 
 //let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
@@ -258,6 +259,9 @@ function InitEnhancedValues()
 
     var isBlink = GetValue('enhancedBlink', 'false');
     $('input:radio[name="enhancedSelectBlink"]:input[value=' + isBlink + ']').attr("checked", true);
+
+    var isKeyboard = GetValue('enhancedKeyboard', 'false');
+    $('input:radio[name="enhancedSelectKeyboard"]:input[value=' + isKeyboard + ']').attr("checked", true);
 
     var isBlockAllArticle = GetValue('enhancedBlockArticleAll', 'true');
     $('input:radio[name="enhancedSelectBlockArticleAll"]:input[value=' + isBlockAllArticle + ']').attr("checked", true);
@@ -468,6 +472,253 @@ function LoadCommonEvents()
         } else {
             konamiCount = 0;
         }
+
+        if (GetValue("enhancedKeyboard", 'false') == 'false')
+        {
+            return;
+        }
+
+
+        //check e's element id is contents_write
+        if (e.target.id == "contents_write") {
+            return;
+        }
+
+        //check e's element class has 'comt_view<random_number>'
+        var elemId = e.target.id;
+        if (elemId.includes("comt_view")) {
+            return;
+        }
+
+        if (document.getElementById("enhancedLayer").style.display == 'block')
+        {
+            return;
+        }
+
+        /* KEYBOARD CONTROL(KEY UP? KEY DOWN?) */
+        //J - FEED Down
+        if (e.keyCode == 74)
+        {
+            if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
+            {
+                return;
+            }
+
+            if (document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center").length > 0)
+            {
+                return;
+            }
+
+            var articles = document.getElementsByClassName("section _activity");
+            var visibleArticles = Array.from(articles).filter(function(element) {
+                return window.getComputedStyle(element).display !== "none";
+              });
+
+            for (var i = 0; i < visibleArticles.length; i++)
+            {
+                if (visibleArticles[i].classList.contains("enhanced_activty_selected"))
+                {
+                    if (i == visibleArticles.length - 1)
+                    {
+                        //visibleArticles[i].scrollIntoView();
+                        ScrollToTargetSmoothly(visibleArticles[i]);
+                        break;
+                    }
+                    visibleArticles[i].classList.remove("enhanced_activty_selected");
+                    visibleArticles[i + 1].classList.add("enhanced_activty_selected");
+                    //visibleArticles[i + 1].scrollIntoView();
+                    ScrollToTargetSmoothly(articles[i + 1]);
+                    break;
+                }
+                if (i == visibleArticles.length - 1)
+                {
+                    visibleArticles[0].classList.add("enhanced_activty_selected");
+                    //visibleArticles[0].scrollIntoView();
+                    ScrollToTargetSmoothly(visibleArticles[0]);
+                }
+            }
+        }
+
+        //K - Feed Up
+        if (e.keyCode == 75)
+        {
+            if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
+            {
+                return;
+            }
+
+            if (document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center").length > 0)
+            {
+                return;
+            }
+            var articles = document.getElementsByClassName("section _activity");
+            var visibleArticles = Array.from(articles).filter(function(element) {
+                return window.getComputedStyle(element).display !== "none";
+            });
+
+            for (var i = 0; i < visibleArticles.length; i++)
+            {
+                if (visibleArticles[i].classList.contains("enhanced_activty_selected"))
+                {
+                    if (i == 0)
+                    {
+                        //visibleArticles[i].scrollIntoView();
+                        ScrollToTargetSmoothly(visibleArticles[i])
+                        break;
+                    }
+                    visibleArticles[i].classList.remove("enhanced_activty_selected");
+                    visibleArticles[i - 1].classList.add("enhanced_activty_selected");
+                    //visibleArticles[i - 1].scrollIntoView();
+                    ScrollToTargetSmoothly(visibleArticles[i - 1]);
+                    break;
+                }
+                if (i == visibleArticles.length - 1)
+                {
+                    visibleArticles[0].classList.add("enhanced_activty_selected");
+                    //visibleArticles[0].scrollIntoView();
+                    ScrollToTargetSmoothly(visibleArticles[0]);
+                }
+            }
+        }
+
+        //G(Double G) - Feed TOP / BOTTOM
+        if (e.keyCode == 71)
+        {
+            if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
+            {
+                return;
+            }
+
+            if (document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center").length > 0)
+            {
+                return;
+            }
+
+            var currentTime = new Date().getTime();
+            if (!gKeyPressed)
+            {
+                gKeyPressed = true;
+                lastKeyPressTime = currentTime;
+
+                // Normal G
+                setTimeout(function() {
+                    if (gKeyPressed && currentTime - lastKeyPressTime < doubleKeyPressThreshold) {
+                        onGKeyPress(false);
+                        gKeyPressed = false;
+                    }
+                }, doubleKeyPressThreshold);
+            }
+            else //Double G
+            {
+                onGKeyPress(true);
+                gKeyPressed = false;
+            }
+        }
+
+        //R - Refresh Feed / Go to Main
+        if (e.keyCode == 82)
+        {
+            var elem = document.getElementsByClassName("link_kakaostory _btnHome")[0];
+            if (elem) {
+                elem.click();
+            }
+        }
+
+        //F - Article Detail View(Close : ESC)
+        if (e.keyCode == 70)
+        {
+            var selElem = GetSelectedActivity();
+            var timeElem = selElem.getElementsByClassName("time _linkPost")[0];
+            if (timeElem)
+            {
+                timeElem.click();
+            }
+        }
+
+        //N - New Article
+        if (e.keyCode == 78)
+        {
+            var elem = document.getElementsByClassName("link_gnb link_write _toggleWriteButton")[0];
+            if (elem) {
+                elem.click();
+                e.preventDefault();
+            }
+        }
+
+        //I - Comment Write
+        if (e.keyCode == 73)
+        {
+            var selElem = GetSelectedActivity();
+            if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
+            {
+                selElem = document.getElementsByClassName("section _activity")[0];
+            }
+            else if (document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center").length > 0)
+            {
+                selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
+            }
+            var comment_elem = selElem.getElementsByClassName("_commentWritingPlaceholder")[0];
+            //var comment_elem = selElem.querySelectorAll('[id*="comt_view"]')[0];
+            if (comment_elem)
+            {
+                ScrollToTargetSmoothly(comment_elem);
+                comment_elem.click();
+                e.preventDefault();
+            }
+        }
+
+        //P - Previous Comment
+        if (e.keyCode == 80)
+        {
+            var selElem = GetSelectedActivity();
+            if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
+            {
+                selElem = document.getElementsByClassName("section _activity")[0];
+            }
+            else if (document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center").length > 0)
+            {
+                selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
+            }
+            var prevElem = selElem.getElementsByClassName("_btnShowPrevComment")[0];
+            if (prevElem)
+                prevElem.click();
+        }
+        
+        //C - First Comment
+        if (e.keyCode == 67)
+        {
+            var selElem = GetSelectedActivity();
+            if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
+            {
+                selElem = document.getElementsByClassName("section _activity")[0];
+            }
+            else if (document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center").length > 0)
+            {
+                selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
+            }
+            var prevElem = selElem.getElementsByClassName("link_view _btnShowFirstComment")[0];
+            if (prevElem)
+                prevElem.click();
+        }
+
+        //L - Like Feeling Button
+        if (e.keyCode == 76)
+        {
+            var selElem = GetSelectedActivity();
+            if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
+            {
+                selElem = document.getElementsByClassName("section _activity")[0];
+            }
+            else if (document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center").length > 0)
+            {
+                selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
+            }
+            var likeElem = selElem.getElementsByClassName("_btnLike")[0];
+            if (likeElem)
+            {
+                likeElem.click();
+            }       
+        }
     });
 
     //$('body').on('input', '#contents_write', function() {
@@ -476,6 +727,80 @@ function LoadCommonEvents()
         //setTimeout(() => null, 1);
         //catEffect.play();
     //});
+}
+
+function GetSelectedActivity()
+{
+    var articles = document.getElementsByClassName("section _activity");
+    var visibleArticles = Array.from(articles).filter(function(element) {
+        return window.getComputedStyle(element).display !== "none";
+    });
+
+    var selectedIdx = -1;
+    
+    for (var i = 0; i < visibleArticles.length; i++)
+    {
+        if (visibleArticles[i].classList.contains("enhanced_activty_selected"))
+        {
+            selectedIdx = i;
+            break;
+        }
+    }
+
+    if (selectedIdx == -1)
+        return null;
+
+    var selElem = visibleArticles[selectedIdx];
+    return selElem;
+}
+
+/* G KEY VARIABLES */
+var gKeyPressed = false;
+var lastKeyPressTime = 0;
+var doubleKeyPressThreshold = 300;
+
+function onGKeyPress(doublePress)
+{
+    var articles = document.getElementsByClassName("section _activity");
+    var visibleArticles = Array.from(articles).filter(function(element) {
+        return window.getComputedStyle(element).display !== "none";
+    });
+
+    for (var i = 0; i < visibleArticles.length; i++)
+    {
+        visibleArticles[i].classList.remove("enhanced_activty_selected");
+    }
+    //console.log("ATC LEN: " + articles.length);
+    //console.log("ATC VISIBLE LEN: " + visibleArticles.length);
+
+    if (doublePress)
+    {
+        console.log(visibleArticles[0]);
+        //visibleArticles[0].scrollIntoView();
+        ScrollToTargetSmoothly(visibleArticles[0]);
+        visibleArticles[0].classList.add("enhanced_activty_selected");
+        console.log("double pressed");
+        //console.log("SEL UP ATC LEN: " + (visibleArticles.length - 1));
+    }
+    else
+    {
+        //visibleArticles[visibleArticles.length - 1].scrollIntoView();
+        ScrollToTargetSmoothly(visibleArticles[visibleArticles.length - 1]);
+        visibleArticles[visibleArticles.length - 1].classList.add("enhanced_activty_selected");
+        console.log("normal pressed");
+        //console.log("SEL DWN ATC LEN: " + (visibleArticles.length - 1));
+    }
+}
+
+function ScrollToTargetSmoothly(elem)
+{
+    // window.scrollTo({
+    //     top: elem.offsetTop - 64,
+    //     behavior: "smooth"
+    // });
+    
+    //64: Header Height
+    window.scrollTo(0, elem.offsetTop - 64);
 }
 
 function VisibleEnhancedPowerModeCount()
@@ -737,6 +1062,11 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedSelectBlink"]',function(){
         var changed = $('[name="enhancedSelectBlink"]:checked').val();
         SetValue("enhancedBlink", changed);
+    });
+
+    $(document).on("change",'input[name="enhancedSelectKeyboard"]',function(){
+        var changed = $('[name="enhancedSelectKeyboard"]:checked').val();
+        SetValue("enhancedKeyboard", changed);
     });
 
     $(document).on("change",'input[name="enhancedSelectBlockArticleAll"]',function(){
