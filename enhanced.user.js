@@ -198,7 +198,7 @@ function InitEnhancedValues()
     var fontName = GetValue('enhancedFontName', 'Noto Sans KR');
     document.getElementById("enhancedTxtFontName").value = fontName;
     document.getElementById("enhancedTxtFontCSS").value = GetValue('enhancedFontCSS', 'https://fonts.googleapis.com/earlyaccess/notosanskr.css');
-    SetFont();
+    //SetFont();
 
     if (fontName == 'Noto Sans KR')
     {
@@ -280,7 +280,7 @@ function InitEnhancedValues()
     GetCSSVersion();
     GetLatestVersion();
 
-    CreateBlockStringList();
+    CreateBlockStringList(); 
 }
 
 function RemoveRecommendFeed() {
@@ -2232,7 +2232,7 @@ function AddLoginThemeSelectButtonUI()
     InitEnhancedSettingsPage();
     LoadCommonEvents();
     GetBlockedUsers();
-
+    
     SetEmoticonSelectorSize();
 
     setTimeout(() => AddEnhancedMenu(), 1000);
