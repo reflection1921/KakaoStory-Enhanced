@@ -1385,7 +1385,7 @@ function CreateBlockStringList() {
 
 function SetFont()
 {
-    SetCSS("enhancedFontCSS", "body, button, input, select, td, textarea, th {font-family: '" + GetValue('enhancedFontName', 'Pretendard') + "', 'Nanum Gothic' !important;}");
+    SetCSS("enhancedFontCSS", "body, button, input, select, td, textarea, th {font-family: '" + GetValue('enhancedFontName', 'Pretendard') + "', 'Nanum Gothic', 'Apple SD Gothic Neo', 'Apple SD 산돌고딕 네오' !important;}");
     SetCSS("enhancedFontURLCSS", "@import url(" + GetValue('enhancedFontCSS', 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css') + ");");
 }
 
