@@ -195,12 +195,12 @@ function InitEnhancedValues()
         document.getElementById('enhancedSystemTheme').checked = false;
     }
 
-    var fontName = GetValue('enhancedFontName', 'Noto Sans KR');
+    var fontName = GetValue('enhancedFontName', 'Pretendard');
     document.getElementById("enhancedTxtFontName").value = fontName;
-    document.getElementById("enhancedTxtFontCSS").value = GetValue('enhancedFontCSS', 'https://fonts.googleapis.com/earlyaccess/notosanskr.css');
-    //SetFont();
+    document.getElementById("enhancedTxtFontCSS").value = GetValue('enhancedFontCSS', 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css');
+    SetFont();
 
-    if (fontName == 'Noto Sans KR')
+    if (fontName == 'Pretendard')
     {
         document.getElementById("enhancedFontNoto").checked = true;
     }
@@ -910,8 +910,8 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on('click', '#enhancedFontNoto', function() {
-        var fontName = "Noto Sans KR";
-        var fontCSS = "https://fonts.googleapis.com/earlyaccess/notosanskr.css";
+        var fontName = "Pretendard";
+        var fontCSS = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css";
         document.getElementById("enhancedTxtFontName").value = fontName;
         document.getElementById("enhancedTxtFontCSS").value = fontCSS;
         SetValue('enhancedFontName', fontName);
@@ -1385,8 +1385,8 @@ function CreateBlockStringList() {
 
 function SetFont()
 {
-    SetCSS("enhancedFontCSS", "body, button, input, select, td, textarea, th {font-family: '" + GetValue('enhancedFontName', 'Noto Sans KR') + "', 'Nanum Gothic' !important;}");
-    SetCSS("enhancedFontURLCSS", "@import url(" + GetValue('enhancedFontCSS', 'https://fonts.googleapis.com/earlyaccess/notosanskr.css') + ");");
+    SetCSS("enhancedFontCSS", "body, button, input, select, td, textarea, th {font-family: '" + GetValue('enhancedFontName', 'Pretendard') + "', 'Nanum Gothic' !important;}");
+    SetCSS("enhancedFontURLCSS", "@import url(" + GetValue('enhancedFontCSS', 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css') + ");");
 }
 
 function SetFontSize() {
