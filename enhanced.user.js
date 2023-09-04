@@ -41,6 +41,8 @@
  * enhancedKeyboard : 키보드 단축키 사용 여부
  * enhancedBlockArticleAll : 강화된 차단의 공유글 전체 보이기 / 숨기기(현재 지원안함. 추후 지원 예정.)
  * enhancedFaviconClassic : 옛날 파비콘으로 되돌리기
+ * enhancedFaviconTitle : 카카오스토리 탭 타이틀
+ * enhancedFaviconURL : 파비콘 URL
  */
 
 /*
@@ -237,6 +239,8 @@ function InitEnhancedValues()
     $('input:radio[name="enhancedSelectLogoIcon"]:input[value=' + hiddenLogoIcon + ']').attr("checked", true);
     currentFavicon = hiddenLogoIcon;
     currentTitle = GetHideLogoIconTitle();
+    document.getElementById('enhancedTxtHideLogoTitle').value = GetValue('enhancedFaviconTitle', 'NAVER');
+    document.getElementById('enhancedTxtHideLogoFaviconURL').value = GetValue('enhancedFaviconURL', resourceURL + 'images/naver.ico');
 
     var isHiddenMemorize = GetValue('enhancedHideMemorize', 'true');
     $('input:radio[name="enhnacnedSelectHideMemorize"]:input[value=' + isHiddenMemorize + ']').attr("checked", true);
@@ -855,6 +859,8 @@ function LoadSettingsPageEvents()
         SetValue('enhancedFontSize', document.getElementById('enhancedTxtFontSize').value);
         SetFontSize();
         SetValue('enhancedNotifyTime', document.getElementById('enhancedTxtNotifyTime').value);
+        SetValue('enhancedFaviconTitle', document.getElementById('enhancedTxtHideLogoTitle').value);
+        SetValue('enhancedFaviconURL', document.getElementById('enhancedTxtHideLogoFaviconURL').value);
         CloseSettingsPage();
     });
 
@@ -1908,6 +1914,10 @@ function GetHideLogoIconTitle()
     {
         return 'Instagram';
     }
+    else if (val == 'custom')
+    {
+        return GetValue('enhancedFaviconTitle', 'NAVER');
+    }
     else
     {
         return 'NAVER';
@@ -1918,6 +1928,11 @@ function HideLogo()
 {
     var link = document.querySelector("link[rel~='icon']");
     var icon = currentFavicon + ".ico";
+
+    if (currentFavicon == 'custom')
+    {
+        icon = GetValue('enhancedFaviconURL', resourceURL + 'images/naver.ico');
+    }
 
     if (document.getElementsByTagName('title')[0].innerText == currentTitle &&
         link.href.includes(icon))
@@ -1932,7 +1947,15 @@ function HideLogo()
         link.rel = 'icon';
         document.getElementsByTagName('head')[0].appendChild(link);
     }
-    link.href = resourceURL + "images/" + icon;
+
+    if (currentFavicon == 'custom')
+    {
+        link.href = GetValue('enhancedFaviconURL', resourceURL + 'images/naver.ico');
+    }
+    else
+    {
+        link.href = resourceURL + "images/" + icon;
+    }   
 }
 
 function SetClassicFavicon()
