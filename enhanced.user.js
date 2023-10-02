@@ -223,6 +223,7 @@ function InitEnhancedValues()
 
     var notifyEnabled = GetValue('enhancedNotify', 'false');
     $('input:radio[name="enhancedSelectNotifyUse"]:input[value=' + notifyEnabled + ']').attr("checked", true);
+    document.getElementById("notifyEnableGroup").style.display = (notifyEnabled == "true")? "block" : "none";
 
     var notifySoundEnabled = GetValue('enhancedNotifySound', 'true');
     $('input:radio[name="enhancedSelectNotifySoundUse"]:input[value=' + notifySoundEnabled + ']').attr("checked", true);
@@ -1009,6 +1010,7 @@ function LoadSettingsPageEvents()
 
     $(document).on("change",'input[name="enhancedSelectNotifyUse"]',function(){
         var changed = $('[name="enhancedSelectNotifyUse"]:checked').val();
+        document.getElementById("notifyEnableGroup").style.display = (changed == "true")? "block" : "none";
         SetValue("enhancedNotify", changed);
         if (GetValue("enhancedNotify", "false") == "true")
         {
