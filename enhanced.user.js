@@ -34,8 +34,11 @@
  * enhancedKittyMode : Kitty Mode(verycute: sound + kitty, cute: kitty, none: 적용안함)
  * enhancedLatestNotyID : 알림 마지막 ID(여러 개 창에서 중복 알림 발생 방지)
  * enhancedHideRecommendFriend : 추천친구 숨기기
- * enhancedHideLogo : 로고 숨기기
- * enhancedHideLogoIcon : 로고 숨기기 아이콘 선택(네이버, 유튜브, 인스타그램)
+ * enhancedHideLogo : 일반인 모드
+ * enhancedHideLogoNoti : 일반인 모드 앞에 (N) 표시
+ * enhancedHideLogoIcon : 일반인 모드 아이콘 선택(네이버, 유튜브, 인스타그램, 커스텀)
+ * enhancedFaviconTitle : 일반인 모드 커스텀 타이틀
+ * enhancedFaviconURL : 일반인 모드 커스텀 Favicon URL
  * enhancedEarthquake : EARTHQUAKE!!!
  * enhancedBlink : BLINK!!!
  * enhancedKeyboard : 키보드 단축키 사용 여부
@@ -54,9 +57,9 @@
 
 let scriptVersion = "1.25";
 
-//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
@@ -234,6 +237,9 @@ function InitEnhancedValues()
 
     var isHiddenLogo = GetValue('enhancedHideLogo', 'false');
     $('input:radio[name="enhancedSelectHideLogo"]:input[value=' + isHiddenLogo + ']').attr("checked", true);
+
+    var isHiddenLogoNoti = GetValue('enhancedHideLogoNoti', 'false');
+    $('input:radio[name="enhancedSelectHideLogoNoti"]:input[value=' + isHiddenLogoNoti + ']').attr("checked", true);
 
     var hiddenLogoIcon = GetValue('enhancedHideLogoIcon', 'naver');
     $('input:radio[name="enhancedSelectLogoIcon"]:input[value=' + hiddenLogoIcon + ']').attr("checked", true);
@@ -779,11 +785,11 @@ function onGKeyPress(doublePress)
 
     if (doublePress)
     {
-        console.log(visibleArticles[0]);
+        //console.log(visibleArticles[0]);
         //visibleArticles[0].scrollIntoView();
         ScrollToTargetSmoothly(visibleArticles[0]);
         visibleArticles[0].classList.add("enhanced_activty_selected");
-        console.log("double pressed");
+        //console.log("double pressed");
         //console.log("SEL UP ATC LEN: " + (visibleArticles.length - 1));
     }
     else
@@ -791,7 +797,7 @@ function onGKeyPress(doublePress)
         //visibleArticles[visibleArticles.length - 1].scrollIntoView();
         ScrollToTargetSmoothly(visibleArticles[visibleArticles.length - 1]);
         visibleArticles[visibleArticles.length - 1].classList.add("enhanced_activty_selected");
-        console.log("normal pressed");
+        //console.log("normal pressed");
         //console.log("SEL DWN ATC LEN: " + (visibleArticles.length - 1));
     }
 }
@@ -1024,6 +1030,11 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedSelectHideLogo"]',function(){
         var changed = $('[name="enhancedSelectHideLogo"]:checked').val();
         SetValue("enhancedHideLogo", changed);
+    });
+
+    $(document).on("change",'input[name="enhancedSelectHideLogoNoti"]',function(){
+        var changed = $('[name="enhancedSelectHideLogoNoti"]:checked').val();
+        SetValue("enhancedHideLogoNoti", changed);
     });
 
     $(document).on("change",'input[name="enhancedSelectLogoIcon"]',function(){
@@ -1928,19 +1939,33 @@ function HideLogo()
 {
     var link = document.querySelector("link[rel~='icon']");
     var icon = currentFavicon + ".ico";
+    var addNotiEnabled = false;
+
+    //innerText starts with (N) means notification
+
+    if (GetValue("enhancedHideLogoNoti", 'false') == 'true' && document.getElementsByTagName('title')[0].innerText.startsWith('(N)'))
+    {
+        addNotiEnabled = true;
+    }
 
     if (currentFavicon == 'custom')
     {
         icon = GetValue('enhancedFaviconURL', resourceURL + 'images/naver.ico');
     }
 
-    if (document.getElementsByTagName('title')[0].innerText == currentTitle &&
+    var _title = currentTitle;
+    if (addNotiEnabled)
+    {
+        _title = '(N) ' + currentTitle;
+    }
+
+    if (document.getElementsByTagName('title')[0].innerText == _title &&
         link.href.includes(icon))
     {
         return;
     }
 
-    document.getElementsByTagName('title')[0].innerText = currentTitle;
+    document.getElementsByTagName('title')[0].innerText = _title;
 
     if (!link) {
         link = document.createElement('link');
@@ -2169,10 +2194,8 @@ function OpenFastDeleteFriend()
         xmlHttp.onreadystatechange = function() {
             if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
                 var friends = JSON.parse(xmlHttp.responseText);
-                console.log("LOG1");
                 for (var i = 0; i < friends.profiles.length; i++)
                 {
-                    console.log("WORKING");
                     let friendli = document.createElement('li');
                     var friendProfileImageL = friends['profiles'][i]['profile_image_url'];
                     var friendProfileImageS = friends['profiles'][i]['profile_thumbnail_url'];
