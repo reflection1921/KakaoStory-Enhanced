@@ -488,6 +488,11 @@ function LoadCommonEvents()
             return;
         }
 
+        //check element is input
+        if (document.activeElement.tagName == "INPUT" || document.activeElement.tagName == "TEXTAREA") {
+            return;
+        }
+
 
         //check e's element id is contents_write
         if (e.target.id == "contents_write") {
