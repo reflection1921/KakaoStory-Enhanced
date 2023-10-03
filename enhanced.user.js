@@ -16,7 +16,7 @@
  * Settings Parameters
  * enhancedSystemTheme : OS에 적용된 시스템 테마 사용 여부
  * enhancedSelectTheme : 선택한 테마(Light, Dark)
- * enhancedDarkThemeStyle : 다크 테마의 스타일(Discord, Dark Blue, Dark Red)
+ * enhancedDarkThemeStyle : 다크 테마의 스타일(Discord, Dark Blue, Dark Red, ...)
  * enhancedDiscordMention : 디스코드 멘션 스타일의 언급 UI 사용 여부
  * enhancedFontName : 설정된 폰트명
  * enhancedFontCSS : 설정된 폰트 CSS URL
@@ -1128,6 +1128,10 @@ function LoadSettingsPageEvents()
             catEffect.play();
         }
     });
+
+    $('body').on('click', '#enhancedBtnDarkStyleCustom', function() {
+        
+    });
 }
 
 function LoadForDeleteFriends(blockedUserOnly) {
@@ -1473,6 +1477,12 @@ function LoadThemeList() {
 
                 opTheme.add(op);
             }
+
+            var op2 = new Option();
+            op2.value = "gradient_custom";
+            op2.text = "Gradient Custom";
+
+            opTheme.add(op2);
 
             var selectedDarkStyle = GetValue('enhancedDarkThemeStyle', 'discord');
             document.getElementById("enhancedOptionDarkTheme").value = selectedDarkStyle;
