@@ -223,7 +223,7 @@ function InitEnhancedValues()
 
     var notifyEnabled = GetValue('enhancedNotify', 'false');
     $('input:radio[name="enhancedSelectNotifyUse"]:input[value=' + notifyEnabled + ']').attr("checked", true);
-    document.getElementById("notifyEnableGroup").style.display = (notifyEnabled == "true")? "block" : "none";
+    document.getElementById("groupEnhancedNotifyEnable").style.display = (notifyEnabled == "true")? "block" : "none";
 
     var notifySoundEnabled = GetValue('enhancedNotifySound', 'true');
     $('input:radio[name="enhancedSelectNotifySoundUse"]:input[value=' + notifySoundEnabled + ']').attr("checked", true);
@@ -238,12 +238,14 @@ function InitEnhancedValues()
 
     var isHiddenLogo = GetValue('enhancedHideLogo', 'false');
     $('input:radio[name="enhancedSelectHideLogo"]:input[value=' + isHiddenLogo + ']').attr("checked", true);
+    document.getElementById("groupEnhancedHideLogoEnable").style.display = (isHiddenLogo == "true")? "block" : "none";
 
     var isHiddenLogoNoti = GetValue('enhancedHideLogoNoti', 'false');
     $('input:radio[name="enhancedSelectHideLogoNoti"]:input[value=' + isHiddenLogoNoti + ']').attr("checked", true);
 
     var hiddenLogoIcon = GetValue('enhancedHideLogoIcon', 'naver');
     $('input:radio[name="enhancedSelectLogoIcon"]:input[value=' + hiddenLogoIcon + ']').attr("checked", true);
+    document.getElementById("groupEnhancedHideLogoCustomEnable").style.display = (hiddenLogoIcon == "custom")? "block" : "none";
     currentFavicon = hiddenLogoIcon;
     currentTitle = GetHideLogoIconTitle();
     document.getElementById('enhancedTxtHideLogoTitle').value = GetValue('enhancedFaviconTitle', 'NAVER');
@@ -1010,7 +1012,7 @@ function LoadSettingsPageEvents()
 
     $(document).on("change",'input[name="enhancedSelectNotifyUse"]',function(){
         var changed = $('[name="enhancedSelectNotifyUse"]:checked').val();
-        document.getElementById("notifyEnableGroup").style.display = (changed == "true")? "block" : "none";
+        document.getElementById("groupEnhancedNotifyEnable").style.display = (changed == "true")? "block" : "none";
         SetValue("enhancedNotify", changed);
         if (GetValue("enhancedNotify", "false") == "true")
         {
@@ -1036,6 +1038,7 @@ function LoadSettingsPageEvents()
 
     $(document).on("change",'input[name="enhancedSelectHideLogo"]',function(){
         var changed = $('[name="enhancedSelectHideLogo"]:checked').val();
+        document.getElementById("groupEnhancedHideLogoEnable").style.display = (changed == "true")? "block" : "none";
         SetValue("enhancedHideLogo", changed);
     });
 
@@ -1046,6 +1049,7 @@ function LoadSettingsPageEvents()
 
     $(document).on("change",'input[name="enhancedSelectLogoIcon"]',function(){
         var iconName = $('[name="enhancedSelectLogoIcon"]:checked').val();
+        document.getElementById("groupEnhancedHideLogoCustomEnable").style.display = (iconName == "custom")? "block" : "none";
         SetValue("enhancedHideLogoIcon", iconName);
         currentFavicon = iconName;
         currentTitle = GetHideLogoIconTitle();

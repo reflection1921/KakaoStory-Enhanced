@@ -97,7 +97,7 @@
                             </div>
                         </div>
                     </dd>
-                    <div id="notifyEnableGroup">
+                    <div id="groupEnhancedNotifyEnable">
                         <dt>알림 사운드</dt>
                         <dd>
                             <div class="option_msg">
@@ -177,54 +177,58 @@
                         ※해당 기능을 켰다가 끄면 새로고침을 해야 정상적으로 되돌아갑니다.<br><br>
                         ※Safari의 경우 해당 브라우저 이슈로 인하여 정상 동작하지 않습니다.<br><br>
                     </dd>
-                    <dt>일반인 모드 아이콘</dt>
-                    <dd>
-                        <div class="option_msg">
-                            <div class="radio_inp">
-                                <input type="radio" name="enhancedSelectLogoIcon" class="inp_radio _friendListExposure" id="enhancedLogoIconNaver" value="naver">
-                                <label for="enhancedLogoIconNaver">네이버</label>
+                    <div id="groupEnhancedHideLogoEnable">
+                        <dt>일반인 모드 아이콘</dt>
+                        <dd>
+                            <div class="option_msg">
+                                <div class="radio_inp">
+                                    <input type="radio" name="enhancedSelectLogoIcon" class="inp_radio _friendListExposure" id="enhancedLogoIconNaver" value="naver">
+                                    <label for="enhancedLogoIconNaver">네이버</label>
+                                </div>
+                                <div class="radio_inp">
+                                    <input type="radio" name="enhancedSelectLogoIcon" class="inp_radio _friendListExposure" id="enhancedLogoIconYouTube" value="youtube">
+                                    <label for="enhancedLogoIconYouTube">유튜브</label>
+                                </div>
+                                <div class="radio_inp">
+                                    <input type="radio" name="enhancedSelectLogoIcon" class="inp_radio _friendListExposure" id="enhancedLogoIconInstagram" value="instagram">
+                                    <label for="enhancedLogoIconInstagram">인스타그램</label>
+                                </div>
+                                <div class="radio_inp">
+                                    <input type="radio" name="enhancedSelectLogoIcon" class="inp_radio _friendListExposure" id="enhancedLogoIconCustom" value="custom">
+                                    <label for="enhancedLogoIconCustom">사용자 설정</label>
+                                </div>
                             </div>
-                            <div class="radio_inp">
-                                <input type="radio" name="enhancedSelectLogoIcon" class="inp_radio _friendListExposure" id="enhancedLogoIconYouTube" value="youtube">
-                                <label for="enhancedLogoIconYouTube">유튜브</label>
+                        </dd>
+                        <dt>일반인 모드 알림 표시</dt>
+                        <dd>
+                            <div class="option_msg">
+                                <div class="radio_inp">
+                                    <input type="radio" name="enhancedSelectHideLogoNoti" class="inp_radio _friendListExposure" id="enhancedHideLogoNotiEnable" value="true">
+                                    <label for="enhancedHideLogoNotiEnable">켜기</label>
+                                </div>
+                                <div class="radio_inp">
+                                    <input type="radio" name="enhancedSelectHideLogoNoti" class="inp_radio _friendListExposure" id="enhancedHideLogoNotiDisable" value="false">
+                                    <label for="enhancedHideLogoNotiDisable">끄기</label>
+                                </div>
                             </div>
-                            <div class="radio_inp">
-                                <input type="radio" name="enhancedSelectLogoIcon" class="inp_radio _friendListExposure" id="enhancedLogoIconInstagram" value="instagram">
-                                <label for="enhancedLogoIconInstagram">인스타그램</label>
-                            </div>
-                            <div class="radio_inp">
-                                <input type="radio" name="enhancedSelectLogoIcon" class="inp_radio _friendListExposure" id="enhancedLogoIconCustom" value="custom">
-                                <label for="enhancedLogoIconCustom">사용자 설정</label>
-                            </div>
+                            ※해당 기능을 사용하면 새 알림이 올 때 타이틀 앞에 (N)이 표시됩니다.<br><br>
+                        </dd>
+                        <div id="groupEnhancedHideLogoCustomEnable">
+                            <dt>일반인 모드 타이틀</dt>
+                            <dd>
+                                <input type="text" class="tf_profile _input _ksdark_cls" id="enhancedTxtHideLogoTitle" style="border: 0px; font-size: 13px; width: 316px; height: 16px; padding: 6px 8px;">
+                            </dd>
+                            <dt>일반인 모드 파비콘 URL</dt>
+                            <dd>
+                                <input type="text" class="tf_profile _input _ksdark_cls" id="enhancedTxtHideLogoFaviconURL" value="" style="border: 0px; font-size: 13px; width: 316px; height: 16px; padding: 6px 8px;">
+                            </dd>
+                            <dt>TIP</dt>
+                            <dd>
+                                일반인 모드를 사용자 설정으로 선택할 경우, 아래 확인 버튼을 클릭해야 적용됩니다.<br><br>
+                                사용자 설정 시 파비콘 URL은 *.ico 파일의 URL을 적용해야 정상 적용됩니다.
+                            </dd>
                         </div>
-                    </dd>
-                    <dt>일반인 모드 알림 표시</dt>
-                    <dd>
-                        <div class="option_msg">
-                            <div class="radio_inp">
-                                <input type="radio" name="enhancedSelectHideLogoNoti" class="inp_radio _friendListExposure" id="enhancedHideLogoNotiEnable" value="true">
-                                <label for="enhancedHideLogoNotiEnable">켜기</label>
-                            </div>
-                            <div class="radio_inp">
-                                <input type="radio" name="enhancedSelectHideLogoNoti" class="inp_radio _friendListExposure" id="enhancedHideLogoNotiDisable" value="false">
-                                <label for="enhancedHideLogoNotiDisable">끄기</label>
-                            </div>
-                        </div>
-                        ※해당 기능을 사용하면 새 알림이 올 때 타이틀 앞에 (N)이 표시됩니다.<br><br>
-                    </dd>
-                    <dt>일반인 모드 타이틀</dt>
-                    <dd>
-                        <input type="text" class="tf_profile _input _ksdark_cls" id="enhancedTxtHideLogoTitle" style="border: 0px; font-size: 13px; width: 316px; height: 16px; padding: 6px 8px;">
-                    </dd>
-                    <dt>일반인 모드 파비콘 URL</dt>
-                    <dd>
-                        <input type="text" class="tf_profile _input _ksdark_cls" id="enhancedTxtHideLogoFaviconURL" value="" style="border: 0px; font-size: 13px; width: 316px; height: 16px; padding: 6px 8px;">
-                    </dd>
-                    <dt>TIP</dt>
-                    <dd>
-                        일반인 모드를 사용자 설정으로 선택할 경우, 아래 확인 버튼을 클릭해야 적용됩니다.<br><br>
-                        사용자 설정 시 파비콘 URL은 *.ico 파일의 URL을 적용해야 정상 적용됩니다.
-                    </dd>
+                    </div>
                     <dt>흑역사 숨기기</dt>
                     <dd>
                         <div class="option_msg">
