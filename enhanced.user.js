@@ -514,6 +514,106 @@ function LoadCommonEvents()
         }
 
         /* KEYBOARD CONTROL(KEY UP? KEY DOWN?) */
+
+        //Shift + M - Permission : Only Me
+        if (e.shiftKey && e.keyCode == 77)
+        {
+            var selElem = GetSelectedActivity();
+            if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
+            {
+                selElem = document.getElementsByClassName("section _activity")[0];
+            }
+            else if (document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center").length > 0)
+            {
+                selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
+            }
+            var settingElem = selElem.getElementsByClassName("ico_ks bn_modify _btnSetting")[0];
+            if (settingElem)
+            {
+                var p = selElem.querySelector('li[data-permission="M"]');
+                if (!p)
+                {
+                    settingElem.click();
+                }
+                
+                setTimeout(() => {
+                    var permElem = selElem.querySelector('li[data-permission="M"]');
+                    if (permElem)
+                    {
+                        permElem.click();
+                    }
+                }, 100);
+            }
+
+            return;
+        }
+
+        //Shift + F - Permission : Friends
+        if (e.shiftKey && e.keyCode == 70)
+        {
+            var selElem = GetSelectedActivity();
+            if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
+            {
+                selElem = document.getElementsByClassName("section _activity")[0];
+            }
+            else if (document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center").length > 0)
+            {
+                selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
+            }
+            var settingElem = selElem.getElementsByClassName("ico_ks bn_modify _btnSetting")[0];
+            if (settingElem)
+            {
+                var p = selElem.querySelector('li[data-permission="F"]');
+                if (!p)
+                {
+                    settingElem.click();
+                }
+
+                setTimeout(() => {
+                    var permElem = selElem.querySelector('li[data-permission="F"]');
+                    if (permElem)
+                    {
+                        permElem.click();
+                    }
+                }, 100);
+            }
+
+            return;
+        }
+
+        //Shift + A - Permission : All
+        if (e.shiftKey && e.keyCode == 65)
+        {
+            var selElem = GetSelectedActivity();
+            if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
+            {
+                selElem = document.getElementsByClassName("section _activity")[0];
+            }
+            else if (document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center").length > 0)
+            {
+                selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
+            }
+            var settingElem = selElem.getElementsByClassName("ico_ks bn_modify _btnSetting")[0];
+            if (settingElem)
+            {
+                var p = selElem.querySelector('li[data-permission="A"]');
+                if (!p)
+                {
+                    settingElem.click();
+                }
+
+                setTimeout(() => {
+                    var permElem = selElem.querySelector('li[data-permission="A"]');
+                    if (permElem)
+                    {
+                        permElem.click();
+                    }
+                }, 100);
+            }
+
+            return;
+        }
+
         //J - FEED Down
         if (e.keyCode == 74)
         {
@@ -737,6 +837,34 @@ function LoadCommonEvents()
                 likeElem.click();
             }       
         }
+        
+        //D - Delete My Selected Article
+        if (e.keyCode == 68)
+        {
+            var selElem = GetSelectedActivity();
+            if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
+            {
+                selElem = document.getElementsByClassName("section _activity")[0];
+            }
+            else if (document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center").length > 0)
+            {
+                selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
+            }
+            var settingElem = selElem.getElementsByClassName("ico_ks bn_modify _btnSetting")[0];
+            if (settingElem)
+            {
+                settingElem.click();
+
+                setTimeout(() => {
+                    var deleteElem = document.getElementsByClassName("_btnActivityDelete link_menu")[0];
+                    if (deleteElem)
+                    {
+                        deleteElem.click();
+                    }
+                }, 100);
+            }
+        }
+
     });
 
     //$('body').on('input', '#contents_write', function() {
