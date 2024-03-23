@@ -1664,7 +1664,7 @@ function ChangeTheme(styleName)
     }
     //hide original logo
     var hideOriginLogo = '.head_story .tit_kakaostory .logo_kakaostory { width: 0px !important; }'
-    + '.head_story .tit_kakaostory .link_kakaostory { width: 144px !important; }';
+    + '.head_story .tit_kakaostory .link_kakaostory { width: 144px !important; height: 27px !important; }';
     SetCSS('enhancedHideLogoCSS', hideOriginLogo);
     LoadEnhancedCSS();
 }
