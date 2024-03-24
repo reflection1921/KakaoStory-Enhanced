@@ -1691,7 +1691,11 @@ function ChangeTheme(styleName)
     + '.head_story .tit_kakaostory .link_kakaostory { width: 144px !important; height: 27px !important; }';
     SetCSS('enhancedHideLogoCSS', hideOriginLogo);
     LoadEnhancedCSS();
-    LoadExtendFeedCSS();
+    if (GetValue('enhancedWideMode', 'false') == 'true')
+    {
+        LoadExtendFeedCSS();
+    }
+    
 }
 
 function GetLatestNotify() {
@@ -2551,8 +2555,11 @@ function SetExtendCommentUI()
             setTimeout(() => SetClassicFavicon(), 750);
         }
 
-        setTimeout(() => SetExtendCommentUI(), 750);
-        setTimeout(() => SetExtendStoryWidgetsUI(), 750);
+        if (GetValue('enhancedWideMode', 'false') == 'true')
+        {
+            setTimeout(() => SetExtendCommentUI(), 750);
+            setTimeout(() => SetExtendStoryWidgetsUI(), 750);
+        }
 
         setTimeout(() => ViewVisitorChart(), 1000);
 
