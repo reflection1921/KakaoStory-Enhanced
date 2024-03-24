@@ -46,6 +46,7 @@
  * enhancedFaviconClassic : 옛날 파비콘으로 되돌리기
  * enhancedFaviconTitle : 카카오스토리 탭 타이틀
  * enhancedFaviconURL : 파비콘 URL
+ * enhancedWideMode : Wide 모드 사용 여부
  */
 
 /*
@@ -278,6 +279,9 @@ function InitEnhancedValues()
 
     var isBlockAllArticle = GetValue('enhancedBlockArticleAll', 'true');
     $('input:radio[name="enhancedSelectBlockArticleAll"]:input[value=' + isBlockAllArticle + ']').attr("checked", true);
+
+    var useWideMode = GetValue('enhancedWideMode', 'false');
+    $('input:radio[name="enhancedSelectWideMode"]:input[value=' + useWideMode + ']').attr("checked", true);
 
     
 
@@ -853,8 +857,11 @@ function LoadCommonEvents()
             var settingElem = selElem.getElementsByClassName("ico_ks bn_modify _btnSetting")[0];
             if (settingElem)
             {
-                settingElem.click();
-
+                var p = document.getElementsByClassName("_btnActivityDelete link_menu")[0];
+                if (!p)
+                {
+                    settingElem.click();
+                }
                 setTimeout(() => {
                     var deleteElem = document.getElementsByClassName("_btnActivityDelete link_menu")[0];
                     if (deleteElem)
@@ -1256,6 +1263,11 @@ function LoadSettingsPageEvents()
             catEffect.play();
         }
     });
+
+    $(document).on("change",'input[name="enhancedSelectWideMode"]',function(){
+        var changed = $('[name="enhancedSelectWideMode"]:checked').val();
+        SetValue("enhancedWideMode", changed);
+    });
 }
 
 function LoadForDeleteFriends(blockedUserOnly) {
@@ -1643,6 +1655,18 @@ function LoadEnhancedCSS() {
     xmlHttp.send();
 }
 
+function LoadExtendFeedCSS() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            var darkcss = xmlHttp.responseText;
+            SetCSS('enhancedExtendFeedCSS', darkcss);
+        }
+    }
+    xmlHttp.open("GET", resourceURL + "css/extend_feed.css");
+    xmlHttp.send();
+}
+
 function ChangeTheme(styleName)
 {
     if (styleName == 'dark')
@@ -1667,6 +1691,7 @@ function ChangeTheme(styleName)
     + '.head_story .tit_kakaostory .link_kakaostory { width: 144px !important; height: 27px !important; }';
     SetCSS('enhancedHideLogoCSS', hideOriginLogo);
     LoadEnhancedCSS();
+    LoadExtendFeedCSS();
 }
 
 function GetLatestNotify() {
@@ -2359,11 +2384,6 @@ function OpenFastDeleteFriend()
         xmlHttp.send();
 }
 
-function _testLog(userID)
-{
-    console.log(userID);
-}
-
 function AddLoginThemeSelectButtonUI()
 {
     var body = document.body;
@@ -2401,6 +2421,59 @@ function AddLoginThemeSelectButtonUI()
     }
 
     body.appendChild(btnElem);
+}
+
+function SetExtendStoryWidgetsUI()
+{
+    var myInfo = document.querySelector('div[data-module="myStoryWidget"]');
+    if (myInfo)
+    {
+        var myInfoParent = myInfo.parentElement;
+        if (!myInfoParent.className.includes('story_cont'))
+        {
+            return;
+        }
+        myInfoParent.removeChild(myInfo);
+
+        var storyCover = document.getElementsByClassName("story_cover");
+        if (storyCover.length > 0)
+        {
+            storyCover[0].parentElement.parentElement.appendChild(myInfo);
+        }
+    }
+}
+
+function SetExtendCommentUI()
+{
+    var detailClass = document.getElementsByClassName("feed detail_desc _feedContainer");
+    if (detailClass.length > 0)
+    {
+        return;
+    }
+
+    var commentClasses = document.getElementsByClassName("comment");
+    for (var i = 0; i < commentClasses.length; i++)
+    {
+        var commentClass = commentClasses[i];
+        var commentParent = commentClass.parentElement;
+        var nextSibling = commentParent.nextElementSibling;
+
+        if (!commentParent.className.includes('_activityBody'))
+        {
+            continue;
+        }
+
+        commentParent.removeChild(commentClass);
+
+        if (nextSibling)
+        {
+            nextSibling.parentNode.insertBefore(commentClass, nextSibling);
+        }
+        else
+        {
+            commentParent.parentNode.appendChild(commentClass);
+        }
+    }
 }
 
 (function() {
@@ -2477,6 +2550,9 @@ function AddLoginThemeSelectButtonUI()
         {
             setTimeout(() => SetClassicFavicon(), 750);
         }
+
+        setTimeout(() => SetExtendCommentUI(), 750);
+        setTimeout(() => SetExtendStoryWidgetsUI(), 750);
 
         setTimeout(() => ViewVisitorChart(), 1000);
 

@@ -42,3 +42,12 @@
 }
 .enhanced_power_mode_score_enable { height: 64px; }
 .enhanced_activty_selected { border: 1px solid var(--text-highlight-color) !important; }
+.enhanced_layer_settings {
+    left: auto;
+    position: absolute;
+    top: 85px;
+    width: 578px;
+    padding-bottom: 85px;
+    margin-left: -289px;
+    z-index: 20;
+}
