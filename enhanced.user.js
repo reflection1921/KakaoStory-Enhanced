@@ -58,9 +58,9 @@
 
 let scriptVersion = "1.27";
 
-//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
@@ -923,25 +923,16 @@ function onGKeyPress(doublePress)
     {
         visibleArticles[i].classList.remove("enhanced_activty_selected");
     }
-    //console.log("ATC LEN: " + articles.length);
-    //console.log("ATC VISIBLE LEN: " + visibleArticles.length);
 
     if (doublePress)
     {
-        //console.log(visibleArticles[0]);
-        //visibleArticles[0].scrollIntoView();
         ScrollToTargetSmoothly(visibleArticles[0]);
         visibleArticles[0].classList.add("enhanced_activty_selected");
-        //console.log("double pressed");
-        //console.log("SEL UP ATC LEN: " + (visibleArticles.length - 1));
     }
     else
     {
-        //visibleArticles[visibleArticles.length - 1].scrollIntoView();
         ScrollToTargetSmoothly(visibleArticles[visibleArticles.length - 1]);
         visibleArticles[visibleArticles.length - 1].classList.add("enhanced_activty_selected");
-        //console.log("normal pressed");
-        //console.log("SEL DWN ATC LEN: " + (visibleArticles.length - 1));
     }
 }
 
@@ -1688,7 +1679,7 @@ function ChangeTheme(styleName)
     }
     //hide original logo
     var hideOriginLogo = '.head_story .tit_kakaostory .logo_kakaostory { width: 0px !important; }'
-    + '.head_story .tit_kakaostory .link_kakaostory { width: 144px !important; height: 27px !important; }';
+    + '.head_story .tit_kakaostory .link_kakaostory { width: 145px !important; height: 27px !important; background-size: cover; }';
     SetCSS('enhancedHideLogoCSS', hideOriginLogo);
     LoadEnhancedCSS();
     if (GetValue('enhancedWideMode', 'false') == 'true')
