@@ -12,6 +12,7 @@ KakaoStory Enhanced는 Discord 스타일의 다크 테마를 구현하기 위해
 ## 기능
 - 다양한 스타일의 다크테마 지원(Discord, Visual Studio, Discord Aurora 등 26가지 테마)
 - 폰트 및 폰트 크기 설정
+- Wide 모드 지원
 - 알림
 - 강화된 차단(차단한 사용자의 게시글 및 댓글 숨기기)
 - 일반인 모드(favicon 및 타이틀 타 사이트처럼 보이기)
