@@ -128,3 +128,8 @@ div[data-module="myStoryMainProfile"]
 {
     margin-left: -289px !important;
 }
+
+.share_scrap._mediaContainer {
+    width: 498px;
+    margin: 0 auto !important;
+}
