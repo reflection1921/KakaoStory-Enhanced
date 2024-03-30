@@ -209,14 +209,17 @@ function InitEnhancedValues()
     if (fontName == 'Pretendard')
     {
         document.getElementById("enhancedFontNoto").checked = true;
+        document.getElementById("groupEnhancedFontCustomEnable").style.display = "none";
     }
     else if (fontName == '나눔고딕')
     {
         document.getElementById("enhancedFontNanum").checked = true;
+        document.getElementById("groupEnhancedFontCustomEnable").style.display = "none";
     }
     else
     {
         document.getElementById("enhancedFontCustom").checked = true;
+        document.getElementById("groupEnhancedFontCustomEnable").style.display = "block";
     }
 
     document.getElementById('enhancedTxtFontSize').value = GetValue('enhancedFontSize', '0');
@@ -1053,6 +1056,7 @@ function LoadSettingsPageEvents()
         document.getElementById("enhancedTxtFontCSS").value = fontCSS;
         SetValue('enhancedFontName', fontName);
         SetValue('enhancedFontCSS', fontCSS);
+        document.getElementById("groupEnhancedFontCustomEnable").style.display = "none";
     });
 
     $(document).on('click', '#enhancedFontNoto', function() {
@@ -1062,6 +1066,11 @@ function LoadSettingsPageEvents()
         document.getElementById("enhancedTxtFontCSS").value = fontCSS;
         SetValue('enhancedFontName', fontName);
         SetValue('enhancedFontCSS', fontCSS);
+        document.getElementById("groupEnhancedFontCustomEnable").style.display = "none";
+    });
+
+    $(document).on('click', '#enhancedFontCustom', function() {
+        document.getElementById("groupEnhancedFontCustomEnable").style.display = "block";
     });
 
     $(document).on('click', '.close_btn_cls', function() {
