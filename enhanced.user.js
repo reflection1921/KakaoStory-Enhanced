@@ -47,6 +47,7 @@
  * enhancedFaviconTitle : 카카오스토리 탭 타이틀
  * enhancedFaviconURL : 파비콘 URL
  * enhancedWideMode : Wide 모드 사용 여부
+ * enhancedSidebarLocation : 사이드바 위치(left, right)
  */
 
 /*
@@ -285,6 +286,9 @@ function InitEnhancedValues()
 
     var useWideMode = GetValue('enhancedWideMode', 'false');
     $('input:radio[name="enhancedSelectWideMode"]:input[value=' + useWideMode + ']').attr("checked", true);
+
+    var sidebarLocation = GetValue('enhancedSidebarLocation', 'right');
+    $('input:radio[name="enhancedSelectSidebarLocation"]:input[value=' + sidebarLocation + ']').attr("checked", true);
 
     
 
@@ -1268,6 +1272,11 @@ function LoadSettingsPageEvents()
         var changed = $('[name="enhancedSelectWideMode"]:checked').val();
         SetValue("enhancedWideMode", changed);
     });
+
+    $(document).on("change",'input[name="enhancedSelectSidebarLocation"]',function(){
+        var changed = $('[name="enhancedSelectSidebarLocation"]:checked').val();
+        SetValue("enhancedSidebarLocation", changed);
+    });
 }
 
 function LoadForDeleteFriends(blockedUserOnly) {
@@ -1667,6 +1676,18 @@ function LoadExtendFeedCSS() {
     xmlHttp.send();
 }
 
+function LoadLeftSidebarCSS() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            var leftSideCSS = xmlHttp.responseText;
+            SetCSS('enhancedLeftSidebarCSS', leftSideCSS);
+        }
+    }
+    xmlHttp.open("GET", resourceURL + "css/left_sidebar.css");
+    xmlHttp.send();
+}
+
 function ChangeTheme(styleName)
 {
     if (styleName == 'dark')
@@ -1694,6 +1715,11 @@ function ChangeTheme(styleName)
     if (GetValue('enhancedWideMode', 'false') == 'true')
     {
         LoadExtendFeedCSS();
+    }
+
+    if (GetValue('enhancedSidebarLocation', 'right') == 'left')
+    {
+        LoadLeftSidebarCSS();
     }
     
 }
