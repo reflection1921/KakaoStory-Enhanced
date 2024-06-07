@@ -13,7 +13,7 @@
 .mejs-container.mejs-kakao .mejs-controls .mejs-videodown-button button {
     width: 18px !important;
     height: 18px !important;
-    background: url(https://raw.githubusercontent.com/reflection1921/KakaoStory-DarkTheme/master/btn_download.png) !important;
+    background: url(https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/btn_download.png) !important;
     margin: 10px 6px !important;
     padding: 0 !important;
 }
@@ -91,7 +91,7 @@
 
 .enhanced_sidebar_show_btn_to_left
 {
-    background-image: url(http://127.0.0.1:8188/kakaostory-enhanced/images/btn_expand_sidebar_left.png) !important;
+    background-image: url(https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/btn_expand_sidebar_left.png) !important;
     background-repeat: no-repeat !important;
     width: 40px;
     height: 40px;
@@ -101,7 +101,7 @@
 
 .enhanced_sidebar_show_btn_to_right
 {
-    background-image: url(http://127.0.0.1:8188/kakaostory-enhanced/images/btn_expand_sidebar_right.png) !important;
+    background-image: url(https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/btn_expand_sidebar_right.png) !important;
     background-repeat: no-repeat !important;
     width: 40px;
     height: 40px;
