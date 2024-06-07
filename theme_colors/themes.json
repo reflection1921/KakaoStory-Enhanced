@@ -181,6 +181,13 @@
       "author": "KakaoStory Enhanced",
       "url": "",
       "style": "light"
+    },
+    {
+      "id": "blurple_twilight",
+      "name": "Discord Blurple Twilight",
+      "author": "KakaoStory Enhanced",
+      "url": "",
+      "style": "dark"
     }
   ]
 }
