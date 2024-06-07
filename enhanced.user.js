@@ -48,6 +48,7 @@
  * enhancedFaviconURL : 파비콘 URL
  * enhancedWideMode : Wide 모드 사용 여부
  * enhancedSidebarLocation : 사이드바 위치(left, right)
+ * enhancedSidebarShow : 사이드바 보이기 여부
  */
 
 /*
@@ -59,9 +60,9 @@
 
 let scriptVersion = "1.28";
 
-//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
@@ -95,12 +96,49 @@ let svgDark = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" vi
 let svgLight = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
 
 function AddEnhancedMenu() {
-    document.getElementsByClassName("menu_util")[0].innerHTML = '<li><a href="#" id="enhancedOpenSettings" class="link_menu _btnSettingProfile">Enhanced 설정</a></li>' + document.getElementsByClassName("menu_util")[0].innerHTML;
+    document.getElementsByClassName("menu_util")[0].innerHTML = '<li><a href="#" id="enhancedHideSidebar" class="link_menu _btnSettingProfile">사이드바 숨기기</a></li><li class="enhanced_settings_menu"><a href="#" id="enhancedOpenSettings" class="link_menu _btnSettingProfile">Enhanced 설정</a></li>' + document.getElementsByClassName("menu_util")[0].innerHTML;
     document.getElementById("enhancedOpenSettings").addEventListener("click", function() {
         document.getElementById("enhancedLayer").style.display = 'block';
         document.body.scrollTop = 0;
         DisableScroll();
     });
+    document.getElementById("enhancedHideSidebar").addEventListener("click", function() {
+        document.getElementById("mSnb").classList.add('enhanced_sidebar_hidden');
+        document.getElementById("enhancedShowSidebar").style.display = 'block';
+        SetValue('enhancedSidebarShow', 'false');
+    });
+
+    var showBtn = document.createElement('div');
+    showBtn.id = 'enhancedShowSidebar';
+    if (GetValue('enhancedSidebarLocation', 'right') == 'right')
+    {
+        showBtn.className = 'enhanced_sidebar_show';
+        showBtn.innerHTML = '<span class="enhanced_sidebar_show_btn_to_left"></span>'
+    }
+    else
+    {
+        showBtn.className = 'enhanced_sidebar_show_left';
+        showBtn.innerHTML = '<span class="enhanced_sidebar_show_btn_to_right"></span>'
+    }
+    
+
+    document.getElementById("rnb").insertBefore(showBtn, document.getElementById("rnb").firstChild);
+    document.getElementById("enhancedShowSidebar").addEventListener("click", function() {
+        document.getElementById("mSnb").classList.remove('enhanced_sidebar_hidden');
+        document.getElementById("enhancedShowSidebar").style.display = 'none';
+        SetValue('enhancedSidebarShow', 'true');
+    });
+
+    if (GetValue('enhancedSidebarShow', 'true') == 'false')
+    {
+        document.getElementById("mSnb").classList.add('enhanced_sidebar_hidden');
+        document.getElementById("enhancedShowSidebar").style.display = 'block';
+    }
+    else
+    {
+        document.getElementById("mSnb").classList.remove('enhanced_sidebar_hidden');
+        document.getElementById("enhancedShowSidebar").style.display = 'none';
+    }
 }
 
 function EnableScroll() {

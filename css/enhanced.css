@@ -51,3 +51,60 @@
     margin-left: -289px;
     z-index: 20;
 }
+.enhanced_settings_menu .link_menu
+{
+    border-top: 1px solid var(--background-border-color) !important;
+}
+
+.enhanced_sidebar_hidden
+{
+    opacity: 0;
+    visibility: hidden;
+}
+
+.snb_story
+{
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.enhanced_sidebar_show
+{
+    position: fixed;
+    z-index: 51;
+    top: 65px;
+    right: 0px;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.enhanced_sidebar_show_left
+{
+    position: fixed;
+    z-index: 51;
+    top: 65px;
+    left: 0px;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.enhanced_sidebar_show_btn_to_left
+{
+    background-image: url(http://127.0.0.1:8188/kakaostory-enhanced/images/btn_expand_sidebar_left.png) !important;
+    background-repeat: no-repeat !important;
+    width: 40px;
+    height: 40px;
+    display: block;
+
+}
+
+.enhanced_sidebar_show_btn_to_right
+{
+    background-image: url(http://127.0.0.1:8188/kakaostory-enhanced/images/btn_expand_sidebar_right.png) !important;
+    background-repeat: no-repeat !important;
+    width: 40px;
+    height: 40px;
+    display: block;
+
+}
