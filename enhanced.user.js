@@ -49,6 +49,7 @@
  * enhancedWideMode : Wide 모드 사용 여부
  * enhancedSidebarLocation : 사이드바 위치(left, right)
  * enhancedSidebarShow : 사이드바 보이기 여부
+ * enhancedThemeSaturation : 테마 채도(Gradient 테마 한정)
  */
 
 /*
@@ -60,9 +61,9 @@
 
 let scriptVersion = "1.28";
 
-let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
@@ -329,6 +330,9 @@ function InitEnhancedValues()
     $('input:radio[name="enhancedSelectSidebarLocation"]:input[value=' + sidebarLocation + ']').attr("checked", true);
 
     document.getElementById('enhancedCurrentVersion').innerText = "현재버전: " + scriptVersion;
+
+    document.getElementById('enhancedTxtThemeSaturation').value = GetValue('enhancedThemeSaturation', '1');
+    document.getElementById('inputSlideThemeSaturation').value = GetValue('enhancedThemeSaturation', '1');
 
     GetCSSVersion();
     GetLatestVersion();
@@ -1315,6 +1319,22 @@ function LoadSettingsPageEvents()
             SetFontSize();
         }
     });
+
+    $(document).on('input', '#inputSlideThemeSaturation', function() {
+        var saturation = document.getElementById("inputSlideThemeSaturation").value;
+        SetValue('enhancedThemeSaturation', saturation);
+        document.documentElement.style.setProperty('--saturation-factor', saturation);
+        document.getElementById("enhancedTxtThemeSaturation").value = saturation;
+    });
+
+    $(document).on('keypress', '#enhancedTxtThemeSaturation', function(e) {
+        if (e.keyCode == 13) {
+            var saturation = document.getElementById('enhancedTxtThemeSaturation').value;
+            SetValue('enhancedThemeSaturation', saturation);
+            document.documentElement.style.setProperty('--saturation-factor', saturation);
+            document.getElementById("inputSlideThemeSaturation").value = saturation;
+        }
+    });
 }
 
 function LoadForDeleteFriends(blockedUserOnly) {
@@ -1640,6 +1660,9 @@ function SetDarkThemeStyle(styleName) {
                 var variableValue = lines[i].split(": ")[1].split(";")[0];
                 document.documentElement.style.setProperty(variableName, variableValue);
             }
+            document.documentElement.style.setProperty('--saturation-factor', GetValue('enhancedThemeSaturation', '1'));
+            var selIdx = document.getElementById('enhancedOptionDarkTheme').selectedIndex;
+            document.getElementById("groupThemeGradientSaturation").style.display = (jThemes.themes[selIdx].isGradient == true)? "block" : "none";
         }
     }
     xmlHttp.open("GET", resourceURL + "theme_colors/" + styleName + ".css");
@@ -1759,7 +1782,6 @@ function ChangeTheme(styleName)
     {
         LoadLeftSidebarCSS();
     }
-    
 }
 
 function GetLatestNotify() {

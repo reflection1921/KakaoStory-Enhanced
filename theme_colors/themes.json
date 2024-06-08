@@ -5,210 +5,240 @@
       "name": "Discord",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": false
     },
     {
       "id": "darkblue",
       "name": "Dark Blue",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": false
     },
     {
       "id": "darkred",
       "name": "Dark Red",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": false
     },
     {
       "id": "blackwhite",
       "name": "Black & White",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": false
     },
     {
       "id": "visualstudio",
       "name": "Visual Studio",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": false
     },
     {
       "id": "chromaglow",
       "name": "Discord Chroma Glow",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "forest",
       "name": "Discord Forest",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "aurora",
       "name": "Discord Aurora",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "dusk",
       "name": "Discord Dusk",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "under_the_sea",
       "name": "Discord Under The Sea",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "retro_storm",
       "name": "Discord Retro Storm",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "strawberry_lemonade",
       "name": "Discord Strawberry Lemonade",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "sepia",
       "name": "Discord Sepia",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "neon_night",
       "name": "Discord Neon Night",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "mars",
       "name": "Discord Mars",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "midnight_blurple",
       "name": "Discord Midnight Blurple",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "sunset",
       "name": "Discord Sunset",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "crimson_moon",
       "name": "Discord Crimson Moon",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "mint_apple",
       "name": "Discord Mint Apple",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "light"
+      "style": "light",
+      "isGradient": true
     },
     {
       "id": "desert_khaki",
       "name": "Discord Desert Khaki",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "light"
+      "style": "light",
+      "isGradient": true
     },
     {
       "id": "hanami",
       "name": "Discord Hanami",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "light"
+      "style": "light",
+      "isGradient": true
     },
     {
       "id": "lofi_vibes",
       "name": "Discord LoFi Vibes",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "light"
+      "style": "light",
+      "isGradient": true
     },
     {
       "id": "citrus_sherbert",
       "name": "Discord Citrus Sherbert",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "light"
+      "style": "light",
+      "isGradient": true
     },
     {
       "id": "cotton_candy",
       "name": "Discord Cotton Candy",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "light"
+      "style": "light",
+      "isGradient": true
     },
     {
       "id": "sunrise",
       "name": "Discord Sunrise",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "light"
+      "style": "light",
+      "isGradient": true
     },
     {
       "id": "retro_raincloud",
       "name": "Discord Retro Raincloud",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "light"
+      "style": "light",
+      "isGradient": true
     },
     {
       "id": "blurple_twilight",
       "name": "Discord Blurple Twilight",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "rainbow",
       "name": "Rainbow",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "dark"
+      "style": "dark",
+      "isGradient": true
     },
     {
       "id": "bluesky",
       "name": "BlueSky",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "light"
+      "style": "light",
+      "isGradient": true
     },
     {
       "id": "blue_lemonade",
       "name": "Blue Lemonade",
       "author": "KakaoStory Enhanced",
       "url": "http://chihaya.kr/enhanced",
-      "style": "light"
+      "style": "light",
+      "isGradient": true
     }
   ]
 }
