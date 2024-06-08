@@ -1808,21 +1808,6 @@ function SetNotify(content, title_, url)
     var noty = new Notification(title_, options);
 }
 
-// GM version
-// function SetNotify(content, title_, url) {
-//     GM_notification ({
-//         text: content,
-//         title: title_,
-//         image: 'https://i.imgur.com/FSvg18g.png',
-//         highlight: false,
-//         silent: (GetValue('enhancedNotifySound', 'true') === 'true'),
-//         timeout: 5000,
-//         onclick: function () {
-//             space.Router.navigate("/" + url);
-//         }
-//     });
-// }
-
 function SaveText(text, name, type, btnID) {
     var btnEl = document.getElementById(btnID);
     var file = new Blob([text], {type: type});
