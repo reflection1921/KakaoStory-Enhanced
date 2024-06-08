@@ -328,15 +328,6 @@ function InitEnhancedValues()
     var sidebarLocation = GetValue('enhancedSidebarLocation', 'right');
     $('input:radio[name="enhancedSelectSidebarLocation"]:input[value=' + sidebarLocation + ']').attr("checked", true);
 
-    
-
-    // old check
-    // if (latestVersion != GetValue('enhancedVersion', ''))
-    // {
-    //     ViewUpdatePage();
-    //     SetValue('enhancedVersion', version);
-    // }
-
     document.getElementById('enhancedCurrentVersion').innerText = "현재버전: " + scriptVersion;
 
     GetCSSVersion();
@@ -1099,6 +1090,7 @@ function LoadSettingsPageEvents()
         SetValue('enhancedFontName', fontName);
         SetValue('enhancedFontCSS', fontCSS);
         document.getElementById("groupEnhancedFontCustomEnable").style.display = "none";
+        SetFont();
     });
 
     $(document).on('click', '#enhancedFontNoto', function() {
@@ -1109,6 +1101,7 @@ function LoadSettingsPageEvents()
         SetValue('enhancedFontName', fontName);
         SetValue('enhancedFontCSS', fontCSS);
         document.getElementById("groupEnhancedFontCustomEnable").style.display = "none";
+        SetFont();
     });
 
     $(document).on('click', '#enhancedFontCustom', function() {
@@ -1314,6 +1307,13 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedSelectSidebarLocation"]',function(){
         var changed = $('[name="enhancedSelectSidebarLocation"]:checked').val();
         SetValue("enhancedSidebarLocation", changed);
+    });
+
+    $(document).on('keypress', '#enhancedTxtFontSize', function(e) {
+        if (e.keyCode == 13) {
+            SetValue('enhancedFontSize', document.getElementById('enhancedTxtFontSize').value);
+            SetFontSize();
+        }
     });
 }
 
