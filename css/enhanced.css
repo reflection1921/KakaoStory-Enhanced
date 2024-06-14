@@ -69,6 +69,7 @@
 
 .enhanced_sidebar_show
 {
+    margin-top: 10px;
     position: fixed;
     z-index: 51;
     top: 65px;
@@ -80,6 +81,7 @@
 
 .enhanced_sidebar_show_left
 {
+    margin-top: 10px;
     position: fixed;
     z-index: 51;
     top: 65px;
