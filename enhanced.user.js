@@ -1334,6 +1334,90 @@ function LoadSettingsPageEvents()
             document.getElementById("inputSlideThemeSaturation").value = saturation;
         }
     });
+
+    $(document).on('click', '#enhancedSettingsTitleThemeUI', function() {
+        var elem = document.getElementById("enhancedSettingsContentThemeUI");
+        if (!elem.classList.contains("enhanced_settings_content_hidden"))
+        {
+            elem.classList.add("enhanced_settings_content_hidden");
+        }
+        else
+        {
+            elem.classList.remove("enhanced_settings_content_hidden");
+        }
+    });
+
+    $(document).on('click', '#enhancedSettingsTitleFont', function() {
+        var elem = document.getElementById("enhancedSettingsContentFont");
+        if (!elem.classList.contains("enhanced_settings_content_hidden"))
+        {
+            elem.classList.add("enhanced_settings_content_hidden");
+        }
+        else
+        {
+            elem.classList.remove("enhanced_settings_content_hidden");
+        }
+    });
+
+    $(document).on('click', '#enhancedSettingsTitleNotification', function() {
+        var elem = document.getElementById("enhancedSettingsContentNotification");
+        if (!elem.classList.contains("enhanced_settings_content_hidden"))
+        {
+            elem.classList.add("enhanced_settings_content_hidden");
+        }
+        else
+        {
+            elem.classList.remove("enhanced_settings_content_hidden");
+        }
+    });
+
+    $(document).on('click', '#enhancedSettingsTitleAdvancedBlock', function() {
+        var elem = document.getElementById("enhancedSettingsContentAdvancedBlock");
+        if (!elem.classList.contains("enhanced_settings_content_hidden"))
+        {
+            elem.classList.add("enhanced_settings_content_hidden");
+        }
+        else
+        {
+            elem.classList.remove("enhanced_settings_content_hidden");
+        }
+    });
+
+    $(document).on('click', '#enhancedSettingsTitleEtc', function() {
+        var elem = document.getElementById("enhancedSettingsContentEtc");
+        if (!elem.classList.contains("enhanced_settings_content_hidden"))
+        {
+            elem.classList.add("enhanced_settings_content_hidden");
+        }
+        else
+        {
+            elem.classList.remove("enhanced_settings_content_hidden");
+        }
+    });
+
+    $(document).on('click', '#enhancedSettingsTitleAddon', function() {
+        var elem = document.getElementById("enhancedSettingsContentAddon");
+        if (!elem.classList.contains("enhanced_settings_content_hidden"))
+        {
+            elem.classList.add("enhanced_settings_content_hidden");
+        }
+        else
+        {
+            elem.classList.remove("enhanced_settings_content_hidden");
+        }
+    });
+
+    $(document).on('click', '#enhancedSettingsTitleInfo', function() {
+        var elem = document.getElementById("enhancedSettingsContentInfo");
+        if (!elem.classList.contains("enhanced_settings_content_hidden"))
+        {
+            elem.classList.add("enhanced_settings_content_hidden");
+        }
+        else
+        {
+            elem.classList.remove("enhanced_settings_content_hidden");
+        }
+    });
 }
 
 function LoadForDeleteFriends(blockedUserOnly) {

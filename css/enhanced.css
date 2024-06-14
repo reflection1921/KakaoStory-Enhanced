@@ -110,3 +110,8 @@
     display: block;
 
 }
+
+.enhanced_settings_content_hidden
+{
+    display: none;
+}
