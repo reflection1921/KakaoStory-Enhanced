@@ -368,7 +368,7 @@ function GetCSSVersion() {
 function GetLatestVersion() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var scriptData = xmlHttp.responseText;
             var latestVersion = scriptData.split("// @version      ")[1].split("\n")[0];
             document.getElementById('enhancedLatestVersion').innerText = "최신버전: " + latestVersion;
@@ -397,7 +397,7 @@ function GetLatestVersion() {
 function ViewUpdatePage() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var updatehtml = xmlHttp.responseText;
             var updateNotice = document.createElement('div');
             updateNotice.id = 'updateNoticeLayer';
@@ -415,7 +415,7 @@ function ViewUpdatePage() {
 function ViewUpdateAllPage() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var updatehtml = xmlHttp.responseText;
             var updateNotice = document.createElement('div');
             updateNotice.id = 'updateNoticeLayer';
@@ -943,8 +943,7 @@ function GetSelectedActivity()
     if (selectedIdx == -1)
         return null;
 
-    var selElem = visibleArticles[selectedIdx];
-    return selElem;
+    return visibleArticles[selectedIdx];
 }
 
 /* G KEY VARIABLES */
