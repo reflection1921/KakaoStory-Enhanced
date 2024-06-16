@@ -226,9 +226,9 @@ function InitEnhancedValues()
 {
     var selectedTheme = GetValue('enhancedSelectTheme', 'dark');
     $('input:radio[name="enhancedSelectTheme"]:input[value=' + selectedTheme + ']').attr("checked", true);
-    ChangeTheme(selectedTheme);
-
+    
     LoadThemeList();
+    ChangeTheme(selectedTheme);
 
     var useDiscordMention = GetValue('enhancedDiscordMention', 'false');
     $('input:radio[name="enhancedSelectDiscordMention"]:input[value=' + useDiscordMention + ']').attr("checked", true);
