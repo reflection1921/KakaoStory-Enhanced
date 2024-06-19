@@ -61,9 +61,9 @@
 
 let scriptVersion = "1.29";
 
-//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
@@ -1252,6 +1252,10 @@ function LoadSettingsPageEvents()
 
     $(document).on("change",'input[name="enhancedSelectBlockUser"]',function(){
         var isEnhancedBlock = $('[name="enhancedSelectBlockUser"]:checked').val();
+        if (isEnhancedBlock == "true")
+        {
+            GetBlockedUsers();
+        }
         SetValue("enhancedBlockUser", isEnhancedBlock);
     });
 
@@ -1832,6 +1836,18 @@ function LoadLeftSidebarCSS() {
     xmlHttp.send();
 }
 
+function LoadDevCSS() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            var darkcss = xmlHttp.responseText;
+            SetCSS("enhancedDevCSS", darkcss);
+        }
+    }
+    xmlHttp.open("GET", resourceURL + "css/enhanced_comment_compact.css");
+    xmlHttp.send();
+}
+
 function ChangeTheme(styleName)
 {
     if (styleName == 'dark')
@@ -1856,6 +1872,7 @@ function ChangeTheme(styleName)
     + '.head_story .tit_kakaostory .link_kakaostory { width: 145px !important; height: 27px !important; background-size: cover !important; }';
     SetCSS('enhancedHideLogoCSS', hideOriginLogo);
     LoadEnhancedCSS();
+    LoadDevCSS();
     if (GetValue('enhancedWideMode', 'false') == 'true')
     {
         LoadExtendFeedCSS();
@@ -2140,6 +2157,7 @@ function GetBlockedUsers() {
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             var jsonBlocked = JSON.parse(xmlHttp.responseText);
+            blockedList.clear();
             for (var i = 0; i < jsonBlocked.length; i ++) {
                 blockedList.add(String(jsonBlocked[i]["id"]));
             }
@@ -2647,7 +2665,10 @@ function SetExtendCommentUI()
     }
     InitEnhancedSettingsPage();
     LoadCommonEvents();
-    GetBlockedUsers();
+    if (GetValue('enhancedBlockUser', 'true') == 'true')
+    {
+        GetBlockedUsers();
+    }
     
     SetEmoticonSelectorSize();
 
