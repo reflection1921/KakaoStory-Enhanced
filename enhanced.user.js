@@ -50,6 +50,7 @@
  * enhancedSidebarLocation : 사이드바 위치(left, right)
  * enhancedSidebarShow : 사이드바 보이기 여부
  * enhancedThemeSaturation : 테마 채도(Gradient 테마 한정)
+ * enhancedExtendFeedBlock : 강화된 글 안받기 사용자 차단
  */
 
 /*
@@ -69,6 +70,7 @@ let myID = ''; //for discord mention style feature
 let notyTimeCount = 0; //for notification feature
 let blockedList = new Set(); //block users
 let blockedStringList = new Array(); //block strings
+let feedBlockedList = new Set(); //blocked feed users
 let catEffect = new Audio(resourceURL + 'sounds/cat-meow.mp3');
 let jThemes;
 
@@ -307,6 +309,10 @@ function InitEnhancedValues()
 
     var isEnhancedBlock = GetValue('enhancedBlockUser', 'true');
     $('input:radio[name="enhancedSelectBlockUser"]:input[value=' + isEnhancedBlock + ']').attr("checked", true);
+    document.getElementById("groupEnhancedBlockUser").style.display = (isEnhancedBlock == "true")? "block" : "none";
+
+    var isEnhancedFeedBlock = GetValue('enhancedExtendFeedBlock', 'false');
+    $('input:radio[name="enhancedSelectFeedBlockUser"]:input[value=' + isEnhancedFeedBlock + ']').attr("checked", true);
 
     var isKitty = GetValue('enhancedKittyMode', 'none');
     $('input:radio[name="enhancedSelectKittyMode"]:input[value=' + isKitty + ']').attr("checked", true);
@@ -459,6 +465,30 @@ function LoadCommonEvents()
         var bannedUserID = splittedURL[splittedURL.length - 1];
         blockedList.delete(bannedUserID);
         $(document).off('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]');
+    });
+    //Add user to feed list when disable feed.
+    $(document).on('click', 'a[data-kant-id="853"]', function(){
+        $(document).on('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]', function(){
+            var splittedURL = $(location).attr('href').split('/');
+            var bannedUserID = splittedURL[splittedURL.length - 1];
+            blockedList.add(bannedUserID);
+            $(document).off('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]');
+        });
+    });
+    //Delete user to feed list when re-enable feed.
+    $(document).on('click', 'a[data-kant-id="852"]', function(){
+        $(document).on('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]', function(){
+            var splittedURL = $(location).attr('href').split('/');
+            var bannedUserID = splittedURL[splittedURL.length - 1];
+            blockedList.delete(bannedUserID);
+            $(document).off('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]');
+        });
+    });
+    //Delete user to feed list when re-enable feed.
+    $(document).on('click', 'a[data-kant-id="857"]', function(){
+        var splittedURL = $(location).attr('href').split('/');
+        var bannedUserID = splittedURL[splittedURL.length - 1];
+        blockedList.delete(bannedUserID);
     });
     //Delete user to block list when unblock in settings page.
     $(document).on('click', 'a[data-kant-id="845"]', function() {
@@ -1252,11 +1282,21 @@ function LoadSettingsPageEvents()
 
     $(document).on("change",'input[name="enhancedSelectBlockUser"]',function(){
         var isEnhancedBlock = $('[name="enhancedSelectBlockUser"]:checked').val();
+        document.getElementById("groupEnhancedBlockUser").style.display = (isEnhancedBlock == "true")? "block" : "none";
         if (isEnhancedBlock == "true")
         {
             GetBlockedUsers();
         }
         SetValue("enhancedBlockUser", isEnhancedBlock);
+    });
+
+    $(document).on("change",'input[name="enhancedSelectFeedBlockUser"]',function(){
+        var isEnhancedFeedBlock = $('[name="enhancedSelectFeedBlockUser"]:checked').val();
+        if (isEnhancedFeedBlock == "true")
+        {
+            GetFeedBlockedUsers();
+        }
+        SetValue("enhancedExtendFeedBlock", isEnhancedFeedBlock);
     });
 
     $(document).on("change",'input[name="enhancedSelectEarthquake"]',function(){
@@ -1872,7 +1912,7 @@ function ChangeTheme(styleName)
     + '.head_story .tit_kakaostory .link_kakaostory { width: 145px !important; height: 27px !important; background-size: cover !important; }';
     SetCSS('enhancedHideLogoCSS', hideOriginLogo);
     LoadEnhancedCSS();
-    LoadDevCSS();
+    //LoadDevCSS();
     if (GetValue('enhancedWideMode', 'false') == 'true')
     {
         LoadExtendFeedCSS();
@@ -2051,7 +2091,7 @@ function HideBlockedUserComment() {
     for (var i = 0; i < comments.length; i++) {
         var bannedID = comments[i].getElementsByClassName("txt")[0].getElementsByTagName("p")[0].getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
 
-        if (blockedList.has(bannedID) == true) {
+        if (blockedList.has(bannedID) == true || feedBlockedList.has(bannedID) == true) {
             comments[i].parentElement.style.display = 'none';
             /*
             comments[i].parentElement.remove();
@@ -2088,7 +2128,7 @@ function HideBlockedUserArticle()
         var profile_info = shared_content.getElementsByClassName("pf")[0];
         var bannedID = profile_info.getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
 
-        if (blockedList.has(bannedID) == true) {
+        if (blockedList.has(bannedID) == true || feedBlockedList.has(bannedID) == true) {
 
             //not used.
             /*
@@ -2150,6 +2190,32 @@ function HideBlockedUserArticle()
         }
 
     }
+}
+
+function GetFeedBlockedUsers()
+{
+    var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                feedBlockedList.clear();
+                var friends = JSON.parse(xmlHttp.responseText);
+                for (var i = 0; i < friends.profiles.length; i++)
+                {
+                    var isFeedBlocked = friends['profiles'][i]['is_feed_blocked'];
+                    let friendID = friends['profiles'][i]['id'];
+                    if (isFeedBlocked == true)
+                    {
+                        feedBlockedList.add(friendID);
+                    }
+                }
+            }
+        }
+        xmlHttp.open("GET", "https://story.kakao.com/a/friends");
+        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+        xmlHttp.setRequestHeader("Accept", "application/json");
+        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xmlHttp.send();
 }
 
 function GetBlockedUsers() {
@@ -2668,6 +2734,11 @@ function SetExtendCommentUI()
     if (GetValue('enhancedBlockUser', 'true') == 'true')
     {
         GetBlockedUsers();
+    }
+
+    if (GetValue('enhancedExtendFeedBlock', 'false') == 'true')
+    {
+        GetFeedBlockedUsers();
     }
     
     SetEmoticonSelectorSize();
