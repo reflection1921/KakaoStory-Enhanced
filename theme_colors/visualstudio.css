@@ -1,9 +1,10 @@
---right-background-color: #2d2d30;
---background-color: #252526;
---light-background-color: #2d2d30;
---lighter-background-color: #333337;
---dark-background-color: #252526;
---darker-background-color: #1b1b1c;
+--saturation-factor: 1;
+--right-background-color: hsl(240 calc(var(--saturation-factor, 1)*3.2%) 18.2);
+--background-color: hsl(240 calc(var(--saturation-factor, 1)*1.3%) 14.7);
+--light-background-color: hsl(240 calc(var(--saturation-factor, 1)*3.2%) 18.2);
+--lighter-background-color: hsl(240 calc(var(--saturation-factor, 1)*3.8%) 20.8);
+--dark-background-color: hsl(240 calc(var(--saturation-factor, 1)*1.3%) 14.7);
+--darker-background-color: hsl(240 calc(var(--saturation-factor, 1)*1.8%) 10.8);
 --background-border-color: #333337;
 --text-color: #d0d0d0;
 --text-title-color: #d0d0d0;
@@ -14,7 +15,7 @@
 --info-text-color: #999999;
 --scrap-text-color: #007acc;
 --menu-text-color: #f1f1f1;
---emoticon-background-color: #4f545c; v
+--emoticon-background-color: hsl(217 calc(var(--saturation-factor, 1)*7.6%) 33.5); v
 --discord-blue: #68217a;
 --discord-blue-disable: #9f5faf;
 --discord-blue-hover: #862a9d;
@@ -23,5 +24,5 @@
 --header-border-color: #222427;v 
 --mention-background-color: #123e71;
 --mention-color: #f1f1f1;
---background-hover-color: #333334;
+--background-hover-color: hsl(240 calc(var(--saturation-factor, 1)*1.0%) 20.2);
 --dark-theme-ks-logo: url('https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/logo_kseh_dark.png');

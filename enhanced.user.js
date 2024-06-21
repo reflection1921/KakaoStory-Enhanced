@@ -1789,7 +1789,7 @@ function SetDarkThemeStyle(styleName) {
             }
             document.documentElement.style.setProperty('--saturation-factor', GetValue('enhancedThemeSaturation', '1'));
             var selIdx = document.getElementById('enhancedOptionDarkTheme').selectedIndex;
-            document.getElementById("groupThemeGradientSaturation").style.display = (jThemes.themes[selIdx].isGradient == true)? "block" : "none";
+            //document.getElementById("groupThemeGradientSaturation").style.display = (jThemes.themes[selIdx].isGradient == true)? "block" : "none";
         }
     }
     xmlHttp.open("GET", resourceURL + "theme_colors/" + styleName + ".css");
