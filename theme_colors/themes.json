@@ -239,6 +239,22 @@
       "url": "http://chihaya.kr/enhanced",
       "style": "light",
       "isGradient": true
+    },
+    {
+      "id": "custom_dark",
+      "name": "Custom Dark",
+      "author": "KakaoStory Enhanced",
+      "url": "http://chihaya.kr/enhanced",
+      "style": "dark",
+      "isGradient": true
+    },
+    {
+      "id": "custom_light",
+      "name": "Custom Light",
+      "author": "KakaoStory Enhanced",
+      "url": "http://chihaya.kr/enhanced",
+      "style": "light",
+      "isGradient": true
     }
   ]
 }

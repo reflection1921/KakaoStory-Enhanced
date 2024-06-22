@@ -161,7 +161,6 @@
     padding: 7px 2px 7px 2px;
     outline: none;
     text-align: center;
-    background-color: white;
 }
 
 .enhanced_custom_gradient_percent_input
@@ -182,7 +181,6 @@
     outline: none;
     text-align: center;
     margin-right: 7px;
-    background-color: white;
 }
 
 .enhanced_custom_gradient_degree_input

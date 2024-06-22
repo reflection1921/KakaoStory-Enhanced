@@ -52,6 +52,9 @@
  * enhancedSidebarShow : 사이드바 보이기 여부
  * enhancedThemeSaturation : 테마 채도(Gradient 테마 한정)
  * enhancedExtendFeedBlock : 강화된 글 안받기 사용자 차단
+ * enhancedCustomThemeColor1~3 : 커스텀 테마 그라데이션 색상
+ * enhancedCustomThemeDegree : 커스텀 테마 그라데이션 각도
+ * enhancedCustomThemePercent1~3 : 커스텀 테마 그라데이션 비율
  */
 
 /*
@@ -1337,6 +1340,14 @@ function LoadSettingsPageEvents()
         ShowBlockStringPage();
     });
 
+    $('body').on('click', '#enhancedBtnCustomTheme', function() {
+        document.getElementById("customThemeLayer").style.display = 'block';
+    });
+
+    $('body').on('click', '#enhancedBtnCustomThemeOK', function() {
+        document.getElementById("customThemeLayer").style.display = 'none';
+    });
+
     $('body').on('click', '#enhancedFastDeleteClose', function() {
         document.getElementById("fastDeleteLayer").remove();
     });
@@ -1804,8 +1815,10 @@ function SetDarkThemeStyle(styleName) {
                 document.documentElement.style.setProperty(variableName, variableValue);
             }
             document.documentElement.style.setProperty('--saturation-factor', GetValue('enhancedThemeSaturation', '1'));
-            var selIdx = document.getElementById('enhancedOptionDarkTheme').selectedIndex;
-            //document.getElementById("groupThemeGradientSaturation").style.display = (jThemes.themes[selIdx].isGradient == true)? "block" : "none";
+            if (styleName == "custom_dark" || styleName == "custom_light")
+            {
+                SetCustomTheme();
+            }
         }
     }
     xmlHttp.open("GET", resourceURL + "theme_colors/" + styleName + ".css");
@@ -2254,13 +2267,198 @@ function GetBlockedUsers() {
 }
 
 function ShowBlockStringPage() {
-    var deleteLayer = document.createElement('div');
-    deleteLayer.id = "banStringLayer";
-    deleteLayer.className = "cover _cover";
-    document.body.appendChild(deleteLayer);
+    var blockStringLayer = document.createElement('div');
+    blockStringLayer.id = "banStringLayer";
+    blockStringLayer.className = "cover _cover";
+    document.body.appendChild(blockStringLayer);
     document.getElementById('banStringLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="dim_ly cover_content cover_center" data-kant-group="msg.w"><div class="ly_con message" style="top:84px"><div class="_container box_writing"><fieldset><legend class="tit_message">문자열 차단</legend><div class="box_from _receiverWrap" data-model="c56736" data-part-name="receiver"><div class="_suggestionWrap friends_search" style="display: block;"><label class="_suggestionInputPlaceholder lab_from" for="messageReceiver">차단할 문자열을 한줄에 하나씩 입력하세요.</label></div></div><div class="box_write color_11" data-model="c56736" data-part-name="writing"><div class="editable"><span class="write_edit" style="top: 162px;"><textarea class="tf_write _texxtarea" id="textBlockString" style="font-size: 22px; line-height: 26px; height: 370px;"></textarea></span> <span class="edit_gap"></span></div></div><div class="box_media menu_on"><div class="bn_group"><a href="#" class="btn_com _sendMessage btn_or" id="enhancedBtnSaveBlockString" data-kant-id="574"><em>저장</em></a></div></div><a href="#" class="link_close _hideWritingView" id="enhancedBtnCancelBlockString"><span class="ico_ks ico_close">취소</span></a></fieldset></div></div></div></div>';
     document.getElementById("textBlockString").value = GetValue('enhancedBlockStringList', '');
 }
+
+function InitCustomThemePage() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            var html = xmlHttp.responseText;
+
+            var customThemeLayer = document.createElement('div');
+            customThemeLayer.id = "customThemeLayer";
+            customThemeLayer.className = "cover _cover";
+            customThemeLayer.style.display = "none";
+            document.body.appendChild(customThemeLayer);
+            document.getElementById('customThemeLayer').innerHTML = html;
+            InitCustomThemeValues();
+            InitCustomThemePageEvents();
+        }
+    }
+    xmlHttp.open("GET", resourceURL + "enhanced_custom_theme_settings.html");
+    xmlHttp.send();
+}
+
+function InitCustomThemeValues()
+{
+    for (var i = 1; i <= 3; i++)
+    {
+        var color = GetValue('enhancedCustomThemeColor' + i, GetRandomHexColor());
+        document.getElementById("enhancedCustomThemeColor" + i).value = color;
+        document.getElementById("enhancedCustomThemePercent" + i).value = GetValue('enhancedCustomThemePercent' + i, Math.floor(Math.random() * 100));
+        var isBright = IsBrightColor(color);
+        var el = document.getElementsByClassName("enhanced_custom_gradient_color_" + i);
+        for (var j = 0; j < el.length; j++)
+        {
+            el[j].style.backgroundColor = color;
+            el[j].style.color = (isBright)? 'black' : 'white';
+        }
+    }
+
+    document.getElementById("enhancedCustomThemeDegree").value = GetValue('enhancedCustomThemeDegree', Math.floor(Math.random() * 360));
+}
+
+function InitCustomThemePageEvents()
+{
+    document.getElementById("enhancedCustomThemeColor1").addEventListener("input", function() {
+        var color = this.value;
+        CustomThemeColorEventFunc(color, 1);
+    });
+    
+    document.getElementById("enhancedCustomThemeColor2").addEventListener("input", function() {
+        var color = this.value;
+        CustomThemeColorEventFunc(color, 2);
+    });
+
+    document.getElementById("enhancedCustomThemeColor3").addEventListener("input", function() {
+        var color = this.value;
+        CustomThemeColorEventFunc(color, 3);
+    });
+
+    document.getElementById("enhancedCustomThemePercent1").addEventListener("input", function() {
+        SetValue('enhancedCustomThemePercent1', this.value);
+        SetCustomTheme();
+    });
+
+    document.getElementById("enhancedCustomThemePercent2").addEventListener("input", function() {
+        SetValue('enhancedCustomThemePercent2', this.value);
+        SetCustomTheme();
+    });
+
+    document.getElementById("enhancedCustomThemePercent3").addEventListener("input", function() {
+        SetValue('enhancedCustomThemePercent3', this.value);
+        SetCustomTheme();
+    });
+
+    document.getElementById("enhancedCustomThemeDegree").addEventListener("input", function() {
+        SetValue('enhancedCustomThemeDegree', this.value);
+        SetCustomTheme();
+    });
+
+    document.getElementById("enhacnedBtnRandomCustomColor").addEventListener("click", function() {
+        for (var i = 1; i <= 3; i++)
+        {
+            var randHex = GetRandomHexColor();
+            document.getElementById("enhancedCustomThemeColor" + i).value = randHex;
+            var percent = Math.floor(Math.random() * 33) + ((i - 1) * 33) + 1;
+            document.getElementById("enhancedCustomThemePercent" + i).value = percent;
+            SetValue('enhancedCustomThemePercent' + i, percent);
+            CustomThemeColorEventFunc(document.getElementById("enhancedCustomThemeColor" + i).value, i);
+        }
+
+        var degree = Math.floor(Math.random() * 360);
+        document.getElementById("enhancedCustomThemeDegree").value = degree;
+        SetValue('enhancedCustomThemeDegree', degree);
+        SetCustomTheme();
+    });
+}
+
+function CustomThemeColorEventFunc(color, i)
+{
+    if (!IsValidHexColor(color))
+    {
+        return;
+    }
+    SetValue('enhancedCustomThemeColor' + i, color);
+    var isBright = IsBrightColor(color);
+    var el = document.getElementsByClassName("enhanced_custom_gradient_color_" + i);
+    for (var j = 0; j < el.length; j++)
+    {
+        el[j].style.backgroundColor = color;
+        el[j].style.color = (isBright)? 'black' : 'white';
+    }
+
+    SetCustomTheme();
+}
+
+function SetCustomTheme()
+{
+    for (var i = 1; i <= 3; i++)
+    {
+        document.documentElement.style.setProperty('--bg-gradient-custom-' + i + '-hsl', GetHSLCSS(document.getElementById("enhancedCustomThemeColor" + i).value));
+    }
+
+    var percent1 = GetValue('enhancedCustomThemePercent1', Math.floor(Math.random() * 100));
+    var percent2 = GetValue('enhancedCustomThemePercent2', Math.floor(Math.random() * 100));
+    var percent3 = GetValue('enhancedCustomThemePercent3', Math.floor(Math.random() * 100));
+    document.documentElement.style.setProperty('--custom-background-color', GetGradientCSS(percent1, percent2, percent3, GetValue('enhancedCustomThemeDegree', Math.floor(Math.random() * 360))));
+    document.documentElement.style.setProperty('--saturation-factor', GetValue('enhancedThemeSaturation', '1'));
+}
+
+function IsValidHexColor(hexColor)
+{
+    return /^#[0-9A-F]{6}$/i.test(hexColor);
+}
+
+function GetRandomHexColor()
+{
+    return '#' + Math.floor(Math.random()*16777215).toString(16);
+}
+
+function IsBrightColor(hexColor)
+{
+    var rgb = HexToRGB(hexColor);
+    var brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
+    return brightness > 125;
+}
+
+function GetHSLCSS(hexColor)
+{
+    var rgb = HexToRGB(hexColor);
+    var hsl = RGBToHSL(rgb);
+    //000 calc(var(--saturation-factor, 1)*0%) 100%;
+    //115 calc(var(--saturation-factor, 1)*10.5%) 42.9%;
+    return hsl[0] + ' calc(var(--saturation-factor, 1)*' + hsl[1] + '%) ' + hsl[2] + '%';
+}
+
+function GetGradientCSS(percent1, percent2, percent3, degree)
+{
+    return 'linear-gradient(' + degree + 'deg, var(--bg-gradient-custom-1) ' + percent1 + '%, var(--bg-gradient-custom-2) ' + percent2 + '%, var(--bg-gradient-custom-3) ' + percent3 + '%)';
+}
+
+function HexToRGB(hexColor) {
+    const rgb = hexColor.startsWith('#') ? hexColor.slice(1) : hexColor;
+    const [r, g, b] = [rgb.slice(0, 2), rgb.slice(2, 4), rgb.slice(4, 6)].map((hex) => Number.parseInt(hex, 16));
+  
+    return [r, g, b];
+  }
+
+function RGBToHSL(rgb) {
+    const r = rgb[0] / 255;
+    const g = rgb[1] / 255;
+    const b = rgb[2] / 255;
+    const l = Math.max(r, g, b);
+    const s = l - Math.min(r, g, b);
+  
+    const h = s
+      ? l === r
+        ? (g - b) / s
+        : l === g
+        ? 2 + (b - r) / s
+        : 4 + (r - g) / s
+      : 0;
+    return [
+      60 * h < 0 ? 60 * h + 360 : 60 * h,
+      100 * (s ? (l <= 0.5 ? s / (2 * l - s) : s / (2 - (2 * l - s))) : 0),
+      (100 * (2 * l - s)) / 2,
+    ];
+  }
 
 function HideBlockStringArticle() {
     var articles = document.getElementsByClassName("txt_wrap");
@@ -2769,6 +2967,7 @@ function SetExtendCommentUI()
         return;
     }
     InitEnhancedSettingsPage();
+    InitCustomThemePage();
     LoadCommonEvents();
     if (GetValue('enhancedBlockUser', 'true') == 'true')
     {
