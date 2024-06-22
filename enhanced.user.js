@@ -1381,6 +1381,14 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedSelectSidebarLocation"]',function(){
         var changed = $('[name="enhancedSelectSidebarLocation"]:checked').val();
         SetValue("enhancedSidebarLocation", changed);
+        if (changed == "left")
+        {
+            LoadLeftSidebarCSS();
+        }
+        else
+        {
+            RemoveCSSCollection("enhancedLeftSidebarCSS");
+        }
     });
 
     $(document).on('keypress', '#enhancedTxtFontSize', function(e) {
@@ -2544,6 +2552,15 @@ function SetCSS(elID, cssText)
     elem.id = elID;
     document.head.appendChild(elem);
     document.getElementById(elID).innerHTML = cssText;
+}
+
+function RemoveCSSCollection(elID)
+{
+    var elem = document.getElementById(elID);
+    if (elem != null)
+    {
+        elem.remove();
+    }
 }
 
 function DownloadText(text, name, type) {
