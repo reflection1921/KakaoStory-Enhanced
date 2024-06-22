@@ -33,8 +33,7 @@
 {
     width: 64px;
     height: 50px;
-    /*background-image: url(https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/puppy.png);*/
-    background-image: url(http://127.0.0.1:8188/KakaoStory-Enhanced/images/dog_frame_1.png);
+    background-image: url(https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/dog_frame_2.png);
     background-size: cover;
     animation: enhanced_puppy_image_after 0.3s;
     animation-iteration-count: infinite;
@@ -43,9 +42,8 @@
 
 @keyframes enhanced_puppy_image_after
 {
-    /*background-image: url(https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/puppy.png);*/
     50% { 
-        background-image: url('http://127.0.0.1:8188/KakaoStory-Enhanced/images/dog_frame_2.png');
+        background-image: url(https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/dog_frame_2.png);
       }
 }
 
