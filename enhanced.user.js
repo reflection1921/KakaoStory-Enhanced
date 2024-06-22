@@ -32,6 +32,7 @@
  * enhancedVersion : 버전 정보
  * enhancedBlockStringList : 차단 문자열 리스트
  * enhancedKittyMode : Kitty Mode(verycute: sound + kitty, cute: kitty, none: 적용안함)
+ * enhancedPuppyMode : Puppy Mode(verycute: sound + puppy, cute: puppy, none: 적용안함)
  * enhancedLatestNotyID : 알림 마지막 ID(여러 개 창에서 중복 알림 발생 방지)
  * enhancedHideRecommendFriend : 추천친구 숨기기
  * enhancedHideLogo : 일반인 모드
@@ -72,6 +73,8 @@ let blockedList = new Set(); //block users
 let blockedStringList = new Array(); //block strings
 let feedBlockedList = new Set(); //blocked feed users
 let catEffect = new Audio(resourceURL + 'sounds/cat-meow.mp3');
+let catEffect2 = new Audio(resourceURL + 'sounds/cat-meow-2.mp3');
+let dogEffect = new Audio(resourceURL + 'sounds/dog-bark.mp3');
 let jThemes;
 
 let powerComboCnt = 0;
@@ -316,6 +319,9 @@ function InitEnhancedValues()
 
     var isKitty = GetValue('enhancedKittyMode', 'none');
     $('input:radio[name="enhancedSelectKittyMode"]:input[value=' + isKitty + ']').attr("checked", true);
+
+    var isKitty = GetValue('enhancedPuppyMode', 'none');
+    $('input:radio[name="enhancedSelectPuppyMode"]:input[value=' + isKitty + ']').attr("checked", true);
 
     var isEarthquake = GetValue('enhancedEarthquake', 'false');
     $('input:radio[name="enhancedSelectEarthquake"]:input[value=' + isEarthquake + ']').attr("checked", true);
@@ -943,13 +949,6 @@ function LoadCommonEvents()
         }
 
     });
-
-    //$('body').on('input', '#contents_write', function() {
-        //catEffect.pause();
-        //catEffect.currentTime = 0;
-        //setTimeout(() => null, 1);
-        //catEffect.play();
-    //});
 }
 
 function GetSelectedActivity()
@@ -1280,6 +1279,12 @@ function LoadSettingsPageEvents()
         MoveKitty();
     });
 
+    $(document).on("change",'input[name="enhancedSelectPuppyMode"]',function(){
+        var changed = $('[name="enhancedSelectPuppyMode"]:checked').val();
+        SetValue("enhancedPuppyMode", changed);
+        MovePuppy();
+    });
+
     $(document).on("change",'input[name="enhancedSelectBlockUser"]',function(){
         var isEnhancedBlock = $('[name="enhancedSelectBlockUser"]:checked').val();
         document.getElementById("groupEnhancedBlockUser").style.display = (isEnhancedBlock == "true")? "block" : "none";
@@ -1343,6 +1348,17 @@ function LoadSettingsPageEvents()
     $('body').on('click', '#enhancedKittyImage', function() {
         if (GetValue('enhancedKittyMode', 'none') == 'verycute') {
             catEffect.play();
+            // var random = Math.floor(Math.random() * 2);
+            // if (random == 0)
+            //     catEffect.play();
+            // else
+            //     catEffect2.play();
+        }
+    });
+
+    $('body').on('click', '#enhancedPuppyImage', function() {
+        if (GetValue('enhancedPuppyMode', 'none') == 'verycute') {
+            dogEffect.play();
         }
     });
 
@@ -2264,6 +2280,30 @@ function HideBlockStringArticle() {
     }
 }
 
+function MovePuppy()
+{
+    var hasPuppy = document.getElementById("enhancedPuppyImage") != null;
+    if (GetValue('enhancedPuppyMode', 'none') == 'none')
+        {
+            if (hasKitty)
+            {
+                document.getElementById("enhancedPuppyImage").remove();
+            }
+            return;
+        }
+    if (!hasPuppy)
+    {
+        var puppy = document.createElement('div');
+        puppy.className = 'enhanced_puppy_image';
+
+        var puppyContainer = document.createElement('div');
+        puppyContainer.id = 'enhancedPuppyImage';
+        puppyContainer.className = 'enhanced_puppy';
+        puppyContainer.appendChild(puppy);
+        document.getElementById("kakaoHead").insertBefore(puppyContainer, document.getElementById("kakaoHead").firstChild);
+    }
+}
+
 function MoveKitty()
 {
     var hasKitty = document.getElementById("enhancedKittyImage") != null;
@@ -2282,7 +2322,6 @@ function MoveKitty()
         kitty.className = 'enhanced_kitty';
         kitty.src = resourceURL + "images/cat.gif";
         document.getElementById("kakaoHead").insertBefore(kitty, document.getElementById("kakaoHead").firstChild);
-        //document.getElementById("kakaoHead").appendChild(kitty);
     }
 }
 
@@ -2745,6 +2784,7 @@ function SetExtendCommentUI()
 
     setTimeout(() => AddEnhancedMenu(), 1000);
     setTimeout(() => MoveKitty(), 1000);
+    setTimeout(() => MovePuppy(), 1000);
     setTimeout(() => GetMyID(), 3000); //for discord style mention feature
     setTimeout(() => HideChannelButton(), 500); //hide channel and teller buttons
     setTimeout(() => AddPowerModeScoreElements(), 1000); //power mode
