@@ -115,3 +115,88 @@
 {
     display: none;
 }
+
+.enhanced_custom_gradient_container
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.enhanced_custom_gradient_color_input
+{
+    width: 60px;
+    padding: 7px 10px 7px 10px;
+    border: 0;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    outline: none;
+    text-align: center;
+    margin-left: 7px;
+}
+
+.enhanced_custom_gradient_slash_character
+{
+    padding: 7px 2px 7px 2px;
+    outline: none;
+    text-align: center;
+    background-color: white;
+}
+
+.enhanced_custom_gradient_percent_input
+{
+    width: 40px;
+    padding: 7px 0px 7px 10px;
+    border: 0;
+    outline: none;
+    text-align: center;
+    margin-right: 0px;
+}
+
+.enhanced_custom_gradient_percent_character
+{
+    padding: 7px 10px 7px 0px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    outline: none;
+    text-align: center;
+    margin-right: 7px;
+    background-color: white;
+}
+
+.enhanced_custom_gradient_degree_input
+{
+    width: 40px;
+    padding: 7px 0px 7px 10px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border: 0;
+    outline: none;
+    text-align: center;
+    margin-right: 0px;
+}
+
+.enhanced_custom_gradient_degree_character
+{
+    padding: 7px 10px 7px 0px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    outline: none;
+    text-align: center;
+    margin-right: 7px;
+    background-color: white;
+}
+
+.write .inp_footer .bn_group_enhanced_left
+{
+    float: left;
+}
+
+.write .bn_group_enhanced_left .btn_com {
+    float: left;
+    height: 32px;
+    margin-left: 5px;
+    padding: 0 20px;
+    line-height: 32px;
+}
