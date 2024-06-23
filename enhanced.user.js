@@ -1825,7 +1825,12 @@ function SetDarkThemeStyle(styleName) {
             document.documentElement.style.setProperty('--saturation-factor', GetValue('enhancedThemeSaturation', '1'));
             if (styleName == "custom_dark" || styleName == "custom_light")
             {
+                document.getElementById("groupThemeGradientCustomTheme").style.display = 'block';
                 SetCustomTheme();
+            }
+            else
+            {
+                document.getElementById("groupThemeGradientCustomTheme").style.display = 'none';
             }
         }
     }
