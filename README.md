@@ -1,35 +1,152 @@
-# KakaoStory Enhanced
+<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+<a name="readme-top"></a>
+<!--
+*** Thanks for checking out the Best-README-Template. If you have a suggestion
+*** that would make this better, please fork the repo and create a pull request
+*** or simply open an issue with the tag "enhancement".
+*** Don't forget to give the project a star!
+*** Thanks again! Now go create something AMAZING! :D
+-->
 
-## 소개
-KakaoStory Enhanced는 Discord 스타일의 다크 테마를 구현하기 위해 시작한 프로젝트 입니다.
-현재는 Discord 스타일의 다크 테마 외에도 유용한 기능들이 추가되었습니다.
+<p align="right">English | <a href="https://github.com/reflection1921/test-readme-repo/blob/main/README-KO.md">한국어</a></p>
 
-## 사용가능한 브라우저
-- 최신버전의 Chrome
-- 최신버전의 Firefox
-- 최신버전의 Safari(일부 기능 미지원)
+<!-- PROJECT SHIELDS -->
+<!--
+*** I'm using markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+*** See the bottom of this document for the declaration of the reference variables
+*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
 
-## 기능
-- 다양한 스타일의 다크테마 지원(Discord, Visual Studio, Discord Aurora 등 26가지 테마)
-- 폰트 및 폰트 크기 설정
-- Wide 모드 지원
-- 알림
-- 강화된 차단(차단한 사용자의 게시글 및 댓글 숨기기)
-- 일반인 모드(favicon 및 타이틀 타 사이트처럼 보이기)
-- 이모티콘 크기 설정
-- 키보드 단축키 기능
-- 이외 기타 유용한 기능들 제공
 
-## 어떻게 적용하나요?
-이 프로그램은 아래와 같은 절차를 통해 적용하실 수 있습니다.
-1. 유저 스크립트를 지원하는 확장프로그램을 설치하세요.(Tampermonkey, Greasemonkey 등)
-    - [Chrome용 Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=ko)
-    - [Firefox용 Tampermonkey](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/)
-    - 위에 소개된 확장프로그램 외에도 유저 스크립트를 지원하면 사용가능 합니다.
-2. [여기](https://github.com/reflection1921/KakaoStory-Enhanced/raw/main/enhanced.user.js)를 클릭해 설치하세요.
-    - 유저 스크립트 설치 창이 표시되면 설치를 클릭하여 설치해주시면 됩니다.
-3. 웹 카카오스토리를 새로고침 해보세요!
 
-## 버그 발견 및 아이디어 제안
-이 repository의 Issues 탭에서 이슈를 등록해주세요.  
-코드에 기여하고 싶다면 수정 후 Pull Request를 통해 merge를 요청해주시면 감사하겠습니다.
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+
+  ![logo-dark](images/logo_readme.png#gh-dark-mode-only)
+  ![logo-light](images/logo_readme_light.png#gh-light-mode-only)
+
+<h3 align="center">KakaoStory Enhanced</h3>
+
+  <p align="center">
+    Add-on for Web KakaoStory
+    <br />
+    <a href="https://github.com/reflection1921/KakaoStory-Enhanced"><strong>Explore the repo »</strong></a>
+    <br />
+    <br />
+    <a href="#getting-started">Getting Started</a>
+    ·
+    <a href="https://github.com/reflection1921/KakaoStory-Enhanced/issues/new?labels=bug">Report Bug</a>
+    ·
+    <a href="https://github.com/reflection/KakaoStory-Enhanced/issues/new?labels=feature">Request Features</a>
+  </p>
+</div>
+
+
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#features">Features</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#contributing">Contributing</a></li>
+  </ol>
+</details>
+
+
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+![KakaoStory Enhanced Screenshot][product-screenshot]
+
+KakaoStory Enhanced is a project started to implement the Discord-style dark theme in the web version of KakaoStory. At present, it provides useful features in addition to the Discord-style dark theme.
+
+### Features
+
+- Various styles of themes
+  - Discord Dark
+  - Discord Gradient Themes
+  - Visual Studio Dark
+  - User custom gradient themes
+- Wide UI
+- Sidebar location customization
+- Custom font and text size
+- Notification support
+- Enhanced user block(Hide articles and comments of blocked users)
+- Emoticion size customization
+- Shortcut keys support
+- Convenient friends backup and deletion
+- Other many useful features
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+This part explains how to install KakaoStory Enhanced in your web browser.
+
+### Prerequisites
+
+Using KakaoStory Enhanced requires the following items:
+* HTML5 supported browsers
+  * Chrome
+  * Firefox
+  * Safari(Some features not supported)
+ 
+* Userscript supported extensions
+  * Tampermonkey: [Chrome](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) / [Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/) / [Safari](https://apps.apple.com/kr/app/tampermonkey/id1482490089?mt=12)
+  * Greasemonkey: [Firefox](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
+  * Userscripts Safari: [Safari](https://github.com/quoid/userscripts)
+  * Other userscript supported extensions
+
+### Installation
+
+1. Click [here](https://github.com/reflection1921/KakaoStory-Enhanced/raw/main/enhanced.user.js) to install the userscript.
+    * When the user Script installation tab appears, click `Install` to install it.
+3. Refresh opened KakaoStory web page!
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- CONTRIBUTING -->
+## Contributing
+
+Code contributions are always welcome.  
+Your contributions make KakaoStory Enhanced better!  
+Thank you!
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/reflection1921/KakaoStory-Enhanced.svg?style=for-the-badge
+[contributors-url]: https://github.com/reflection1921/KakaoStory-Enhanced/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/reflection1921/KakaoStory-Enhanced.svg?style=for-the-badge
+[forks-url]: https://github.com/reflection1921/KakaoStory-Enhanced/network/members
+[stars-shield]: https://img.shields.io/github/stars/reflection1921/KakaoStory-Enhanced.svg?style=for-the-badge
+[stars-url]: https://github.com/reflection1921/KakaoStory-Enhanced/stargazers
+[issues-shield]: https://img.shields.io/github/issues/reflection1921/KakaoStory-Enhanced.svg?style=for-the-badge
+[issues-url]: https://github.com/reflection1921/KakaoStory-Enhanced/issues
+[product-screenshot]: images/screenshot-readme.png
