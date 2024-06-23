@@ -1,0 +1,31 @@
+.comment .list>li .pf
+{
+    display: none;
+}
+
+.comment .list>li .txt
+{
+    padding: 0px;
+    display: flex;
+}
+
+.btn_like._btnLikeComment
+{
+    display: none;
+}
+
+.data_like._likeCommentEmpty
+{
+    margin-right: 10px;
+}
+
+.comment .list>li .txt p
+{
+    white-space: nowrap;
+}
+
+.comment .list>li
+{
+    min-height: 0;
+    margin-top: 0;
+}
