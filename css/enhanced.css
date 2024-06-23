@@ -33,7 +33,7 @@
 {
     width: 64px;
     height: 50px;
-    background-image: url(https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/dog_frame_2.png);
+    background-image: url(https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/images/dog_frame_1.png);
     background-size: cover;
     animation: enhanced_puppy_image_after 0.3s;
     animation-iteration-count: infinite;
