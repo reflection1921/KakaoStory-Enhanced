@@ -2978,7 +2978,7 @@ function SetExtendCommentUI()
 }
 
 (function() {
-    if (window.location.href.includes("accounts.kakao.com/"))
+    if (window.location.href.includes("accounts.kakao.com/login"))
     {
         AddLoginThemeSelectButtonUI();
         if (GetValue('enhancedSelectThemeLogin', 'dark') == 'dark')
