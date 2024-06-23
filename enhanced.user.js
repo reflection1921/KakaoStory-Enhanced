@@ -97,7 +97,7 @@ let currentTitle = "NAVER";
 //let selNewPerm = 'F'; //A = 전체공개, F = 친구공개, M = 나만보기
 
 //konami command to restore kakaostory favicon classic
-let konami = [38,38,40,40,37,39,37,39,66,65];
+let konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
 let konamiCount = 0;
 
 /* For Login Page */
@@ -172,7 +172,7 @@ function GetMyID() {
 function GetMySID(val) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var jsonProf = JSON.parse(xmlHttp.responseText);
             if (jsonProf.activities.length == 0) {
                 myID = '';
@@ -208,7 +208,7 @@ function HighlightCommentLikeDiscord() {
 function InitEnhancedSettingsPage() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var html = xmlHttp.responseText;
 
             AttachEnhancedSettingsPage(html);
@@ -323,8 +323,8 @@ function InitEnhancedValues()
     var isKitty = GetValue('enhancedKittyMode', 'none');
     $('input:radio[name="enhancedSelectKittyMode"]:input[value=' + isKitty + ']').attr("checked", true);
 
-    var isKitty = GetValue('enhancedPuppyMode', 'none');
-    $('input:radio[name="enhancedSelectPuppyMode"]:input[value=' + isKitty + ']').attr("checked", true);
+    var isPuppy = GetValue('enhancedPuppyMode', 'none');
+    $('input:radio[name="enhancedSelectPuppyMode"]:input[value=' + isPuppy + ']').attr("checked", true);
 
     var isEarthquake = GetValue('enhancedEarthquake', 'false');
     $('input:radio[name="enhancedSelectEarthquake"]:input[value=' + isEarthquake + ']').attr("checked", true);
@@ -371,7 +371,7 @@ function CloseSettingsPage()
 function GetCSSVersion() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var cssVersion = xmlHttp.responseText;
             document.getElementById('enhancedCSSVersion').innerText = cssVersion;
         }
@@ -558,7 +558,7 @@ function LoadCommonEvents()
     });
 
     document.addEventListener('keydown', function(e) {
-        if (e.keyCode == konami[konamiCount]) {
+        if (e.code === konami[konamiCount]) {
             konamiCount++;
             if (konamiCount >= 10) {
                 konamiCount = 0;
@@ -596,10 +596,10 @@ function LoadCommonEvents()
             return;
         }
 
-        /* KEYBOARD CONTROL(KEY UP? KEY DOWN?) */
+        /* KEYBOARD CONTROL */
 
         //Shift + M - Permission : Only Me
-        if (e.shiftKey && e.keyCode == 77)
+        if (e.shiftKey && e.code === 'KeyM')
         {
             var selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
@@ -632,7 +632,7 @@ function LoadCommonEvents()
         }
 
         //Shift + F - Permission : Friends
-        if (e.shiftKey && e.keyCode == 70)
+        if (e.shiftKey && e.code === 'KeyF')
         {
             var selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
@@ -665,7 +665,7 @@ function LoadCommonEvents()
         }
 
         //Shift + A - Permission : All
-        if (e.shiftKey && e.keyCode == 65)
+        if (e.shiftKey && e.code === 'KeyA')
         {
             var selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
@@ -698,7 +698,7 @@ function LoadCommonEvents()
         }
 
         //J - FEED Down
-        if (e.keyCode == 74)
+        if (e.code === 'KeyJ')
         {
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
             {
@@ -741,7 +741,7 @@ function LoadCommonEvents()
         }
 
         //K - Feed Up
-        if (e.keyCode == 75)
+        if (e.code === 'KeyK')
         {
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
             {
@@ -783,7 +783,7 @@ function LoadCommonEvents()
         }
 
         //G(Double G) - Feed TOP / BOTTOM
-        if (e.keyCode == 71)
+        if (e.code === 'KeyG')
         {
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
             {
@@ -817,7 +817,7 @@ function LoadCommonEvents()
         }
 
         //R - Refresh Feed / Go to Main
-        if (e.keyCode == 82)
+        if (e.code === 'KeyR')
         {
             var elem = document.getElementsByClassName("link_kakaostory _btnHome")[0];
             if (elem) {
@@ -826,7 +826,7 @@ function LoadCommonEvents()
         }
 
         //F - Article Detail View(Close : ESC)
-        if (e.keyCode == 70)
+        if (e.code === 'KeyF')
         {
             var selElem = GetSelectedActivity();
             var timeElem = selElem.getElementsByClassName("time _linkPost")[0];
@@ -837,7 +837,7 @@ function LoadCommonEvents()
         }
 
         //N - New Article
-        if (e.keyCode == 78)
+        if (e.code === 'KeyN')
         {
             var elem = document.getElementsByClassName("link_gnb link_write _toggleWriteButton")[0];
             if (elem) {
@@ -847,7 +847,7 @@ function LoadCommonEvents()
         }
 
         //I - Comment Write
-        if (e.keyCode == 73)
+        if (e.code === 'KeyI')
         {
             var selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
@@ -869,7 +869,7 @@ function LoadCommonEvents()
         }
 
         //P - Previous Comment
-        if (e.keyCode == 80)
+        if (e.code === 'KeyP')
         {
             var selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
@@ -886,7 +886,7 @@ function LoadCommonEvents()
         }
         
         //C - First Comment
-        if (e.keyCode == 67)
+        if (e.code === 'KeyC')
         {
             var selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
@@ -903,7 +903,7 @@ function LoadCommonEvents()
         }
 
         //L - Like Feeling Button
-        if (e.keyCode == 76)
+        if (e.code === 'KeyL')
         {
             var selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
@@ -922,7 +922,7 @@ function LoadCommonEvents()
         }
         
         //D - Delete My Selected Article
-        if (e.keyCode == 68)
+        if (e.code === 'KeyD')
         {
             var selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
@@ -1139,7 +1139,7 @@ function LoadSettingsPageEvents()
         SetFont();
     });
 
-    $(document).on('click', '#enhancedFontCustom', function() {
+    document.getElementById("enhancedFontCustom").addEventListener("click", function() {
         document.getElementById("groupEnhancedFontCustomEnable").style.display = "block";
     });
 
@@ -1147,15 +1147,15 @@ function LoadSettingsPageEvents()
         CloseSettingsPage();
     });
 
-    $(document).on('click', '#enhancedBtnBackupFriendsList', function() {
+    document.getElementById("enhancedBtnBackupFriendsList").addEventListener("click", function() {
         BackupFriendsList();
     });
 
-    $(document).on('click', '#enhancedBtnBackupBannedUserList', function() {
+    document.getElementById("enhancedBtnBackupBannedUserList").addEventListener("click", function() {
         BackupBannedUserList();
     });
 
-    $(document).on('click', '#enhancedBtnUpdateInfo', function() {
+    document.getElementById("enhancedBtnUpdateInfo").addEventListener("click", function() {
         ViewUpdateAllPage();
     });
 
@@ -1276,16 +1276,20 @@ function LoadSettingsPageEvents()
         SetEmoticonSize();
     });
 
-    $(document).on("change",'input[name="enhancedSelectKittyMode"]',function(){
-        var changed = $('[name="enhancedSelectKittyMode"]:checked').val();
-        SetValue("enhancedKittyMode", changed);
-        MoveKitty();
+    document.querySelectorAll('input[name="enhancedSelectKittyMode"]').forEach(function(element) {
+        element.addEventListener('change', function() {
+            let value = document.querySelector('input[name="enhancedSelectKittyMode"]:checked').value;
+            SetValue("enhancedKittyMode", value);
+            MoveKitty();
+        });
     });
 
-    $(document).on("change",'input[name="enhancedSelectPuppyMode"]',function(){
-        var changed = $('[name="enhancedSelectPuppyMode"]:checked').val();
-        SetValue("enhancedPuppyMode", changed);
-        MovePuppy();
+    document.querySelectorAll('input[name="enhancedSelectPuppyMode"]').forEach(function(element) {
+        element.addEventListener('change', function() {
+            let value = document.querySelector('input[name="enhancedSelectKittyMode"]:checked').value;
+            SetValue("enhancedPuppyMode", value);
+            MovePuppy();
+        });
     });
 
     $(document).on("change",'input[name="enhancedSelectBlockUser"]',function(){
@@ -1406,7 +1410,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on('keypress', '#enhancedTxtThemeSaturation', function(e) {
-        if (e.keyCode == 13) {
+        if (e.key === 'Enter') {
             var saturation = document.getElementById('enhancedTxtThemeSaturation').value;
             SetValue('enhancedThemeSaturation', saturation);
             document.documentElement.style.setProperty('--saturation-factor', saturation);
@@ -1502,7 +1506,7 @@ function LoadSettingsPageEvents()
 function LoadForDeleteFriends(blockedUserOnly) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             jsonMyFriends = JSON.parse(xmlHttp.responseText);
 
             var deleteCountLayer = document.createElement('div');
@@ -1615,7 +1619,7 @@ function DeleteFriends() {
 function _DeleteFriend(userid) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             //Deleted Message;
         }
     }
@@ -1654,7 +1658,7 @@ function _ChangePermission(articleID/*, perm, enableShare, commentWriteable, isM
 {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             //Changed
         }
     }
@@ -1671,7 +1675,7 @@ function _ChangePermission(articleID/*, perm, enableShare, commentWriteable, isM
 function LoadActivitiesForPermission(userID, lastArticleID) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var activities = JSON.parse(xmlHttp.responseText);
 
             if (activities.length == 0) {
@@ -1733,7 +1737,7 @@ function PrepareChangePermission() {
 
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var jsonProfile = JSON.parse(xmlHttp.responseText);
             changePermUserID = jsonProfile.id;
             changePermActivityCount = jsonProfile.activity_count;
@@ -1789,7 +1793,7 @@ function SetFont()
 function SetFontSize() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var lines = xmlHttp.responseText.split("\n");
             for (var i = 0; i < lines.length; i++) {
 
@@ -1815,7 +1819,7 @@ function GetOSTheme() {
 function SetDarkThemeStyle(styleName) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var lines = xmlHttp.responseText.split("\n");
             for (var i = 0; i < lines.length; i++) {
                 var variableName = lines[i].split(":")[0];
@@ -1841,7 +1845,7 @@ function SetDarkThemeStyle(styleName) {
 function LoadThemeList() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             jThemes = JSON.parse(xmlHttp.responseText);
             for (var i = 0; i < jThemes.themes.length; i++)
             {
@@ -1873,7 +1877,7 @@ function LoadThemeList() {
 function LoadDarkThemeCSS() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var darkcss = xmlHttp.responseText;
             SetCSS("enhancedDarkCSS", darkcss);
         }
@@ -1885,7 +1889,7 @@ function LoadDarkThemeCSS() {
 function LoadEnhancedCSS() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var darkcss = xmlHttp.responseText;
             SetCSS('enhancedCSS', darkcss);
         }
@@ -1897,7 +1901,7 @@ function LoadEnhancedCSS() {
 function LoadExtendFeedCSS() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var darkcss = xmlHttp.responseText;
             SetCSS('enhancedExtendFeedCSS', darkcss);
         }
@@ -1909,7 +1913,7 @@ function LoadExtendFeedCSS() {
 function LoadLeftSidebarCSS() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var leftSideCSS = xmlHttp.responseText;
             SetCSS('enhancedLeftSidebarCSS', leftSideCSS);
         }
@@ -1921,7 +1925,7 @@ function LoadLeftSidebarCSS() {
 function LoadDevCSS() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var darkcss = xmlHttp.responseText;
             SetCSS("enhancedDevCSS", darkcss);
         }
@@ -1969,7 +1973,7 @@ function ChangeTheme(styleName)
 function GetLatestNotify() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var jsonNoty = JSON.parse(xmlHttp.responseText);
             var notyID = jsonNoty[0]["id"];
             var notyMessage = jsonNoty[0]["message"];
@@ -2022,7 +2026,7 @@ function SaveText(text, name, type, btnID) {
 function BackupFriendsList() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var jsonFriends = JSON.parse(xmlHttp.responseText);
             var friendsText = '';
             for (var i = 0; i < jsonFriends.profiles.length; i ++) {
@@ -2043,7 +2047,7 @@ function BackupFriendsList() {
 function BackupBannedUserList() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var jsonBannedUsers = JSON.parse(xmlHttp.responseText);
             var bannedUsersText = '';
             for (var i = 0; i < jsonBannedUsers.length; i ++) {
@@ -2092,13 +2096,13 @@ function HideMemorize() {
 
 function SetEmoticonSize()
 {
-    var sSize = GetValue("enhancedEmoticonSize", 'small');
-    if (sSize == "small")
+    let emoticonSize = GetValue("enhancedEmoticonSize", 'small');
+    if (emoticonSize === "small")
     {
         SetCSS('enhancedCommentEmoticonSize', '.comment .comt_write .inp_write .inp_graphic .kakao_emoticon, .comment .list>li .txt .emoticon .kakao_emoticon { width: 64px !important; height: 64px !important; }');
         SetCSS('enhancedArticleEmoticonSize', '.fd_cont .txt_wrap .kakao_emoticon { width: 84px !important; height: 84px !important; }');
         SetCSS('enhancedWriteEmoticonSize', '.write .inp_contents .sticon { height: 84px !important; }')
-    } else if (sSize == "middle")
+    } else if (emoticonSize === "middle")
     {
         SetCSS('enhancedCommentEmoticonSize', '.comment .comt_write .inp_write .inp_graphic .kakao_emoticon, .comment .list>li .txt .emoticon .kakao_emoticon { width: 96px !important; height: 96px !important; }');
         SetCSS('enhancedArticleEmoticonSize', '.fd_cont .txt_wrap .kakao_emoticon { width: 96px !important; height: 96px !important; }');
@@ -2133,7 +2137,7 @@ function HideBlockedUserComment() {
     for (var i = 0; i < comments.length; i++) {
         var bannedID = comments[i].getElementsByClassName("txt")[0].getElementsByTagName("p")[0].getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
 
-        if (blockedList.has(bannedID) == true || feedBlockedList.has(bannedID) == true) {
+        if (blockedList.has(bannedID) === true || feedBlockedList.has(bannedID) === true) {
             comments[i].parentElement.style.display = 'none';
             /*
             comments[i].parentElement.remove();
@@ -2238,7 +2242,7 @@ function GetFeedBlockedUsers()
 {
     var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
                 feedBlockedList.clear();
                 var friends = JSON.parse(xmlHttp.responseText);
                 for (var i = 0; i < friends.profiles.length; i++)
@@ -2263,7 +2267,7 @@ function GetFeedBlockedUsers()
 function GetBlockedUsers() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var jsonBlocked = JSON.parse(xmlHttp.responseText);
             blockedList.clear();
             for (var i = 0; i < jsonBlocked.length; i ++) {
@@ -2291,7 +2295,7 @@ function ShowBlockStringPage() {
 function InitCustomThemePage() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var html = xmlHttp.responseText;
 
             var customThemeLayer = document.createElement('div');
@@ -2330,7 +2334,7 @@ function InitCustomThemeValues()
 function InitCustomThemePageEvents()
 {
     document.getElementById("enhancedCustomThemeColor1").addEventListener("input", function() {
-        var color = this.value;
+        let color = this.value;
         CustomThemeColorEventFunc(color, 1);
     });
     
@@ -2494,7 +2498,7 @@ function HideBlockStringArticle() {
 function MovePuppy()
 {
     var hasPuppy = document.getElementById("enhancedPuppyImage") != null;
-    if (GetValue('enhancedPuppyMode', 'none') == 'none')
+    if (GetValue('enhancedPuppyMode', 'none') === 'none')
         {
             if (hasKitty)
             {
@@ -2578,19 +2582,19 @@ function DownloadText(text, name, type) {
 function GetHideLogoIconTitle()
 {
     var val = GetValue('enhancedHideLogoIcon', 'naver');
-    if (val == 'naver')
+    if (val === 'naver')
     {
         return 'NAVER';
     }
-    else if (val == 'youtube')
+    else if (val === 'youtube')
     {
         return 'YouTube';
     }
-    else if (val == 'instagram')
+    else if (val === 'instagram')
     {
         return 'Instagram';
     }
-    else if (val == 'custom')
+    else if (val === 'custom')
     {
         return GetValue('enhancedFaviconTitle', 'NAVER');
     }
@@ -2832,7 +2836,7 @@ function ViewVisitorChart()
 
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var highlights = JSON.parse(xmlHttp.responseText);
             
             ParseVisitorCount(highlights.highlight);
@@ -2857,7 +2861,7 @@ function OpenFastDeleteFriend()
 
     var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
                 var friends = JSON.parse(xmlHttp.responseText);
                 for (var i = 0; i < friends.profiles.length; i++)
                 {
