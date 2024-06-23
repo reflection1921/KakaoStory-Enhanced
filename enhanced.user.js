@@ -12,57 +12,6 @@
 // @require      https://cdn.jsdelivr.net/npm/chart.js
 // ==/UserScript==
 
-/*
- * Settings Parameters
- * enhancedSystemTheme : OS에 적용된 시스템 테마 사용 여부
- * enhancedSelectTheme : 선택한 테마(Light, Dark)
- * enhancedDarkThemeStyle : 다크 테마의 스타일(Discord, Dark Blue, Dark Red, ...)
- * enhancedDiscordMention : 디스코드 멘션 스타일의 언급 UI 사용 여부
- * enhancedFontName : 설정된 폰트명
- * enhancedFontCSS : 설정된 폰트 CSS URL
- * enhancedFontSize : 설정된 폰트 크기
- * enhancedNotify : 알림 사용 여부
- * enhancedNotifySound : 알림 사운드 켜기 / 끄기
- * enhancedNotifyTime : 알림 시간
- * enhancedDownloadVideo : 동영상 다운로드 여부
- * enhancedHideChannelButton : 텔러/채널 버튼 숨기기
- * enhancedHideMemorize : 흑역사 숨기기
- * enhancedEmoticonSize : 이모티콘 크기
- * enhancedBlockUser : 강화된 차단 사용
- * enhancedVersion : 버전 정보
- * enhancedBlockStringList : 차단 문자열 리스트
- * enhancedKittyMode : Kitty Mode(verycute: sound + kitty, cute: kitty, none: 적용안함)
- * enhancedPuppyMode : Puppy Mode(verycute: sound + puppy, cute: puppy, none: 적용안함)
- * enhancedLatestNotyID : 알림 마지막 ID(여러 개 창에서 중복 알림 발생 방지)
- * enhancedHideRecommendFriend : 추천친구 숨기기
- * enhancedHideLogo : 일반인 모드
- * enhancedHideLogoNoti : 일반인 모드 앞에 (N) 표시
- * enhancedHideLogoIcon : 일반인 모드 아이콘 선택(네이버, 유튜브, 인스타그램, 커스텀)
- * enhancedFaviconTitle : 일반인 모드 커스텀 타이틀
- * enhancedFaviconURL : 일반인 모드 커스텀 Favicon URL
- * enhancedEarthquake : EARTHQUAKE!!!
- * enhancedBlink : BLINK!!!
- * enhancedKeyboard : 키보드 단축키 사용 여부
- * enhancedBlockArticleAll : 강화된 차단의 공유글 전체 보이기 / 숨기기(현재 지원안함. 추후 지원 예정.)
- * enhancedFaviconClassic : 옛날 파비콘으로 되돌리기
- * enhancedFaviconTitle : 카카오스토리 탭 타이틀
- * enhancedFaviconURL : 파비콘 URL
- * enhancedWideMode : Wide 모드 사용 여부
- * enhancedSidebarLocation : 사이드바 위치(left, right)
- * enhancedSidebarShow : 사이드바 보이기 여부
- * enhancedThemeSaturation : 테마 채도(Gradient 테마 한정)
- * enhancedExtendFeedBlock : 강화된 글 안받기 사용자 차단
- * enhancedCustomThemeColor1~3 : 커스텀 테마 그라데이션 색상
- * enhancedCustomThemeDegree : 커스텀 테마 그라데이션 각도
- * enhancedCustomThemePercent1~3 : 커스텀 테마 그라데이션 비율
- */
-
-/*
- * Settings Parameters for Login Page
- * enhancedSelectThemeLogin : 선택한 테마(Light, Dark)
- * 
- */
-
 
 let scriptVersion = "1.29";
 
