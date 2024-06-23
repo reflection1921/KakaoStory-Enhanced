@@ -413,13 +413,13 @@ function ViewUpdatePage() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var updatehtml = xmlHttp.responseText;
-            var updateNotice = document.createElement('div');
+            let updateHtml = xmlHttp.responseText;
+            let updateNotice = document.createElement('div');
             updateNotice.id = 'updateNoticeLayer';
             updateNotice.className = 'cover _cover';
             updateNotice.style.cssText = 'overflow-y: scroll;';
             document.body.appendChild(updateNotice);
-            document.getElementById('updateNoticeLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="write cover_content cover_center" data-kant-group="wrt" data-part-name="view"><div class="_layerWrapper enhanced_layer_settings"><div class="section _dropZone account_modify"><div class="writing"><div class="inp_contents" data-part-name="editor"><strong class="subtit_modify subtit_enhanced">\' Enhanced 업데이트 내역</strong><div style="word-break: break-all">' + updatehtml + '</div></div></div><div></div><div class="inp_footer"><div class="bn_group"> <a href="https://github.com/reflection1921/KakaoStory-Enhanced/raw/main/enhanced.user.js" class="_postBtn btn_com btn_or" id="enhancedUpdateNoticeOK"><em>업데이트</em></a></div></div></div></div><div></div></div></div>';
+            document.getElementById('updateNoticeLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="write cover_content cover_center" data-kant-group="wrt" data-part-name="view"><div class="_layerWrapper enhanced_layer_settings"><div class="section _dropZone account_modify"><div class="writing"><div class="inp_contents" data-part-name="editor"><strong class="subtit_modify subtit_enhanced">\' Enhanced 업데이트 내역</strong><div style="word-break: break-all">' + updateHtml + '</div></div></div><div></div><div class="inp_footer"><div class="bn_group"> <a href="https://github.com/reflection1921/KakaoStory-Enhanced/raw/main/enhanced.user.js" class="_postBtn btn_com btn_or" id="enhancedUpdateNoticeOK"><em>업데이트</em></a></div></div></div></div><div></div></div></div>';
             DisableScroll();
         }
     }
@@ -431,13 +431,13 @@ function ViewUpdateAllPage() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var updatehtml = xmlHttp.responseText;
-            var updateNotice = document.createElement('div');
+            let updateHtml = xmlHttp.responseText;
+            let updateNotice = document.createElement('div');
             updateNotice.id = 'updateNoticeLayer';
             updateNotice.className = 'cover _cover';
             updateNotice.style.cssText = 'overflow-y: scroll;';
             document.body.appendChild(updateNotice);
-            document.getElementById('updateNoticeLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="write cover_content cover_center" data-kant-group="wrt" data-part-name="view"><div class="_layerWrapper enhanced_layer_settings"><div class="section _dropZone account_modify"><div class="writing"><div class="inp_contents" data-part-name="editor"><strong class="subtit_modify subtit_enhanced">\' Enhanced 업데이트 내역</strong><div style="word-break: break-all">' + updatehtml + '</div></div></div><div></div><div class="inp_footer"><div class="bn_group"> <a href="#" class="_postBtn btn_com btn_or" id="enhancedAllUpdateNoticeOK"><em>알겠어용</em></a></div></div></div></div><div></div></div></div>';
+            document.getElementById('updateNoticeLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="write cover_content cover_center" data-kant-group="wrt" data-part-name="view"><div class="_layerWrapper enhanced_layer_settings"><div class="section _dropZone account_modify"><div class="writing"><div class="inp_contents" data-part-name="editor"><strong class="subtit_modify subtit_enhanced">\' Enhanced 업데이트 내역</strong><div style="word-break: break-all">' + updateHtml + '</div></div></div><div></div><div class="inp_footer"><div class="bn_group"> <a href="#" class="_postBtn btn_com btn_or" id="enhancedAllUpdateNoticeOK"><em>알겠어용</em></a></div></div></div></div><div></div></div></div>';
         }
     }
     xmlHttp.open("GET", resourceURL + "update_notice/update_notice_all.html");
@@ -447,9 +447,9 @@ function ViewUpdateAllPage() {
 function ViewDetailNotFriendArticle()
 {
     var detail = document.getElementsByClassName("_btnViewDetailInShare");
-    for (var i = 0; i < detail.length; i++)
+    for (let i = 0; i < detail.length; i++)
     {
-        if (detail[i].innerText == "...더보기")
+        if (detail[i].innerText === "...더보기")
         {
             detail[i].href = "javascript:void(0);";
             detail[i].className = "_btnViewDetailNotFriend";
@@ -972,7 +972,7 @@ function GetSelectedActivity()
         }
     }
 
-    if (selectedIdx == -1)
+    if (selectedIdx === -1)
         return null;
 
     return visibleArticles[selectedIdx];
@@ -2368,18 +2368,17 @@ function InitCustomThemePageEvents()
         SetCustomTheme();
     });
 
-    document.getElementById("enhacnedBtnRandomCustomColor").addEventListener("click", function() {
+    document.getElementById("enhancedBtnRandomCustomColor").addEventListener("click", function() {
         for (var i = 1; i <= 3; i++)
         {
-            var randHex = GetRandomHexColor();
-            document.getElementById("enhancedCustomThemeColor" + i).value = randHex;
-            var percent = Math.floor(Math.random() * 33) + ((i - 1) * 33) + 1;
+            document.getElementById("enhancedCustomThemeColor" + i).value = GetRandomHexColor();
+            let percent = Math.floor(Math.random() * 33) + ((i - 1) * 33) + 1;
             document.getElementById("enhancedCustomThemePercent" + i).value = percent;
             SetValue('enhancedCustomThemePercent' + i, percent);
             CustomThemeColorEventFunc(document.getElementById("enhancedCustomThemeColor" + i).value, i);
         }
 
-        var degree = Math.floor(Math.random() * 360);
+        let degree = Math.floor(Math.random() * 360);
         document.getElementById("enhancedCustomThemeDegree").value = degree;
         SetValue('enhancedCustomThemeDegree', degree);
         SetCustomTheme();
