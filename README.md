@@ -8,7 +8,7 @@
 *** Thanks again! Now go create something AMAZING! :D
 -->
 
-<p align="right">English | <a href="https://github.com/reflection1921/test-readme-repo/blob/main/README-KO.md">한국어</a></p>
+<p align="right">English | <a href="https://github.com/reflection1921/KakaoStory-Enhanced/blob/main/README-KO.md">한국어</a></p>
 
 <!-- PROJECT SHIELDS -->
 <!--
