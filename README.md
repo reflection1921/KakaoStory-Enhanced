@@ -109,7 +109,7 @@ This part explains how to install KakaoStory Enhanced in your web browser.
 
 Using KakaoStory Enhanced requires the following items:
 * HTML5 supported browsers
-  * Chrome
+  * Chrome(or chromium-based browsers)
   * Firefox
   * Safari(Some features not supported)
  
@@ -117,7 +117,17 @@ Using KakaoStory Enhanced requires the following items:
   * Tampermonkey: [Chrome](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) / [Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/) / [Safari](https://apps.apple.com/kr/app/tampermonkey/id1482490089?mt=12)
   * Greasemonkey: [Firefox](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
   * Userscripts Safari: [Safari](https://github.com/quoid/userscripts)
-  * Other userscript supported extensions
+  * Other userscript supported extensions  
+  
+⚠️ Userscript extensions using ManifestV3(Tampermonkey, etc.) require developer mode to be enabled. Currently, this setup is needed for chrome or chromium-based browsers only. However, in the future Firefox and Safari may be needed to set-up. Follow the steps below to learn how to enable developer mode.
+
+* Google Chrome
+  1. Open Google Chrome and navigate to `chrome://extensions`(Extensions page).
+  2. Click `Developer mode`(switch button) to enable developer mode.
+
+* Microsoft Edge
+  1. Open Microsoft Edge and navigate to `edge://extensions`(Extensions page).
+  2. Click `Developer mode`(switch button) to enable developer mode.
 
 ### Installation
 
