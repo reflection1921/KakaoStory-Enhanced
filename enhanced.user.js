@@ -2448,7 +2448,7 @@ function MovePuppy()
     var hasPuppy = document.getElementById("enhancedPuppyImage") != null;
     if (GetValue('enhancedPuppyMode', 'none') === 'none')
         {
-            if (hasKitty)
+            if (hasPuppy)
             {
                 document.getElementById("enhancedPuppyImage").remove();
             }
