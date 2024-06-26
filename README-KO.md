@@ -119,6 +119,16 @@ KakaoStory Enhanced를 설치하는 방법에 대해 설명합니다.
   * Userscripts Safari: [Safari](https://github.com/quoid/userscripts)
   * 그 외 유저 스크립트를 지원하는 확장 프로그램
 
+⚠️ ManifestV3를 사용하는 유저스크립트 확장 프로그램(Tampermonkey 등)은 개발자 모드 활성화가 필요합니다. 현재는 이 설정은 크롬 및 크롬 기반의 브라우저만 필요합니다. 하지만 나중에는 Firefox 및 Safari도 해당 설정이 필요할 수 있습니다. 아래 내용을 참고하여 개발자 모드를 활성화하는 방법을 알아보세요.
+
+* Google Chrome
+  1. Google Chrome을 열고 `chrome://extensions`(확장프로그램 페이지)로 이동하세요.
+  2. `개발자 모드`(스위치 버튼)를 클릭하여 개발자 모드를 활성화 하세요.
+
+* Microsoft Edge
+  1. Microsoft Edge를 열고 `edge://extensions`(확장프로그램 페이지)로 이동하세요.
+  2. `개발자 모드`(스위치 버튼)를 클릭하여 개발자 모드를 활성화 하세요.
+
 ### Installation
 
 1. [여기](https://github.com/reflection1921/KakaoStory-Enhanced/raw/main/enhanced.user.js)를 클릭해 스크립트를 설치하세요.
