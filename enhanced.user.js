@@ -15,9 +15,9 @@
 
 let scriptVersion = "1.30";
 
-//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
@@ -2929,6 +2929,55 @@ function SetExtendCommentUI()
     }
 }
 
+let birthdayTopRetryCount = 0;
+function MoveBirthdayFriendsToTop()
+{
+    let els = document.getElementsByClassName("list_cate list_myfriend");
+    if (els.length <= 0)
+    {
+        setTimeout(() => MoveBirthdayFriendsToTop(), 300);
+        return;
+    }
+
+    let friendsEl = null;
+    for (var i = 0; i < els.length; i++)
+    {
+        if (els[i].getAttribute("data-part-name") == "peopleList")
+        {
+            friendsEl = els[i];
+            break;
+        }
+    }
+
+    if (friendsEl == null)
+    {
+        setTimeout(() => MoveBirthdayFriendsToTop(), 300);
+        return;
+    }
+
+    let friends = friendsEl.getElementsByTagName("li");
+
+    if (friends.length <= 0)
+    {
+        birthdayTopRetryCount++;
+        if (birthdayTopRetryCount < 10)
+        {
+            setTimeout(() => MoveBirthdayFriendsToTop(), 300);
+        }
+        return;
+    }
+
+    let lastIndex = -1;
+    for (let i = 0; i < friends.length; i++)
+    {
+        if (friends[i].className.includes("user_birth"))
+        {
+            lastIndex = i;
+            friendsEl.insertBefore(friends[i], friendsEl.firstChild);
+        }
+    }
+}
+
 (function() {
     if (window.location.href.includes("accounts.kakao.com/login"))
     {
@@ -2961,6 +3010,7 @@ function SetExtendCommentUI()
     setTimeout(() => GetMyID(), 3000); //for discord style mention feature
     setTimeout(() => HideChannelButton(), 500); //hide channel and teller buttons
     setTimeout(() => AddPowerModeScoreElements(), 1000); //power mode
+    setTimeout(() => MoveBirthdayFriendsToTop(), 100); //move birthday friends to top
 
     setInterval(function() {
         if (GetValue('enhancedNotify', 'false') == 'true')
