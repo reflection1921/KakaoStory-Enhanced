@@ -113,11 +113,11 @@ div[data-module="myStoryMainProfile"]
 }
 */
 
-/* .scoll .cover_cont .menu_story
+ .scoll .cover_cont .menu_story
 {
-    width: 1240px !important;
-    margin-left: -730px !important;
-} */
+    width: 984px !important;
+    margin-left: -602px !important;
+}
 
 .write.cover_content.cover_center > .layer_write {
     width: 1024px !important;
@@ -148,6 +148,9 @@ div[data-module="myStoryMainProfile"]
 
 
 .feed.detail_desc._feedContainer > .section._activity > ._activityBody > .cont_inflow > .comment .comt_write .inp_write.bn_right {
-    width: 478px !important;
+    width: 820px !important;
 }
 
+.story_inflow .feed {
+    width: 1024px !important;
+}
