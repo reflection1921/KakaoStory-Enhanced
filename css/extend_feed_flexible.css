@@ -1,13 +1,27 @@
+:root {
+    --extended-feed-width: calc(100vw - 258px - 80px); /* 100vw - sidebar_width - items padding */
+    --left-test-margin: calc((-100vw + var(--extended-feed-width)) / 2);
+}
+
+/* Feed Width */
 .story_desc .feed,
-div.feed[data-part-name="feed"],
+div.feed[data-part-name="feed"]
+{
+    width: var(--extended-feed-width) !important;
+    margin: 0 auto;
+}
+
 .wrap_map.wrap_desc.detail_desc.cover_content.cover_center > .feed
 {
-    width: 1280px !important;
+    width: var(--extended-feed-width) !important;
+    margin: 0;
+    margin-left: calc(0% - (var(--extended-feed-width) / 2)) !important;
+
 }
 
 .story_desc .feed
 {
-    margin-left: -200px;
+    /*margin-left: var(--left-test-margin);*/
 }
 
 .wrap_map.wrap_desc.detail_desc.cover_content.cover_center > .feed > .section,
@@ -33,31 +47,37 @@ div[data-part-name="feedList"] > .section
 }
 
 .wrap_desc .feed {
-    margin-left: -578px !important;
+    margin-left: 0 !important;
 }
 
 .writingContainer {
-    width: 1280px;
+    width: var(--extended-feed-width);
 }
 
 .write {
-    width: 1280px !important;
+    width: var(--extended-feed-width) !important;
 }
 
 .write .preview .list_preview {
-    width: 1280px !important;
+    width: var(--extended-feed-width) !important;
 }
 
+/* Write Feed Buttons(Music, Link) */
 .write .type li {
-    width: 398px !important;
+    width: 33% !important;
 }
 
+/* Write Feed Button(Media) */
 .write .type li:first-child {
-    width: 400px !important;
+    width: 34% !important;
+}
+
+.story_cont {
+    width: var(--extended-feed-width) !important
 }
 
 .story_cover {
-    width: 1280px !important;
+    width: var(--extended-feed-width) !important;
     margin: 0 auto;
 }
 
@@ -101,7 +121,7 @@ div[data-part-name="feedList"] > .section
 
 div[data-module="myStoryMainProfile"]
 {
-    margin-left: 80px;
+    /*margin-left: calc((5vw - 298px) / 2);*/
 }
 
 /*
@@ -120,13 +140,8 @@ div[data-module="myStoryMainProfile"]
 }
 
 .write.cover_content.cover_center > .layer_write {
-    width: 1280px !important;
+    width: var(--extended-feed-width) !important;
     margin-left: -50% !important;
-}
-
-.layer_write._enhanced_settings
-{
-    margin-left: -289px !important;
 }
 
 .share_scrap._mediaContainer {
