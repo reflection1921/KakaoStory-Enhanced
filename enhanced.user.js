@@ -22,7 +22,7 @@ let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
 let blockedList = new Set(); //block users
-let blockedStringList = new Array(); //block strings
+let blockedStringList = []; //block strings
 let feedBlockedList = new Set(); //blocked feed users
 let catEffect = new Audio(resourceURL + 'sounds/cat-meow.mp3');
 let catEffect2 = new Audio(resourceURL + 'sounds/cat-meow-2.mp3');
@@ -2693,7 +2693,7 @@ function LoadLoginDarkThemeCSS()
     document.documentElement.style.setProperty('--discord-blue', '#7289da');
     document.documentElement.style.setProperty('--dark-background-color', '#202225');
 
-    var elem = document.createElement('style');
+    let elem = document.createElement('style');
     elem.id = 'enhancedLoginDarkThemeCSS';
     document.head.appendChild(elem);
     document.getElementById('enhancedLoginDarkThemeCSS').innerHTML =
@@ -2913,26 +2913,6 @@ function AddLoginThemeSelectButtonUI()
     body.appendChild(btnElem);
 }
 
-function SetExtendStoryWidgetsUI()
-{
-    var myInfo = document.querySelector('div[data-module="myStoryWidget"]');
-    if (myInfo)
-    {
-        var myInfoParent = myInfo.parentElement;
-        if (!myInfoParent.className.includes('story_cont'))
-        {
-            return;
-        }
-        myInfoParent.removeChild(myInfo);
-
-        var storyCover = document.getElementsByClassName("story_cover");
-        if (storyCover.length > 0)
-        {
-            storyCover[0].parentElement.parentElement.appendChild(myInfo);
-        }
-    }
-}
-
 function SetExtendCommentUI()
 {
     var detailClass = document.getElementsByClassName("feed detail_desc _feedContainer");
@@ -2977,9 +2957,9 @@ function MoveBirthdayFriendsToTop()
     }
 
     let friendsEl = null;
-    for (var i = 0; i < els.length; i++)
+    for (let i = 0; i < els.length; i++)
     {
-        if (els[i].getAttribute("data-part-name") == "peopleList")
+        if (els[i].getAttribute("data-part-name") === "peopleList")
         {
             friendsEl = els[i];
             break;
@@ -3016,6 +2996,7 @@ function MoveBirthdayFriendsToTop()
 }
 
 (function() {
+    /* Kakao Login Page */
     if (window.location.href.includes("accounts.kakao.com/login"))
     {
         AddLoginThemeSelectButtonUI();
@@ -3026,6 +3007,7 @@ function MoveBirthdayFriendsToTop()
         
         return;
     }
+    /* KakaoStory */
     InitEnhancedSettingsPage();
     InitCustomThemePage();
     LoadCommonEvents();
@@ -3104,7 +3086,6 @@ function MoveBirthdayFriendsToTop()
         if (GetValue('enhancedWideMode', 'false') != 'false')
         {
             setTimeout(() => SetExtendCommentUI(), 750);
-            setTimeout(() => SetExtendStoryWidgetsUI(), 750);
         }
 
         setTimeout(() => ViewVisitorChart(), 1000);
