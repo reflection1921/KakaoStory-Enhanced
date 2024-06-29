@@ -3085,7 +3085,7 @@ function MoveBirthdayFriendsToTop()
             setTimeout(() => SetClassicFavicon(), 750);
         }
 
-        if (GetValue('enhancedWideMode', 'false') == 'true' || GetValue('enhancedWideMode', 'false') == 'fixed')
+        if (GetValue('enhancedWideMode', 'false') != 'false')
         {
             setTimeout(() => SetExtendCommentUI(), 750);
             setTimeout(() => SetExtendStoryWidgetsUI(), 750);
