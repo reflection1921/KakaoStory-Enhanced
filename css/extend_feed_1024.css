@@ -138,6 +138,16 @@ div[data-module="myStoryMainProfile"]
     width: 366px !important;
 }
 
+.feed.detail_desc._feedContainer > .section._activity > ._activityBody > .cont_inflow > .comment {
+    width: unset !important;
+}
+
 .comment .comt_write .inp_write.bn_right {
     width: unset !important;
 }
+
+
+.feed.detail_desc._feedContainer > .section._activity > ._activityBody > .cont_inflow > .comment .comt_write .inp_write.bn_right {
+    width: 478px !important;
+}
+
