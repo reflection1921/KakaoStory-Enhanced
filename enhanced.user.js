@@ -15,9 +15,9 @@
 
 let scriptVersion = "1.30";
 
-let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
@@ -2944,9 +2944,9 @@ function SetExtendCommentUI()
     var commentClasses = document.getElementsByClassName("comment");
     for (var i = 0; i < commentClasses.length; i++)
     {
-        var commentClass = commentClasses[i];
-        var commentParent = commentClass.parentElement;
-        var nextSibling = commentParent.nextElementSibling;
+        let commentClass = commentClasses[i];
+        let commentParent = commentClass.parentElement;
+        let nextSibling = commentParent.nextElementSibling;
 
         if (!commentParent.className.includes('_activityBody'))
         {

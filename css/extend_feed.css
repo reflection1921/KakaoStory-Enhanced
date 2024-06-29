@@ -134,10 +134,10 @@ div[data-module="myStoryMainProfile"]
     margin: 0 auto !important;
 }
 
-/* .feed.detail_desc._feedContainer > .section._activity > ._activityBody > .cont_inflow > .comment .comt_write .inp_write.bn_right {
+.feed.detail_desc._feedContainer > .section._activity > ._activityBody > .cont_inflow > .comment .comt_write .inp_write.bn_right {
     width: 1076px !important;
 }
 
 .story_inflow .feed {
     width: 1280px !important;
-} */
+}
