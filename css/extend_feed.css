@@ -113,11 +113,11 @@ div[data-module="myStoryMainProfile"]
 }
 */
 
-.scoll .cover_cont .menu_story
+/* .scoll .cover_cont .menu_story
 {
     width: 1240px !important;
     margin-left: -730px !important;
-}
+} */
 
 .write.cover_content.cover_center > .layer_write {
     width: 1280px !important;

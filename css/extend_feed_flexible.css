@@ -1,6 +1,5 @@
 :root {
     --extended-feed-width: calc(100vw - 258px - 80px); /* 100vw - sidebar_width - items padding */
-    --left-test-margin: calc((-100vw + var(--extended-feed-width)) / 2);
 }
 
 /* Feed Width */
@@ -17,11 +16,6 @@ div.feed[data-part-name="feed"]
     margin: 0;
     margin-left: calc(0% - (var(--extended-feed-width) / 2)) !important;
 
-}
-
-.story_desc .feed
-{
-    /*margin-left: var(--left-test-margin);*/
 }
 
 .wrap_map.wrap_desc.detail_desc.cover_content.cover_center > .feed > .section,
@@ -43,7 +37,22 @@ div[data-part-name="feedList"] > .section
 }
 
 ._wrapper > div[data-part-name="feedList"] > .section._activity > ._activityBody {
-    width: 498px;
+    width: calc(var(--extended-feed-width) / 2) !important;
+}
+
+/* 피드 내 공유글 내 여러개의 미디어 */
+.fd_cont .share_wrap .wrap_swipe
+{
+    left: 25% !important;
+    width: 496px !important;
+    margin: 17px 0px 10px !important;
+}
+
+/* 피드 내 여러개의 미디어 */
+._contentWrapper .wrap_swipe
+{
+    left: 249px !important;
+    width: 498px !important;
 }
 
 .wrap_desc .feed {
@@ -133,11 +142,11 @@ div[data-module="myStoryMainProfile"]
 }
 */
 
-.scoll .cover_cont .menu_story
+/* .scoll .cover_cont .menu_story
 {
     width: 1240px !important;
     margin-left: -730px !important;
-}
+} */
 
 .write.cover_content.cover_center > .layer_write {
     width: var(--extended-feed-width) !important;
@@ -145,6 +154,10 @@ div[data-module="myStoryMainProfile"]
 }
 
 .share_scrap._mediaContainer {
-    width: 498px;
+    width: calc(var(--extended-feed-width) / 2) !important;
     margin: 0 auto !important;
+}
+
+.fd_cont .img_wrap {
+    left: 25% !important;
 }
