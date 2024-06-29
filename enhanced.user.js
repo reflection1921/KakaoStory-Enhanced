@@ -288,6 +288,11 @@ function InitEnhancedValues()
     $('input:radio[name="enhancedSelectBlockArticleAll"]:input[value=' + isBlockAllArticle + ']').attr("checked", true);
 
     var useWideMode = GetValue('enhancedWideMode', 'false');
+    if (useWideMode == 'true')
+    {
+        SetValue('enhancedWideMode', 'fixed');
+        useWideMode = 'fixed';
+    }
     $('input:radio[name="enhancedSelectWideMode"]:input[value=' + useWideMode + ']').attr("checked", true);
 
     var sidebarLocation = GetValue('enhancedSidebarLocation', 'right');
@@ -1859,6 +1864,18 @@ function LoadExtendFeedCSS() {
     xmlHttp.send();
 }
 
+function LoadExtendFeedFlexibleCSS() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+            var darkcss = xmlHttp.responseText;
+            SetCSS('enhancedExtendFeedCSS', darkcss);
+        }
+    }
+    xmlHttp.open("GET", resourceURL + "css/extend_feed_flexible.css");
+    xmlHttp.send();
+}
+
 function LoadLeftSidebarCSS() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
@@ -1908,9 +1925,13 @@ function ChangeTheme(styleName)
     SetCSS('enhancedHideLogoCSS', hideOriginLogo);
     LoadEnhancedCSS();
     //LoadDevCSS();
-    if (GetValue('enhancedWideMode', 'false') == 'true')
+    if (GetValue('enhancedWideMode', 'false') == 'true' || GetValue('enhancedWideMode', 'false') == 'fixed')
     {
         LoadExtendFeedCSS();
+    }
+    else if (GetValue('enhancedWideMode', 'false') == 'flexible')
+    {
+        LoadExtendFeedFlexibleCSS();
     }
 
     if (GetValue('enhancedSidebarLocation', 'right') == 'left')
@@ -3064,7 +3085,7 @@ function MoveBirthdayFriendsToTop()
             setTimeout(() => SetClassicFavicon(), 750);
         }
 
-        if (GetValue('enhancedWideMode', 'false') == 'true')
+        if (GetValue('enhancedWideMode', 'false') == 'true' || GetValue('enhancedWideMode', 'false') == 'fixed')
         {
             setTimeout(() => SetExtendCommentUI(), 750);
             setTimeout(() => SetExtendStoryWidgetsUI(), 750);
