@@ -1,0 +1,143 @@
+.story_desc .feed,
+div.feed[data-part-name="feed"],
+.wrap_map.wrap_desc.detail_desc.cover_content.cover_center > .feed
+{
+    width: 1024px !important;
+}
+
+.story_desc .feed
+{
+    margin-left: -72px;
+}
+
+.wrap_map.wrap_desc.detail_desc.cover_content.cover_center > .feed > .section,
+div[data-part-name="feedList"] > .section
+{
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.write .section
+{
+    display: block !important;
+}
+
+.comment
+{
+    margin: 0 0 0 0 !important;
+    border-top: 0 !important;
+}
+
+._wrapper > div[data-part-name="feedList"] > .section._activity > ._activityBody {
+    width: 498px;
+}
+
+.wrap_desc .feed {
+    margin-left: -578px !important;
+}
+
+.writingContainer {
+    width: 1024px;
+}
+
+.write {
+    width: 1024px !important;
+}
+
+.write .preview .list_preview {
+    width: 1024px !important;
+}
+
+.write .type li {
+    width: 315px !important;
+}
+
+.write .type li:first-child {
+    width: 314px !important;
+}
+
+.story_cover {
+    width: 1024px !important;
+    margin: 0 auto;
+}
+
+.story_widgets
+{
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr);
+    height: 342px;
+}
+
+.section_widgets.widgets_info
+{
+    height: 342px;
+}
+
+.section_widgets
+{
+    height: 342px !important;
+}
+
+.story_widgets
+{
+    top: auto !important;
+}
+
+.story_widgets
+{
+    display: none !important;
+}
+/* Wide 모드에서는 스토리 채널 내 발견 강제 비활성화 */
+.story_widgets > div[data-part-name="discovery"]
+{
+    display: none;
+}
+
+/* Wide 모드에서는 추천친구 강제 비활성화 */
+.story_widgets > div[data-part-name="recommends"]
+{
+    display: none;
+}
+
+div[data-module="myStoryMainProfile"]
+{
+    margin-left: 80px;
+}
+
+/*
+div[data-module="myStoryMainProfile"]
+{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 0 auto;
+}
+*/
+
+/* .scoll .cover_cont .menu_story
+{
+    width: 1240px !important;
+    margin-left: -730px !important;
+} */
+
+.write.cover_content.cover_center > .layer_write {
+    width: 1024px !important;
+    margin-left: -50% !important;
+}
+
+.layer_write._enhanced_settings
+{
+    margin-left: -289px !important;
+}
+
+.share_scrap._mediaContainer {
+    width: 498px;
+    margin: 0 auto !important;
+}
+
+.comment {
+    width: 366px !important;
+}
+
+.comment .comt_write .inp_write.bn_right {
+    width: unset !important;
+}

@@ -1864,6 +1864,18 @@ function LoadExtendFeedCSS() {
     xmlHttp.send();
 }
 
+function LoadExtendFeed1024CSS() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+            var darkcss = xmlHttp.responseText;
+            SetCSS('enhancedExtendFeedCSS', darkcss);
+        }
+    }
+    xmlHttp.open("GET", resourceURL + "css/extend_feed_1024.css");
+    xmlHttp.send();
+}
+
 function LoadExtendFeedFlexibleCSS() {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
@@ -1928,6 +1940,10 @@ function ChangeTheme(styleName)
     if (GetValue('enhancedWideMode', 'false') == 'true' || GetValue('enhancedWideMode', 'false') == 'fixed')
     {
         LoadExtendFeedCSS();
+    }
+    else if (GetValue('enhancedWideMode', 'false') == 'fixed_1024')
+    {
+        LoadExtendFeed1024CSS();
     }
     else if (GetValue('enhancedWideMode', 'false') == 'flexible')
     {
