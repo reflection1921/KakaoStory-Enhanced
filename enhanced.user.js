@@ -257,6 +257,7 @@ function InitEnhancedValues()
 
     var isHiddenRecommendFriend = GetValue('enhancedHideRecommendFriend', 'false');
     $('input:radio[name="enhancedSelectRecommendFriend"]:input[value=' + isHiddenRecommendFriend + ']').attr("checked", true);
+    HideRecommendFriend();
 
     var size = GetValue('enhancedEmoticonSize', 'small');
     $('input:radio[name="enhancedSelectEmoticonSize"]:input[value=' + size + ']').attr("checked", true);
@@ -1222,6 +1223,7 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedSelectRecommendFriend"]',function(){
         var changed = $('[name="enhancedSelectRecommendFriend"]:checked').val();
         SetValue("enhancedHideRecommendFriend", changed);
+        HideRecommendFriend();
     });
 
     $(document).on("change",'input[name="enhancedSelectEmoticonSize"]',function(){
@@ -1714,14 +1716,10 @@ function PrepareChangePermission() {
 
 function HideRecommendFriend()
 {
-    var el = document.getElementsByClassName("tit_widgets");
-    for (var i = 0; i < el.length; i++)
-    {
-        if (el[i].innerText == '추천친구')
-        {
-            el[i].parentElement.style.display = "none";
-        }
-    }
+    if (GetValue("enhancedHideRecommendFriend", "true") == "true")
+        SetCSS("enhancedHideRecommendFriend", '.story_widgets > div[data-part-name="recommends"] { display: none !important; }');
+    else
+        RemoveCSSCollection("enhancedHideRecommendFriend");
 }
 
 function CreateBlockStringList() {
@@ -2673,16 +2671,6 @@ function AddPowerModeScoreElements()
     header.appendChild(scoreElement);
 }
 
-//enhancedDark2TestCSS
-function SetCSS2(elID, cssText)
-{
-    //GM_addStyle(cssText);
-    var elem = document.createElement('style');
-    elem.id = elID;
-    document.head.appendChild(elem);
-    document.getElementById(elID).innerHTML = cssText;
-}
-
 /* For Login */
 function LoadLoginDarkThemeCSS()
 {
@@ -3058,11 +3046,6 @@ function MoveBirthdayFriendsToTop()
         {
             HideBlockedUserComment();
             HideBlockedUserArticle();
-        }
-
-        if (GetValue('enhancedHideRecommendFriend', 'false') == 'true')
-        {
-            HideRecommendFriend();
         }
 
         HideBlockStringArticle();
