@@ -218,3 +218,8 @@
     padding: 0 20px;
     line-height: 32px;
 }
+
+/* Recommend Feed Block */
+.section.recommend {
+    display: none;
+}

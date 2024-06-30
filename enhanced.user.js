@@ -15,9 +15,9 @@
 
 let scriptVersion = "1.31";
 
-//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 //let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
@@ -308,13 +308,6 @@ function InitEnhancedValues()
     GetLatestVersion();
 
     CreateBlockStringList(); 
-}
-
-function RemoveRecommendFeed() {
-    var recommendFeed = document.getElementsByClassName("section recommend");
-    for (var i = 0; i < recommendFeed.length; i++) {
-        recommendFeed[i].remove();
-    }
 }
 
 function CloseSettingsPage()
@@ -3051,8 +3044,6 @@ function MoveBirthdayFriendsToTop()
         HideBlockStringArticle();
 
         ViewDetailNotFriendArticle();
-
-        RemoveRecommendFeed();
 
         var hideLogoEnabled = (GetValue('enhancedHideLogo', 'false') == 'true');
 
