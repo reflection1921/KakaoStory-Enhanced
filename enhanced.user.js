@@ -45,6 +45,12 @@ let currentTitle = "NAVER";
 //let selCurPerm = 'Z'; //A = 전체공개, F = 친구공개, M = 나만보기, Z = 기본설정(모든 게시글)
 //let selNewPerm = 'F'; //A = 전체공개, F = 친구공개, M = 나만보기
 
+let notyOption = {
+    body: '',
+    icon: 'https://i.imgur.com/FSvg18g.png',
+    silent: false
+}
+
 //konami command to restore kakaostory favicon classic
 let konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
 let konamiCount = 0;
@@ -227,6 +233,7 @@ function InitEnhancedValues()
     document.getElementById("groupEnhancedNotifyEnable").style.display = (notifyEnabled == "true")? "block" : "none";
 
     var notifySoundEnabled = GetValue('enhancedNotifySound', 'true');
+    notyOption.silent = (notifySoundEnabled == 'true')? false : true;
     $('input:radio[name="enhancedSelectNotifySoundUse"]:input[value=' + notifySoundEnabled + ']').attr("checked", true);
 
     document.getElementById('enhancedTxtNotifyTime').value = GetValue('enhancedNotifyTime', '20');
@@ -1176,6 +1183,7 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedSelectNotifySoundUse"]',function(){
         var changed = $('[name="enhancedSelectNotifySoundUse"]:checked').val();
         SetValue("enhancedNotifySound", changed);
+        notyOption.silent = (changed == "true")? false : true;
     });
 
     $(document).on("change",'input[name="enhancedSelectDownloadVideo"]',function(){
@@ -1981,16 +1989,15 @@ function GetLatestNotify() {
 
 function SetNotify(content, title_, url)
 {
-    var options = {
-        body: content,
-        icon: 'https://i.imgur.com/FSvg18g.png',
-        silent: (GetValue('enhancedNotifySound', 'true') === 'true'),
-        onclick: function() {
-            space.Router.navigate("/" + url);
-        }
+    notyOption.body = content;
+    /*
+    notyOption.onclick = function(e) {
+        e.preventDefault();
+        window.open("https://story.kakao.com/" + url, '_blank');
     }
+    */
 
-    var noty = new Notification(title_, options);
+    new Notification(title_, notyOption);
 }
 
 function SaveText(text, name, type, btnID) {
