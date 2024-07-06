@@ -19,13 +19,11 @@ let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
-//let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
 let blockedList = new Set(); //block users
 let blockedStringList = []; //block strings
 let feedBlockedList = new Set(); //blocked feed users
 let catEffect = new Audio(resourceURL + 'sounds/cat-meow.mp3');
-let catEffect2 = new Audio(resourceURL + 'sounds/cat-meow-2.mp3');
 let dogEffect = new Audio(resourceURL + 'sounds/dog-bark.mp3');
 let jThemes;
 
@@ -1320,11 +1318,13 @@ function LoadSettingsPageEvents()
     $('body').on('click', '#enhancedKittyImage', function() {
         if (GetValue('enhancedKittyMode', 'none') == 'verycute') {
             catEffect.play();
-            // var random = Math.floor(Math.random() * 2);
-            // if (random == 0)
-            //     catEffect.play();
-            // else
-            //     catEffect2.play();
+            /*
+            var random = Math.floor(Math.random() * 2);
+            if (random == 0)
+                catEffect.play();
+            else
+                catEffect2.play();
+             */
         }
     });
 
@@ -2671,53 +2671,6 @@ function AddPowerModeScoreElements()
     header.appendChild(scoreElement);
 }
 
-/* For Login */
-function LoadLoginDarkThemeCSS()
-{
-    document.documentElement.style.setProperty('--background-color', '#2f3136');
-    document.documentElement.style.setProperty('--text-color', '#dcddde');
-    document.documentElement.style.setProperty('--text-highlight-color', '#fff');
-    document.documentElement.style.setProperty('--text-menu-color', '#b9bbbe');
-    document.documentElement.style.setProperty('--discord-blue', '#7289da');
-    document.documentElement.style.setProperty('--dark-background-color', '#202225');
-
-    let elem = document.createElement('style');
-    elem.id = 'enhancedLoginDarkThemeCSS';
-    document.head.appendChild(elem);
-    document.getElementById('enhancedLoginDarkThemeCSS').innerHTML =
-        'body { background: var(--background-color) !important; }' +
-        '.set_login .lab_choice { color: var(--text-color) !important; }' +
-        '.doc-footer .txt_copyright { color: var(--text-color) !important; }' +
-        'a { color: var(--text-highlight-color) !important; }' +
-        '.cont_login a { color: var(--text-menu-color) !important; }' +
-        '.doc-footer .service_info .link_info { color: var(--text-menu-color) !important; }' +
-        '.item_select .link_selected { color: var(--text-menu-color) !important; }' +
-        '.box_tf { border: solid 0px var(--text-highlight-color) !important; background: var(--dark-background-color) !important; padding-left: 10px; padding-right: 10px; }' +
-        '.box_tf .tf_g { color: var(--text-color) !important; caret-color: auto !important; }' +
-        '.info_tip, .line_or .txt_or { color: var(--text-color) !important;}' +
-        '.info_tip .txt_tip { color: var(--discord-blue) !important; }' +
-        '.box_tf .txt_mail { color: var(--text-color) !important; margin-right: 10px !important }' +
-        '.doc-title .tit_service .logo_kakao { background: var(--background-color) url(/images/pc/logo_kakao.png) no-repeat 0 0 !important; background-size: 100px 80px !important; background-position: 0 -41px !important};';
-
-}
-
-function ChangeLoginTheme(theme)
-{
-    var btnElem = document.getElementById('enhancedLoginThemeChangeBtn');
-    if (theme == 'dark')
-    {
-        LoadLoginDarkThemeCSS();
-        SetValue('enhancedSelectThemeLogin', 'dark');
-        btnElem.innerHTML = svgLight;
-    }
-    else if (theme == 'light')
-    {
-        document.querySelector('style').remove(); //Remove Dark Theme CSS
-        SetValue('enhancedSelectThemeLogin', 'light');
-        btnElem.innerHTML = svgDark;
-    }
-}
-
 function AddVisitorCountLayer()
 {
     var visitorCountLayer = document.createElement("div");
@@ -2864,41 +2817,77 @@ function OpenFastDeleteFriend()
 
 function AddLoginThemeSelectButtonUI()
 {
-    var body = document.body;
-    var btnElem = document.createElement('button');
-    btnElem.id = 'enhancedLoginThemeChangeBtn';
-    btnElem.innerHTML = svgDark;
-    btnElem.style.height = '64px';
-    btnElem.style.width = '64px';
-    btnElem.style.background = 'none';
-    btnElem.style.position = 'absolute';
-    btnElem.style.right = '10px';
-    btnElem.style.bottom = '10px';
+    const loginPageBody = document.body;
+    let btnLoginThemeElem = document.createElement('button');
+    btnLoginThemeElem.id = 'enhancedLoginThemeChangeBtn';
+    btnLoginThemeElem.innerHTML = svgDark;
+    btnLoginThemeElem.style.height = '64px';
+    btnLoginThemeElem.style.width = '64px';
+    btnLoginThemeElem.style.background = 'none';
+    btnLoginThemeElem.style.position = 'absolute';
+    btnLoginThemeElem.style.right = '10px';
+    btnLoginThemeElem.style.bottom = '10px';
 
-    var theme = GetValue('enhancedSelectThemeLogin', 'dark');
+    let loginTheme = GetValue('enhancedSelectThemeLogin', 'dark');
+    btnLoginThemeElem.innerHTML = loginTheme === 'dark'? svgLight : svgDark;
 
-    if (theme == 'dark')
+    btnLoginThemeElem.onclick = function() {
+        let loginTheme = GetValue('enhancedSelectThemeLogin', 'dark');
+        loginTheme = loginTheme === 'dark'? 'light' : 'dark';
+        SetValue('enhancedSelectThemeLogin', loginTheme);
+        ChangeLoginTheme(loginTheme);
+    }
+
+    loginPageBody.appendChild(btnLoginThemeElem);
+}
+
+function ChangeLoginTheme(theme)
+{
+    if (theme === 'dark')
     {
-        btnElem.innerHTML = svgLight;
+        SetLoginDarkThemeCSS();
+        document.getElementById('enhancedLoginThemeChangeBtn').innerHTML = svgLight;
     }
-    else if (theme == 'light')
+    else if (theme === 'light')
     {
-        btnElem.innerHTML = svgDark;
+        document.querySelector('style').remove(); //Remove Dark Theme CSS
+        document.getElementById('enhancedLoginThemeChangeBtn').innerHTML = svgDark;
     }
-    btnElem.onclick = function() {
-        if (theme == 'dark')
-        {
-            theme = 'light';
-        }
-        else if (theme == 'light')
-        {
-            theme = 'dark';
-        }
+}
 
-        ChangeLoginTheme(theme);
+function SetLoginDarkThemeCSS()
+{
+    const loginDarkThemeStyle = {
+        '--background-color': '#2f3136',
+        '--text-color': '#dcddde',
+        '--text-highlight-color': '#fff',
+        '--text-menu-color': '#b9bbbe',
+        '--discord-blue': '#7289da',
+        '--dark-background-color': '#202225'
     }
 
-    body.appendChild(btnElem);
+    for (const [key, value] of Object.entries(loginDarkThemeStyle))
+    {
+        document.documentElement.style.setProperty(key, value);
+    }
+
+    let styleElem = document.createElement('style');
+    styleElem.id = 'enhancedLoginDarkThemeCSS';
+    document.head.appendChild(styleElem);
+    document.getElementById('enhancedLoginDarkThemeCSS').innerHTML =
+        'body { background: var(--background-color) !important; }' +
+        '.set_login .lab_choice { color: var(--text-color) !important; }' +
+        '.doc-footer .txt_copyright { color: var(--text-color) !important; }' +
+        'a { color: var(--text-highlight-color) !important; }' +
+        '.cont_login a { color: var(--text-menu-color) !important; }' +
+        '.doc-footer .service_info .link_info { color: var(--text-menu-color) !important; }' +
+        '.item_select .link_selected { color: var(--text-menu-color) !important; }' +
+        '.box_tf { border: solid 0px var(--text-highlight-color) !important; background: var(--dark-background-color) !important; padding-left: 10px; padding-right: 10px; }' +
+        '.box_tf .tf_g { color: var(--text-color) !important; caret-color: auto !important; }' +
+        '.info_tip, .line_or .txt_or { color: var(--text-color) !important;}' +
+        '.info_tip .txt_tip { color: var(--discord-blue) !important; }' +
+        '.box_tf .txt_mail { color: var(--text-color) !important; margin-right: 10px !important }' +
+        '.doc-title .tit_service .logo_kakao { background: var(--background-color) url(/images/pc/logo_kakao.png) no-repeat 0 0 !important; background-size: 100px 80px !important; background-position: 0 -41px !important};';
 }
 
 function SetExtendCommentUI()
@@ -2988,7 +2977,7 @@ function MoveBirthdayFriendsToTop()
     if (window.location.href.includes("accounts.kakao.com/login"))
     {
         AddLoginThemeSelectButtonUI();
-        if (GetValue('enhancedSelectThemeLogin', 'dark') == 'dark')
+        if (GetValue('enhancedSelectThemeLogin', 'dark') === 'dark')
         {
             ChangeLoginTheme('dark');
         }
