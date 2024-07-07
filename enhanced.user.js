@@ -187,7 +187,7 @@ function InitEnhancedValues()
 {
     var selectedTheme = GetValue('enhancedSelectTheme', 'dark');
     $('input:radio[name="enhancedSelectTheme"]:input[value=' + selectedTheme + ']').attr("checked", true);
-    
+
     LoadThemeList();
     ChangeTheme(selectedTheme);
 
@@ -312,7 +312,7 @@ function InitEnhancedValues()
     GetCSSVersion();
     GetLatestVersion();
 
-    CreateBlockStringList(); 
+    CreateBlockStringList();
 }
 
 function CloseSettingsPage()
@@ -571,7 +571,7 @@ function LoadCommonEvents()
                 {
                     settingElem.click();
                 }
-                
+
                 setTimeout(() => {
                     var permElem = selElem.querySelector('li[data-permission="M"]');
                     if (permElem)
@@ -837,7 +837,7 @@ function LoadCommonEvents()
             if (prevElem)
                 prevElem.click();
         }
-        
+
         //C - First Comment
         if (e.code === 'KeyC')
         {
@@ -871,9 +871,9 @@ function LoadCommonEvents()
             if (likeElem)
             {
                 likeElem.click();
-            }       
+            }
         }
-        
+
         //D - Delete My Selected Article
         if (e.code === 'KeyD')
         {
@@ -915,7 +915,7 @@ function GetSelectedActivity()
     });
 
     var selectedIdx = -1;
-    
+
     for (var i = 0; i < visibleArticles.length; i++)
     {
         if (visibleArticles[i].classList.contains("enhanced_activty_selected"))
@@ -966,7 +966,7 @@ function ScrollToTargetSmoothly(elem)
     //     top: elem.offsetTop - 64,
     //     behavior: "smooth"
     // });
-    
+
     //64: Header Height
     window.scrollTo(0, elem.offsetTop - 64);
 }
@@ -986,7 +986,7 @@ function VisibleEnhancedPowerModeCount()
         document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_l");
     }
     else if (powerComboCnt > 300 && powerComboCnt < 500)
-    {  
+    {
         document.getElementById("enhancedPowerModeScore").classList.add("shake_text");
         document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_s");
         document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_l");
@@ -1505,13 +1505,13 @@ function DeleteBlockedFriendsConfirm()
     deleteLayer.id = "deleteBlockedLayer";
     deleteLayer.className = "cover _cover";
     document.body.appendChild(deleteLayer);
-    document.getElementById('deleteBlockedLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' + 
-                                                        '<div class="cover_wrapper" style="z-index: 201;">' + 
+    document.getElementById('deleteBlockedLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' +
+                                                        '<div class="cover_wrapper" style="z-index: 201;">' +
                                                         '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
-                                                                '<div class="inner_toast_layer _toastBody">' + 
+                                                                '<div class="inner_toast_layer _toastBody">' +
                                                                     '<p class="txt _dialogText">정말 제한된 사용자를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
-                                                                    '<div class="btn_group">' + 
-                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteBlockedFriendConfirmCancel"><span>취소</span></a>' + 
+                                                                    '<div class="btn_group">' +
+                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteBlockedFriendConfirmCancel"><span>취소</span></a>' +
                                                                         '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteBlockedFriendConfirmOK"><span>확인</span></a>' +
                                                                     '</div>' +
                                                                 '</div>' +
@@ -1525,13 +1525,13 @@ function DeleteFriendsConfirm()
     deleteLayer.id = "deleteLayer";
     deleteLayer.className = "cover _cover";
     document.body.appendChild(deleteLayer);
-    document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' + 
-                                                        '<div class="cover_wrapper" style="z-index: 201;">' + 
+    document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' +
+                                                        '<div class="cover_wrapper" style="z-index: 201;">' +
                                                         '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
-                                                                '<div class="inner_toast_layer _toastBody">' + 
+                                                                '<div class="inner_toast_layer _toastBody">' +
                                                                     '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
-                                                                    '<div class="btn_group">' + 
-                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendConfirmCancel"><span>취소</span></a>' + 
+                                                                    '<div class="btn_group">' +
+                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendConfirmCancel"><span>취소</span></a>' +
                                                                         '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendConfirmOK"><span>확인</span></a>' +
                                                                     '</div>' +
                                                                 '</div>' +
@@ -1545,13 +1545,13 @@ function DeleteFriendsReConfirm()
     deleteLayer.id = "deleteLayer";
     deleteLayer.className = "cover _cover";
     document.body.appendChild(deleteLayer);
-    document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' + 
-                                                        '<div class="cover_wrapper" style="z-index: 201;">' + 
+    document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' +
+                                                        '<div class="cover_wrapper" style="z-index: 201;">' +
                                                         '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
-                                                                '<div class="inner_toast_layer _toastBody">' + 
+                                                                '<div class="inner_toast_layer _toastBody">' +
                                                                     '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>진행하면 되돌릴 수 없습니다!<br>다시 한 번 신중하게 생각해주세요!<br>취소하시려면 새로고침해야 합니다.</p>' +
-                                                                    '<div class="btn_group">' + 
-                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendReConfirmCancel"><span>취소</span></a>' + 
+                                                                    '<div class="btn_group">' +
+                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendReConfirmCancel"><span>취소</span></a>' +
                                                                         '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendReConfirmOK"><span>확인</span></a>' +
                                                                     '</div>' +
                                                                 '</div>' +
@@ -1597,13 +1597,13 @@ function ChangePermissionConfirm()
     changePermLayer.id = "changePermLayer";
     changePermLayer.className = "cover _cover";
     document.body.appendChild(changePermLayer);
-    document.getElementById('changePermLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' + 
-                                                        '<div class="cover_wrapper" style="z-index: 201;">' + 
+    document.getElementById('changePermLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' +
+                                                        '<div class="cover_wrapper" style="z-index: 201;">' +
                                                         '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
-                                                                '<div class="inner_toast_layer _toastBody">' + 
+                                                                '<div class="inner_toast_layer _toastBody">' +
                                                                     '<p class="txt _dialogText">' + sourcePermissionText + ' 권한 게시글을 나만보기로 변경할까요? 취소하시려면 새로고침해야 합니다.</p>' +
-                                                                    '<div class="btn_group">' + 
-                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="changePermissionConfirmCancel"><span>취소</span></a>' + 
+                                                                    '<div class="btn_group">' +
+                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="changePermissionConfirmCancel"><span>취소</span></a>' +
                                                                         '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionConfirmOK"><span>확인</span></a>' +
                                                                     '</div>' +
                                                                 '</div>' +
@@ -1661,7 +1661,7 @@ function SetPermissionActivities()
         if (changeInternalPermCount < jsonPermActivities.length)
         {
             var activity = jsonPermActivities[changeInternalPermCount];
-            
+
             var lArticleID = activity["sid"];
             var permission = activity["permission"];
             var sourcePermission = document.getElementById("enhancedOptionSourcePerm").value;
@@ -1685,7 +1685,7 @@ function SetPermissionActivities()
             LoadActivitiesForPermission(changePermUserID, jsonPermActivities[jsonPermActivities.length - 1]["sid"]);
         }
     }, 550);
-    
+
 }
 
 function PrepareChangePermission() {
@@ -1987,7 +1987,7 @@ function GetLatestNotify() {
     xmlHttp.send();
 }
 
-function SetNotify(content, title_, url)
+function SetNotify(content, title, url)
 {
     notyOption.body = content;
     /*
@@ -1997,7 +1997,7 @@ function SetNotify(content, title_, url)
     }
     */
 
-    new Notification(title_, notyOption);
+    new Notification(title, notyOption);
 }
 
 function SaveText(text, name, type, btnID) {
@@ -2113,7 +2113,7 @@ function SetEmoticonSelectorSize()
         SetCSS('enhancedEmoticonSelectorItemSize', '.emoticon_keyboard .emt_il .emt_il_item { width: 128px !important; height: 128px !important; } .emoticon_keyboard .emt_il img { width: 128px !important; height: 128px !important; }')
         SetCSS('enhancedEmoticonSelectorBoxSize', '.write .section .inp_footer .emoticon_layer { width: 630px !important; } .emoticon_keyboard .emoticon_item_list { height: 450px !important; } .emoticon_layer { width: 630px !important; }')
     }
-    
+
 }
 
 function HideBlockedUserComment() {
@@ -2149,7 +2149,7 @@ function HideBlockedUserArticle()
         }
 
         var shared_content = content.getElementsByClassName("share_wrap share_wrap_v2")[0];
-        
+
         if (shared_content.getElementsByClassName("pf") <= 0) //???
         {
             continue;
@@ -2321,7 +2321,7 @@ function InitCustomThemePageEvents()
         let color = this.value;
         CustomThemeColorEventFunc(color, 1);
     });
-    
+
     document.getElementById("enhancedCustomThemeColor2").addEventListener("input", function() {
         var color = this.value;
         CustomThemeColorEventFunc(color, 2);
@@ -2435,7 +2435,7 @@ function GetGradientCSS(percent1, percent2, percent3, degree)
 function HexToRGB(hexColor) {
     const rgb = hexColor.startsWith('#') ? hexColor.slice(1) : hexColor;
     const [r, g, b] = [rgb.slice(0, 2), rgb.slice(2, 4), rgb.slice(4, 6)].map((hex) => Number.parseInt(hex, 16));
-  
+
     return [r, g, b];
   }
 
@@ -2445,7 +2445,7 @@ function RGBToHSL(rgb) {
     const b = rgb[2] / 255;
     const l = Math.max(r, g, b);
     const s = l - Math.min(r, g, b);
-  
+
     const h = s
       ? l === r
         ? (g - b) / s
@@ -2564,7 +2564,7 @@ function DownloadText(text, name, type) {
 
 function GetHideLogoIconTitle()
 {
-    var val = GetValue('enhancedHideLogoIcon', 'naver');
+    let val = GetValue('enhancedHideLogoIcon', 'naver');
     if (val === 'naver')
     {
         return 'NAVER';
@@ -2632,7 +2632,7 @@ function HideLogo()
     else
     {
         link.href = resourceURL + "images/" + icon;
-    }   
+    }
 }
 
 function SetClassicFavicon()
@@ -2764,7 +2764,7 @@ function ViewVisitorChart()
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             var highlights = JSON.parse(xmlHttp.responseText);
-            
+
             ParseVisitorCount(highlights.highlight);
         }
     }
@@ -2803,7 +2803,7 @@ function OpenFastDeleteFriend()
                         _DeleteFriend(friendID);
                         friendli.remove();
                     });
-                    
+
                 }
             }
         }
@@ -2972,19 +2972,17 @@ function MoveBirthdayFriendsToTop()
     }
 }
 
-(function() {
-    /* Kakao Login Page */
-    if (window.location.href.includes("accounts.kakao.com/login"))
+function MainKakaoLogin()
+{
+    AddLoginThemeSelectButtonUI();
+    if (GetValue('enhancedSelectThemeLogin', 'dark') === 'dark')
     {
-        AddLoginThemeSelectButtonUI();
-        if (GetValue('enhancedSelectThemeLogin', 'dark') === 'dark')
-        {
-            ChangeLoginTheme('dark');
-        }
-        
-        return;
+        ChangeLoginTheme('dark');
     }
-    /* KakaoStory */
+}
+
+function MainKakaoStory()
+{
     InitEnhancedSettingsPage();
     InitCustomThemePage();
     LoadCommonEvents();
@@ -2997,7 +2995,7 @@ function MoveBirthdayFriendsToTop()
     {
         GetFeedBlockedUsers();
     }
-    
+
     SetEmoticonSelectorSize();
 
     setTimeout(() => AddEnhancedMenu(), 1000);
@@ -3070,4 +3068,15 @@ function MoveBirthdayFriendsToTop()
         }
 
     }, 100);
+}
+
+(function() {
+    /* Kakao Login */
+    if (window.location.href.includes("accounts.kakao.com/login"))
+    {
+        MainKakaoLogin();
+        return;
+    }
+    /* KakaoStory */
+    MainKakaoStory();
 })();
