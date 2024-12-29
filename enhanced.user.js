@@ -2286,6 +2286,7 @@ function InitCustomThemePage() {
             customThemeLayer.id = "customThemeLayer";
             customThemeLayer.className = "cover _cover";
             customThemeLayer.style.display = "none";
+            customThemeLayer.style.zIndex = "301";
             document.body.appendChild(customThemeLayer);
             document.getElementById('customThemeLayer').innerHTML = html;
             InitCustomThemeValues();
