@@ -223,3 +223,7 @@
 .section.recommend {
     display: none;
 }
+
+.minipf_layer._profilePopup {
+    z-index: 303 !important;
+}
