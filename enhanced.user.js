@@ -3253,7 +3253,7 @@ function MainKakaoStory()
         MainKakaoLogin();
         return;
     }
-    alert("CONNNN");
+
     /* KakaoStory */
     MainKakaoStory();
 })();
