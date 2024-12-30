@@ -38,6 +38,13 @@ let changePermCount = 0;
 let changeInternalPermCount = 0;
 let changePermUserID;
 let changePermActivityCount;
+
+let jsonRemoveActivities;
+let removedArticleCount = 0;
+let removedArticleInternalCount = 0;
+let removeArticlesUserID;
+let removeArticlesActivityCount;
+
 let currentFavicon = "naver";
 let currentTitle = "NAVER";
 //let selCurPerm = 'Z'; //A = 전체공개, F = 친구공개, M = 나만보기, Z = 기본설정(모든 게시글)
@@ -1111,6 +1118,33 @@ function LoadSettingsPageEvents()
     document.getElementById("enhancedBtnUpdateInfo").addEventListener("click", function() {
         ViewUpdateAllPage();
     });
+    
+    $(document).on('click', '#enhancedBtnRemoveAllArticlesConfirm', function() {
+        RemoveAllArticlesConfirm();
+    });
+
+    $(document).on('click', '#removeAllArticlesConfirmCancel', function() {
+        document.getElementById("deleteLayer").remove();
+    });
+
+    $(document).on('click', '#removeAllArticlesConfirmOK', function() {
+        document.getElementById("deleteLayer").remove();
+        RemoveAllArticlesReConfirm();
+    });
+
+    $(document).on('click', '#removeAllArticlesReConfirmCancel', function() {
+        document.getElementById("deleteLayer").remove();
+    });
+
+    $(document).on('click', '#removeAllArticlesReConfirmOK', function() {
+        document.getElementById("deleteLayer").remove();
+        PrepareRemoveAllArticles();
+    });
+
+    $(document).on('click', '#removeAllArticlesBtnOK', function() {
+        document.getElementById("deleteLayer").remove();
+        document.getElementById("removeAllArticlesCountLayer").remove();
+    });
 
     $(document).on('click', '#enhancedBtnDeleteFriendConfirm', function() {
         DeleteFriendsConfirm();
@@ -1529,7 +1563,7 @@ function DeleteFriendsConfirm()
                                                         '<div class="cover_wrapper" style="z-index: 201;">' +
                                                         '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
                                                                 '<div class="inner_toast_layer _toastBody">' +
-                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
+                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.<br>취소하더라도 이미 삭제된 친구는 복구되지 않습니다!</p>' +
                                                                     '<div class="btn_group">' +
                                                                         '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendConfirmCancel"><span>취소</span></a>' +
                                                                         '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendConfirmOK"><span>확인</span></a>' +
@@ -1549,7 +1583,7 @@ function DeleteFriendsReConfirm()
                                                         '<div class="cover_wrapper" style="z-index: 201;">' +
                                                         '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
                                                                 '<div class="inner_toast_layer _toastBody">' +
-                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>진행하면 되돌릴 수 없습니다!<br>다시 한 번 신중하게 생각해주세요!<br>취소하시려면 새로고침해야 합니다.</p>' +
+                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>진행하면 되돌릴 수 없습니다!<br>다시 한 번 신중하게 생각해주세요!<br>취소하시려면 새로고침해야 합니다.<br>취소하더라도 이미 삭제된 친구는 복구되지 않습니다!</p>' +
                                                                     '<div class="btn_group">' +
                                                                         '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendReConfirmCancel"><span>취소</span></a>' +
                                                                         '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendReConfirmOK"><span>확인</span></a>' +
@@ -1581,6 +1615,147 @@ function _DeleteFriend(userid) {
         }
     }
     xmlHttp.open("DELETE", "https://story.kakao.com/a/friends/" + userid);
+    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+    xmlHttp.setRequestHeader("Accept", "application/json");
+    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xmlHttp.send();
+}
+
+function RemoveAllArticlesConfirm()
+{
+    var deleteLayer = document.createElement('div');
+    deleteLayer.id = "deleteLayer";
+    deleteLayer.className = "cover _cover";
+    document.body.appendChild(deleteLayer);
+    document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' +
+                                                        '<div class="cover_wrapper" style="z-index: 201;">' +
+                                                        '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
+                                                                '<div class="inner_toast_layer _toastBody">' +
+                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.<br>취소하더라도 이미 삭제된 게시글은 복구되지 않습니다!</p>' +
+                                                                    '<div class="btn_group">' +
+                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="removeAllArticlesConfirmCancel"><span>취소</span></a>' +
+                                                                        '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="removeAllArticlesConfirmOK"><span>확인</span></a>' +
+                                                                    '</div>' +
+                                                                '</div>' +
+                                                            '</div>' +
+                                                        '</div>';
+}
+
+function RemoveAllArticlesReConfirm()
+{
+    var deleteLayer = document.createElement('div');
+    deleteLayer.id = "deleteLayer";
+    deleteLayer.className = "cover _cover";
+    document.body.appendChild(deleteLayer);
+    document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' +
+                                                        '<div class="cover_wrapper" style="z-index: 201;">' +
+                                                        '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
+                                                                '<div class="inner_toast_layer _toastBody">' +
+                                                                    '<p class="txt _dialogText">정말 게시글을 전체 삭제하시겠습니까?<br>진행하면 되돌릴 수 없습니다!<br>다시 한 번 신중하게 생각해주세요!<br>취소하시려면 새로고침해야 합니다.<br>취소하더라도 이미 삭제된 게시글은 복구되지 않습니다!</p>' +
+                                                                    '<div class="btn_group">' +
+                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="removeAllArticlesReConfirmCancel"><span>취소</span></a>' +
+                                                                        '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="removeAllArticlesReConfirmOK"><span>확인</span></a>' +
+                                                                    '</div>' +
+                                                                '</div>' +
+                                                            '</div>' +
+                                                        '</div>';
+}
+
+function _RemoveArticle(articleID)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+            // Removed
+        }
+    }
+    xmlHttp.open("DELETE", "https://story.kakao.com/a/activities/" + articleID);
+    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+    xmlHttp.setRequestHeader("Accept", "application/json");
+    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xmlHttp.setRequestHeader("Accept-Language", "ko");
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+    xmlHttp.send();
+}
+
+function LoadActivitiesForRemove(userID, lastArticleID) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+            var activities = JSON.parse(xmlHttp.responseText);
+
+            if (activities.length == 0) {
+                jsonRemoveActivities = null;
+                document.getElementById('removeAllArticlesText').innerHTML = '게시글이 성공적으로 삭제되었습니다.';
+                document.getElementById('removeAllArticlesBtnOK').style.display = 'block';
+                return;
+            }
+
+            jsonRemoveActivities = activities;
+
+            RemoveActivities();
+        }
+    }
+    xmlHttp.open("GET", "https://story.kakao.com/a/profiles/" + userID + "/activities?ag=false&since=" + lastArticleID);
+    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+    xmlHttp.setRequestHeader("Accept", "application/json");
+    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xmlHttp.send();
+}
+
+function RemoveActivities()
+{
+    setTimeout(function() {
+        if (removedArticleInternalCount < jsonRemoveActivities.length - 1)
+        {
+            let activity = jsonRemoveActivities[removedArticleInternalCount];
+
+            let lArticleID = activity["sid"];
+            _RemoveArticle(lArticleID);
+
+            document.getElementById('removeAllArticlesText').innerHTML = '게시글 삭제 중... (' + (removedArticleCount + 1) + '/' + removeArticlesActivityCount + '개 완료)';
+            removedArticleCount++;
+            removedArticleInternalCount++;
+            RemoveActivities();
+        }
+        else
+        {
+
+            let activity = jsonRemoveActivities[removedArticleInternalCount];
+            let lArticleID = activity["sid"];
+            
+            removedArticleInternalCount = 0;
+            LoadActivitiesForRemove(removeArticlesUserID, jsonRemoveActivities[jsonRemoveActivities.length - 1]["sid"]);
+
+            _RemoveArticle(lArticleID);
+        }
+    }, 550);
+
+}
+
+function PrepareRemoveAllArticles() {
+
+    removedArticleCount = 0; //reset count
+
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+            var jsonProfile = JSON.parse(xmlHttp.responseText);
+            removeArticlesUserID = jsonProfile.id;
+            removeArticlesActivityCount = jsonProfile.activity_count;
+
+            var removeAllArticlesCountLayer = document.createElement('div');
+            removeAllArticlesCountLayer.id = "removeAllArticlesCountLayer";
+            removeAllArticlesCountLayer.className = "cover _cover";
+            document.body.appendChild(removeAllArticlesCountLayer);
+            document.getElementById('removeAllArticlesCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="removeAllArticlesText">게시글 삭제 중... (0 / 0)</p><div>※정책상 변경 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="removeAllArticlesBtnOK" style="display: none;"><span>확인</span></a> </div></div></div></div>';
+            LoadActivitiesForRemove(removeArticlesUserID, "");
+        }
+    }
+    xmlHttp.open("GET", "https://story.kakao.com/a/settings/profile");
     xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
     xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
     xmlHttp.setRequestHeader("Accept", "application/json");
@@ -3078,6 +3253,7 @@ function MainKakaoStory()
         MainKakaoLogin();
         return;
     }
+    alert("CONNNN");
     /* KakaoStory */
     MainKakaoStory();
 })();
