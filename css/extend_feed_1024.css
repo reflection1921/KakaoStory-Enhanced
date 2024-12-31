@@ -17,6 +17,13 @@ div[data-part-name="feedList"] > .section
     grid-template-columns: repeat(2, 1fr);
 }
 
+/* block recommend feed */
+.wrap_map.wrap_desc.detail_desc.cover_content.cover_center > .feed > .section,
+div[data-part-name="feedList"] > .section.recommend
+{
+    display: none !important;
+}
+
 .write .section
 {
     display: block !important;
