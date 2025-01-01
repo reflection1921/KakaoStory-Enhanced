@@ -2919,33 +2919,6 @@ function AddPowerModeScoreElements()
 
 const visitorChartModule = ( function() {
 
-    function loadScript(url, callback) {
-        // 새로운 <script> 태그 생성
-        const script = document.createElement('script');
-        script.src = url;
-        script.type = 'text/javascript';
-        script.async = true; // 비동기 로딩 설정 (옵션)
-
-        // 로딩 완료 시 callback 실행
-        script.onload = () => {
-            console.log(`Script loaded: ${url}`);
-            if (callback) callback();
-        };
-
-        // 로딩 실패 처리
-        script.onerror = () => {
-            console.error(`Failed to load script: ${url}`);
-        };
-
-        // <head> 또는 <body>에 <script> 추가
-        document.head.appendChild(script);
-    }
-
-// 사용 예제
-    loadScript('https://example.com/script.js', () => {
-        console.log('Script loaded and callback executed!');
-    });
-
     function addVisitorCountLayer()
     {
         let visitorCountLayer = document.createElement("div");
