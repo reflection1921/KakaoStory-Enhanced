@@ -2916,110 +2916,147 @@ function AddPowerModeScoreElements()
     header.appendChild(scoreElement);
 }
 
-function AddVisitorCountLayer()
-{
-    var visitorCountLayer = document.createElement("div");
-    visitorCountLayer.id = "enhancedVisitorCountLayer";
-    visitorCountLayer.className = "profile_collection visitor_count_layer";
-    document.getElementsByClassName("profile_collection")[0].parentElement.appendChild(visitorCountLayer);
-    visitorCountLayer.innerHTML = '<fieldset><h4 class="tit_collection">방문자수</h4></br><div style=""><canvas id="visitorChartCanvas"></canvas></div></fieldset>';
-}
 
-function ParseVisitorCount(jsonData)
-{
-    var counterJSON = null;
-    for (var i = 0; i < jsonData.length; i++)
+const visitorChartModule = ( function() {
+
+    function loadScript(url, callback) {
+        // 새로운 <script> 태그 생성
+        const script = document.createElement('script');
+        script.src = url;
+        script.type = 'text/javascript';
+        script.async = true; // 비동기 로딩 설정 (옵션)
+
+        // 로딩 완료 시 callback 실행
+        script.onload = () => {
+            console.log(`Script loaded: ${url}`);
+            if (callback) callback();
+        };
+
+        // 로딩 실패 처리
+        script.onerror = () => {
+            console.error(`Failed to load script: ${url}`);
+        };
+
+        // <head> 또는 <body>에 <script> 추가
+        document.head.appendChild(script);
+    }
+
+// 사용 예제
+    loadScript('https://example.com/script.js', () => {
+        console.log('Script loaded and callback executed!');
+    });
+
+    function addVisitorCountLayer()
     {
-        if (jsonData[i].type == "visit_counter")
+        let visitorCountLayer = document.createElement("div");
+        visitorCountLayer.id = "enhancedVisitorCountLayer";
+        visitorCountLayer.className = "profile_collection visitor_count_layer";
+        document.getElementsByClassName("profile_collection")[0].parentElement.appendChild(visitorCountLayer);
+        visitorCountLayer.innerHTML = '<fieldset><h4 class="tit_collection">방문자수</h4></br><div style=""><canvas id="visitorChartCanvas"></canvas></div></fieldset>';
+    }
+
+    function parseVisitorCount(jsonData)
+    {
+        let counterJSON = null;
+        for (let i = 0; i < jsonData.length; i++)
         {
-            counterJSON = jsonData[i].object.items;
-            break;
-        }
-    }
-
-    if (counterJSON == null)
-    {
-        document.getElementById("enhancedVisitorCountLayer").style.display = 'none';
-        return;
-    }
-
-    var labelData = ['', '', '', '', '', '', ''];
-    var countData = [0, 0, 0, 0, 0, 0, 0];
-
-    for (var i = 0; i < counterJSON.length; i++)
-    {
-        labelData[i] = counterJSON[i].date;
-        countData[i] = (counterJSON[i].count == -1? 0 : counterJSON[i].count);
-    }
-
-    var chartCanvas = document.getElementById('visitorChartCanvas').getContext('2d');
-
-    var visitChart = new Chart(chartCanvas, {
-        type: 'line',
-        data: {
-            labels: labelData,
-            datasets: [
-                {
-                    fill: false,
-                    data: countData,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                    ],
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            plugins: {
-                legend: {
-                    display: false
-                }
+            if (jsonData[i].type === "visit_counter")
+            {
+                counterJSON = jsonData[i].object.items;
+                break;
             }
         }
-    })
-}
 
-function ViewVisitorChart()
-{
-    if (document.getElementById("enhancedVisitorCountLayer") != null)
-    {
-        return;
-    }
-
-    if (document.getElementsByClassName("profile_collection").length < 1)
-    {
-        return;
-    }
-
-    var pathname = window.location.pathname;
-    var pathList = pathname.split("/");
-    if (pathList.length < 3)
-    {
-        return;
-    }
-
-    var curUserID = pathList[1];
-
-    AddVisitorCountLayer();
-
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var highlights = JSON.parse(xmlHttp.responseText);
-
-            ParseVisitorCount(highlights.highlight);
+        if (counterJSON == null)
+        {
+            document.getElementById("enhancedVisitorCountLayer").style.display = 'none';
+            return;
         }
+
+        let labelData = ['', '', '', '', '', '', ''];
+        let countData = [0, 0, 0, 0, 0, 0, 0];
+
+        for (let i = 0; i < counterJSON.length; i++)
+        {
+            labelData[i] = counterJSON[i].date;
+            countData[i] = (counterJSON[i].count === -1? 0 : counterJSON[i].count);
+        }
+
+        let chartCanvas = document.getElementById('visitorChartCanvas').getContext('2d');
+
+        new Chart(chartCanvas, {
+            type: 'line',
+            data: {
+                labels: labelData,
+                datasets: [
+                    {
+                        fill: false,
+                        data: countData,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                        ],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        })
     }
-    xmlHttp.open("GET", "https://story.kakao.com/a/profiles/" + curUserID + "/highlight");
-    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
-    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
-    xmlHttp.setRequestHeader("Accept", "application/json");
-    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-    xmlHttp.send();
-}
+
+    function viewVisitorChart()
+    {
+        if (document.getElementById("enhancedVisitorCountLayer") != null)
+        {
+            return;
+        }
+
+        if (document.getElementsByClassName("profile_collection").length < 1)
+        {
+            return;
+        }
+
+        let pathname = window.location.pathname;
+        let pathList = pathname.split("/");
+        if (pathList.length < 3)
+        {
+            return;
+        }
+
+        let curUserID = pathList[1];
+
+        addVisitorCountLayer();
+
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                let highlights = JSON.parse(xmlHttp.responseText);
+
+                parseVisitorCount(highlights.highlight);
+            }
+        }
+        xmlHttp.open("GET", "https://story.kakao.com/a/profiles/" + curUserID + "/highlight");
+        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+        xmlHttp.setRequestHeader("Accept", "application/json");
+        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xmlHttp.send();
+    }
+
+    return {
+        viewVisitorChart: viewVisitorChart
+    }
+})();
+
+
 
 function AddLoginThemeSelectButtonUI()
 {
@@ -3262,7 +3299,7 @@ function MainKakaoStory()
             setTimeout(() => SetExtendCommentUI(), 750);
         }
 
-        setTimeout(() => ViewVisitorChart(), 1000);
+        setTimeout(() => visitorChartModule.viewVisitorChart(), 1000);
 
         if (GetValue('enhancedEarthquake', 'false') == 'true')
         {
