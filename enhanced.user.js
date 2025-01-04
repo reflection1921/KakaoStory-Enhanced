@@ -174,7 +174,7 @@ const deleteFriendsModule = (function() {
     // Remove unblocked users to remove blocked users only
     function verifyBlockedUserForDeleteFriends()
     {
-        for (var i = 0; i < jsonMyFriends.profiles.length; i++)
+        for (let i = 0; i < jsonMyFriends.profiles.length; i++)
         {
             if (!jsonMyFriends.profiles[i].hasOwnProperty("blocked") || jsonMyFriends.profiles[i]["blocked"] === false)
             {
@@ -630,14 +630,14 @@ const changePermissionModule = (function() {
 
         changePermCount = 0; //reset count
 
-        var xmlHttp = new XMLHttpRequest();
+        let xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
             if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-                var jsonProfile = JSON.parse(xmlHttp.responseText);
+                let jsonProfile = JSON.parse(xmlHttp.responseText);
                 changePermUserID = jsonProfile.id;
                 changePermActivityCount = jsonProfile.activity_count;
 
-                var permissionCountLayer = document.createElement('div');
+                let permissionCountLayer = document.createElement('div');
                 permissionCountLayer.id = "changePermissionCountLayer";
                 permissionCountLayer.className = "cover _cover";
                 document.body.appendChild(permissionCountLayer);
@@ -872,7 +872,7 @@ function DisableScroll() {
 }
 
 function GetMyID() {
-    var tmpMyID = $('a[data-kant-id="737"]').attr('href').substring(1);
+    let tmpMyID = $('a[data-kant-id="737"]').attr('href').substring(1);
     if (tmpMyID.charAt(0) == '_') {
         myID = tmpMyID;
     } else {
@@ -881,14 +881,14 @@ function GetMyID() {
 }
 
 function GetMySID(val) {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var jsonProf = JSON.parse(xmlHttp.responseText);
-            if (jsonProf.activities.length == 0) {
+            let jsonProf = JSON.parse(xmlHttp.responseText);
+            if (jsonProf.activities.length === 0) {
                 myID = '';
             } else {
-                var tmpID = jsonProf.activities[0].id;
+                let tmpID = jsonProf.activities[0].id;
                 myID = tmpID.split(".")[0];
             }
         }
@@ -902,12 +902,12 @@ function GetMySID(val) {
 }
 
 function HighlightCommentLikeDiscord() {
-    var comments = document.getElementsByClassName("_commentContent");
-    for (var i = 0; i < comments.length; i++) {
-        var tmpComment = comments[i].getElementsByClassName("txt")[0].getElementsByClassName("_decoratedProfile");
-        for ( var j = 0; j < tmpComment.length; j++) {
-            var tmpUserID = tmpComment[j].getAttribute("data-id");
-            if (myID == tmpUserID) {
+    let comments = document.getElementsByClassName("_commentContent");
+    for (let i = 0; i < comments.length; i++) {
+        let tmpComment = comments[i].getElementsByClassName("txt")[0].getElementsByClassName("_decoratedProfile");
+        for ( let j = 0; j < tmpComment.length; j++) {
+            let tmpUserID = tmpComment[j].getAttribute("data-id");
+            if (myID === tmpUserID) {
                 tmpComment[j].style.cssText = "background-color:rgba(0,0,0,0) !important;";
                 comments[i].parentElement.style.cssText = 'background-color: rgba(250,166,26,0.1); border-left: 5px solid #f6a820; padding-left: 4px;';
             }
@@ -1080,10 +1080,10 @@ function CloseSettingsPage()
 }
 
 function GetCSSVersion() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var cssVersion = xmlHttp.responseText;
+            let cssVersion = xmlHttp.responseText;
             document.getElementById('enhancedCSSVersion').innerText = cssVersion;
         }
     }
@@ -2444,8 +2444,8 @@ function SetNotify(content, title, url)
 }
 
 function SaveText(text, name, type, btnID) {
-    var btnEl = document.getElementById(btnID);
-    var file = new Blob([text], {type: type});
+    let btnEl = document.getElementById(btnID);
+    let file = new Blob([text], {type: type});
     btnEl.href = URL.createObjectURL(file);
     btnEl.download = name;
 }
@@ -2496,7 +2496,7 @@ function AddDownloadVideoButton() {
     var videoControl = document.getElementsByClassName("mejs-controls");
     for (var i = 0; i < videoControl.length; i++) {
         var checkDownExists = videoControl[i].getElementsByClassName("mejs-button mejs-videodown-button");
-        if (checkDownExists.length == 0) {
+        if (checkDownExists.length === 0) {
             var videoURL = videoControl[i].parentElement.getElementsByClassName("mejs-mediaelement")[0].getElementsByClassName("mejs-kakao")[0].getAttribute("src");
             var downloadBtnEl = document.createElement('div');
             downloadBtnEl.id = 'videodown';
@@ -2560,9 +2560,9 @@ function SetEmoticonSelectorSize()
 }
 
 function HideBlockedUserComment() {
-    var comments = document.getElementsByClassName("_commentContent");
-    for (var i = 0; i < comments.length; i++) {
-        var bannedID = comments[i].getElementsByClassName("txt")[0].getElementsByTagName("p")[0].getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
+    let comments = document.getElementsByClassName("_commentContent");
+    for (let i = 0; i < comments.length; i++) {
+        let bannedID = comments[i].getElementsByClassName("txt")[0].getElementsByTagName("p")[0].getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
 
         if (blockedList.has(bannedID) === true || feedBlockedList.has(bannedID) === true) {
             comments[i].parentElement.style.display = 'none';
@@ -2924,7 +2924,7 @@ function HideBlockStringArticle() {
 
 function MovePuppy()
 {
-    var hasPuppy = document.getElementById("enhancedPuppyImage") != null;
+    let hasPuppy = document.getElementById("enhancedPuppyImage") != null;
     if (GetValue('enhancedPuppyMode', 'none') === 'none')
         {
             if (hasPuppy)
@@ -2935,10 +2935,10 @@ function MovePuppy()
         }
     if (!hasPuppy)
     {
-        var puppy = document.createElement('div');
+        let puppy = document.createElement('div');
         puppy.className = 'enhanced_puppy_image';
 
-        var puppyContainer = document.createElement('div');
+        let puppyContainer = document.createElement('div');
         puppyContainer.id = 'enhancedPuppyImage';
         puppyContainer.className = 'enhanced_puppy';
         puppyContainer.appendChild(puppy);
@@ -2948,7 +2948,7 @@ function MovePuppy()
 
 function MoveKitty()
 {
-    var hasKitty = document.getElementById("enhancedKittyImage") != null;
+    let hasKitty = document.getElementById("enhancedKittyImage") != null;
     if (GetValue('enhancedKittyMode', 'none') == 'none')
     {
         if (hasKitty)
@@ -2959,7 +2959,7 @@ function MoveKitty()
     }
     if (!hasKitty)
     {
-        var kitty = document.createElement('img');
+        let kitty = document.createElement('img');
         kitty.id = 'enhancedKittyImage';
         kitty.className = 'enhanced_kitty';
         kitty.src = resourceURL + "images/cat.gif";
@@ -3081,14 +3081,14 @@ function HideLogo()
 
 function SetClassicFavicon()
 {
-    var link = document.querySelector("link[rel~='icon']");
+    let link = document.querySelector("link[rel~='icon']");
 
     if (link.href.includes("classic.ico") || link.href.includes("classic_noty.ico"))
     {
         return;
     }
 
-    var faviLink = resourceURL + "images/classic.ico";
+    let faviLink = resourceURL + "images/classic.ico";
 
     if (document.getElementsByTagName('title')[0].innerText.includes("(N)"))
     {
@@ -3106,8 +3106,8 @@ function SetClassicFavicon()
 
 function AddPowerModeScoreElements()
 {
-    var header = document.querySelectorAll('[data-part-name="gnbMenu"]')[0];
-    var scoreElement = document.createElement('div');
+    let header = document.querySelectorAll('[data-part-name="gnbMenu"]')[0];
+    let scoreElement = document.createElement('div');
     scoreElement.id = 'enhancedPowerModeScore';
     scoreElement.className = 'enhanced_power_mode_score';
     scoreElement.innerText = 'COMBO 120';
@@ -3115,18 +3115,16 @@ function AddPowerModeScoreElements()
     header.appendChild(scoreElement);
 }
 
-
-
 function SetExtendCommentUI()
 {
-    var detailClass = document.getElementsByClassName("feed detail_desc _feedContainer");
+    let detailClass = document.getElementsByClassName("feed detail_desc _feedContainer");
     if (detailClass.length > 0)
     {
         return;
     }
 
-    var commentClasses = document.getElementsByClassName("comment");
-    for (var i = 0; i < commentClasses.length; i++)
+    let commentClasses = document.getElementsByClassName("comment");
+    for (let i = 0; i < commentClasses.length; i++)
     {
         let commentClass = commentClasses[i];
         let commentParent = commentClass.parentElement;
