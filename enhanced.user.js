@@ -15,7 +15,7 @@
 
 let scriptVersion = "1.31";
 
-let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+let resourceURL = 'http://127.0.0.1:9011/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
@@ -44,10 +44,6 @@ let notyOption = {
 //konami command to restore kakaostory favicon classic
 let konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
 let konamiCount = 0;
-
-/* For Login Page */
-let svgDark = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
-let svgLight = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
 
 function AddEnhancedMenu() {
     document.getElementsByClassName("menu_util")[0].innerHTML = '<li><a href="#" id="enhancedHideSidebar" class="link_menu _btnSettingProfile">사이드바 숨기기</a></li><li class="enhanced_settings_menu"><a href="#" id="enhancedOpenSettings" class="link_menu _btnSettingProfile">Enhanced 설정</a></li>' + document.getElementsByClassName("menu_util")[0].innerHTML;
@@ -659,6 +655,209 @@ const changePermissionModule = (function() {
 
     return {
         initialize: initialize
+    }
+})();
+
+const loginThemeModule = (function() {
+    let svgDark = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+    let svgLight = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+
+    function initialize()
+    {
+        addThemeButton();
+
+        changeLoginTheme(GetValue('enhancedSelectThemeLogin', 'dark'));
+    }
+
+    function changeLoginTheme(theme)
+    {
+        if (theme === 'light')
+        {
+            document.querySelector('style').remove(); //Remove Dark Theme CSS
+            document.getElementById('enhancedLoginThemeChangeBtn').innerHTML = svgDark;
+        }
+        else // Light
+        {
+            setLoginDarkThemeCSS();
+            document.getElementById('enhancedLoginThemeChangeBtn').innerHTML = svgLight;
+            SetValue('enhancedSelectThemeLogin', 'dark');
+        }
+    }
+
+    function addThemeButton()
+    {
+        let btnLoginThemeElem = document.createElement('button');
+        btnLoginThemeElem.id = 'enhancedLoginThemeChangeBtn';
+        btnLoginThemeElem.innerHTML = svgDark;
+        btnLoginThemeElem.style.height = '48px';
+        btnLoginThemeElem.style.width = '48px';
+        btnLoginThemeElem.style.background = 'none';
+        btnLoginThemeElem.style.position = 'absolute';
+        btnLoginThemeElem.style.right = '10px';
+        btnLoginThemeElem.style.bottom = '10px';
+
+        let loginTheme = GetValue('enhancedSelectThemeLogin', 'dark');
+        btnLoginThemeElem.innerHTML = loginTheme === 'dark'? svgLight : svgDark;
+
+        btnLoginThemeElem.onclick = function() {
+            let theme = GetValue('enhancedSelectThemeLogin', 'dark');
+            theme = theme === 'dark'? 'light' : 'dark';
+            SetValue('enhancedSelectThemeLogin', theme);
+            changeLoginTheme(theme);
+        }
+
+        document.body.appendChild(btnLoginThemeElem);
+    }
+
+    function setLoginDarkThemeCSS()
+    {
+        const loginDarkThemeStyle = {
+            '--background-color': '#2f3136',
+            '--text-color': '#dcddde',
+            '--text-highlight-color': '#fff',
+            '--text-menu-color': '#b9bbbe',
+            '--discord-blue': '#7289da',
+            '--dark-background-color': '#202225'
+        }
+
+        for (const [key, value] of Object.entries(loginDarkThemeStyle))
+        {
+            document.documentElement.style.setProperty(key, value);
+        }
+
+        let styleElem = document.createElement('style');
+        styleElem.id = 'enhancedLoginDarkThemeCSS';
+        document.head.appendChild(styleElem);
+        document.getElementById('enhancedLoginDarkThemeCSS').innerHTML =
+            'body { background: var(--background-color) !important; }' +
+            '.set_login .lab_choice { color: var(--text-color) !important; }' +
+            '.doc-footer .txt_copyright { color: var(--text-color) !important; }' +
+            'a { color: var(--text-highlight-color) !important; }' +
+            '.cont_login a { color: var(--text-menu-color) !important; }' +
+            '.doc-footer .service_info .link_info { color: var(--text-menu-color) !important; }' +
+            '.item_select .link_selected { color: var(--text-menu-color) !important; }' +
+            '.box_tf { border: solid 0px var(--text-highlight-color) !important; background: var(--dark-background-color) !important; padding-left: 10px; padding-right: 10px; }' +
+            '.box_tf .tf_g { color: var(--text-color) !important; caret-color: auto !important; }' +
+            '.info_tip, .line_or .txt_or { color: var(--text-color) !important;}' +
+            '.info_tip .txt_tip { color: var(--discord-blue) !important; }' +
+            '.box_tf .txt_mail { color: var(--text-color) !important; margin-right: 10px !important }' +
+            '.doc-title .tit_service .logo_kakao { background: var(--background-color) url(/images/pc/logo_kakao.png) no-repeat 0 0 !important; background-size: 100px 80px !important; background-position: 0 -41px !important};';
+    }
+
+    return {
+        initialize: initialize
+    }
+})();
+
+const visitorChartModule = ( function() {
+
+    function addVisitorCountLayer()
+    {
+        let visitorCountLayer = document.createElement("div");
+        visitorCountLayer.id = "enhancedVisitorCountLayer";
+        visitorCountLayer.className = "profile_collection visitor_count_layer";
+        document.getElementsByClassName("profile_collection")[0].parentElement.appendChild(visitorCountLayer);
+        visitorCountLayer.innerHTML = '<fieldset><h4 class="tit_collection">방문자수</h4></br><div style=""><canvas id="visitorChartCanvas"></canvas></div></fieldset>';
+    }
+
+    function parseVisitorCount(jsonData)
+    {
+        let counterJSON = null;
+        for (let i = 0; i < jsonData.length; i++)
+        {
+            if (jsonData[i].type === "visit_counter")
+            {
+                counterJSON = jsonData[i].object.items;
+                break;
+            }
+        }
+
+        if (counterJSON == null)
+        {
+            document.getElementById("enhancedVisitorCountLayer").style.display = 'none';
+            return;
+        }
+
+        let labelData = ['', '', '', '', '', '', ''];
+        let countData = [0, 0, 0, 0, 0, 0, 0];
+
+        for (let i = 0; i < counterJSON.length; i++)
+        {
+            labelData[i] = counterJSON[i].date;
+            countData[i] = (counterJSON[i].count === -1? 0 : counterJSON[i].count);
+        }
+
+        let chartCanvas = document.getElementById('visitorChartCanvas').getContext('2d');
+
+        new Chart(chartCanvas, {
+            type: 'line',
+            data: {
+                labels: labelData,
+                datasets: [
+                    {
+                        fill: false,
+                        data: countData,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                        ],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        })
+    }
+
+    function viewVisitorChart()
+    {
+        if (document.getElementById("enhancedVisitorCountLayer") != null)
+        {
+            return;
+        }
+
+        if (document.getElementsByClassName("profile_collection").length < 1)
+        {
+            return;
+        }
+
+        let pathname = window.location.pathname;
+        let pathList = pathname.split("/");
+        if (pathList.length < 3)
+        {
+            return;
+        }
+
+        let curUserID = pathList[1];
+
+        addVisitorCountLayer();
+
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                let highlights = JSON.parse(xmlHttp.responseText);
+
+                parseVisitorCount(highlights.highlight);
+            }
+        }
+        xmlHttp.open("GET", "https://story.kakao.com/a/profiles/" + curUserID + "/highlight");
+        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+        xmlHttp.setRequestHeader("Accept", "application/json");
+        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xmlHttp.send();
+    }
+
+    return {
+        viewVisitorChart: viewVisitorChart
     }
 })();
 
@@ -2917,194 +3116,6 @@ function AddPowerModeScoreElements()
 }
 
 
-const visitorChartModule = ( function() {
-
-    function addVisitorCountLayer()
-    {
-        let visitorCountLayer = document.createElement("div");
-        visitorCountLayer.id = "enhancedVisitorCountLayer";
-        visitorCountLayer.className = "profile_collection visitor_count_layer";
-        document.getElementsByClassName("profile_collection")[0].parentElement.appendChild(visitorCountLayer);
-        visitorCountLayer.innerHTML = '<fieldset><h4 class="tit_collection">방문자수</h4></br><div style=""><canvas id="visitorChartCanvas"></canvas></div></fieldset>';
-    }
-
-    function parseVisitorCount(jsonData)
-    {
-        let counterJSON = null;
-        for (let i = 0; i < jsonData.length; i++)
-        {
-            if (jsonData[i].type === "visit_counter")
-            {
-                counterJSON = jsonData[i].object.items;
-                break;
-            }
-        }
-
-        if (counterJSON == null)
-        {
-            document.getElementById("enhancedVisitorCountLayer").style.display = 'none';
-            return;
-        }
-
-        let labelData = ['', '', '', '', '', '', ''];
-        let countData = [0, 0, 0, 0, 0, 0, 0];
-
-        for (let i = 0; i < counterJSON.length; i++)
-        {
-            labelData[i] = counterJSON[i].date;
-            countData[i] = (counterJSON[i].count === -1? 0 : counterJSON[i].count);
-        }
-
-        let chartCanvas = document.getElementById('visitorChartCanvas').getContext('2d');
-
-        new Chart(chartCanvas, {
-            type: 'line',
-            data: {
-                labels: labelData,
-                datasets: [
-                    {
-                        fill: false,
-                        data: countData,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                        ],
-                        borderWidth: 1
-                    }
-                ]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        })
-    }
-
-    function viewVisitorChart()
-    {
-        if (document.getElementById("enhancedVisitorCountLayer") != null)
-        {
-            return;
-        }
-
-        if (document.getElementsByClassName("profile_collection").length < 1)
-        {
-            return;
-        }
-
-        let pathname = window.location.pathname;
-        let pathList = pathname.split("/");
-        if (pathList.length < 3)
-        {
-            return;
-        }
-
-        let curUserID = pathList[1];
-
-        addVisitorCountLayer();
-
-        let xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function() {
-            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-                let highlights = JSON.parse(xmlHttp.responseText);
-
-                parseVisitorCount(highlights.highlight);
-            }
-        }
-        xmlHttp.open("GET", "https://story.kakao.com/a/profiles/" + curUserID + "/highlight");
-        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
-        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
-        xmlHttp.setRequestHeader("Accept", "application/json");
-        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-        xmlHttp.send();
-    }
-
-    return {
-        viewVisitorChart: viewVisitorChart
-    }
-})();
-
-
-
-function AddLoginThemeSelectButtonUI()
-{
-    const loginPageBody = document.body;
-    let btnLoginThemeElem = document.createElement('button');
-    btnLoginThemeElem.id = 'enhancedLoginThemeChangeBtn';
-    btnLoginThemeElem.innerHTML = svgDark;
-    btnLoginThemeElem.style.height = '64px';
-    btnLoginThemeElem.style.width = '64px';
-    btnLoginThemeElem.style.background = 'none';
-    btnLoginThemeElem.style.position = 'absolute';
-    btnLoginThemeElem.style.right = '10px';
-    btnLoginThemeElem.style.bottom = '10px';
-
-    let loginTheme = GetValue('enhancedSelectThemeLogin', 'dark');
-    btnLoginThemeElem.innerHTML = loginTheme === 'dark'? svgLight : svgDark;
-
-    btnLoginThemeElem.onclick = function() {
-        let loginTheme = GetValue('enhancedSelectThemeLogin', 'dark');
-        loginTheme = loginTheme === 'dark'? 'light' : 'dark';
-        SetValue('enhancedSelectThemeLogin', loginTheme);
-        ChangeLoginTheme(loginTheme);
-    }
-
-    loginPageBody.appendChild(btnLoginThemeElem);
-}
-
-function ChangeLoginTheme(theme)
-{
-    if (theme === 'dark')
-    {
-        SetLoginDarkThemeCSS();
-        document.getElementById('enhancedLoginThemeChangeBtn').innerHTML = svgLight;
-    }
-    else if (theme === 'light')
-    {
-        document.querySelector('style').remove(); //Remove Dark Theme CSS
-        document.getElementById('enhancedLoginThemeChangeBtn').innerHTML = svgDark;
-    }
-}
-
-function SetLoginDarkThemeCSS()
-{
-    const loginDarkThemeStyle = {
-        '--background-color': '#2f3136',
-        '--text-color': '#dcddde',
-        '--text-highlight-color': '#fff',
-        '--text-menu-color': '#b9bbbe',
-        '--discord-blue': '#7289da',
-        '--dark-background-color': '#202225'
-    }
-
-    for (const [key, value] of Object.entries(loginDarkThemeStyle))
-    {
-        document.documentElement.style.setProperty(key, value);
-    }
-
-    let styleElem = document.createElement('style');
-    styleElem.id = 'enhancedLoginDarkThemeCSS';
-    document.head.appendChild(styleElem);
-    document.getElementById('enhancedLoginDarkThemeCSS').innerHTML =
-        'body { background: var(--background-color) !important; }' +
-        '.set_login .lab_choice { color: var(--text-color) !important; }' +
-        '.doc-footer .txt_copyright { color: var(--text-color) !important; }' +
-        'a { color: var(--text-highlight-color) !important; }' +
-        '.cont_login a { color: var(--text-menu-color) !important; }' +
-        '.doc-footer .service_info .link_info { color: var(--text-menu-color) !important; }' +
-        '.item_select .link_selected { color: var(--text-menu-color) !important; }' +
-        '.box_tf { border: solid 0px var(--text-highlight-color) !important; background: var(--dark-background-color) !important; padding-left: 10px; padding-right: 10px; }' +
-        '.box_tf .tf_g { color: var(--text-color) !important; caret-color: auto !important; }' +
-        '.info_tip, .line_or .txt_or { color: var(--text-color) !important;}' +
-        '.info_tip .txt_tip { color: var(--discord-blue) !important; }' +
-        '.box_tf .txt_mail { color: var(--text-color) !important; margin-right: 10px !important }' +
-        '.doc-title .tit_service .logo_kakao { background: var(--background-color) url(/images/pc/logo_kakao.png) no-repeat 0 0 !important; background-size: 100px 80px !important; background-position: 0 -41px !important};';
-}
 
 function SetExtendCommentUI()
 {
@@ -3185,15 +3196,6 @@ function MoveBirthdayFriendsToTop()
             lastIndex = i;
             friendsEl.insertBefore(friends[i], friendsEl.firstChild);
         }
-    }
-}
-
-function MainKakaoLogin()
-{
-    AddLoginThemeSelectButtonUI();
-    if (GetValue('enhancedSelectThemeLogin', 'dark') === 'dark')
-    {
-        ChangeLoginTheme('dark');
     }
 }
 
@@ -3290,7 +3292,7 @@ function MainKakaoStory()
     /* Kakao Login */
     if (window.location.href.includes("accounts.kakao.com/login"))
     {
-        MainKakaoLogin();
+        loginThemeModule.initialize();
         return;
     }
 
