@@ -58,9 +58,9 @@ function AddEnhancedMenu() {
         SetValue('enhancedSidebarShow', 'false');
     });
 
-    var showBtn = document.createElement('div');
+    let showBtn = document.createElement('div');
     showBtn.id = 'enhancedShowSidebar';
-    if (GetValue('enhancedSidebarLocation', 'right') == 'right')
+    if (GetValue('enhancedSidebarLocation', 'right') === 'right')
     {
         showBtn.className = 'enhanced_sidebar_show';
         showBtn.innerHTML = '<span class="enhanced_sidebar_show_btn_to_left"></span>'
@@ -91,55 +91,65 @@ function AddEnhancedMenu() {
     }
 }
 
+const eventHandlerModule = (function() {
+    let clickEventByIdMap = new Map();
+
+    function initialize()
+    {
+        document.addEventListener('click', function(event) {
+            if (clickEventByIdMap.has(event.target.id))
+            {
+                clickEventByIdMap.get(event.target.id)();
+            }
+        });
+    }
+
+    function addClickEventById(elemId, func)
+    {
+        clickEventByIdMap.set(elemId, func);
+    }
+
+    return {
+        initialize: initialize,
+        addClickEventById: addClickEventById
+    }
+})();
+
 const deleteFriendsModule = (function() {
     let deletedFriendCount = 0;
     let jsonMyFriends;
 
     function initialize()
     {
-        $(document).on('click', '#enhancedBtnDeleteFriendConfirm', function() {
-            deleteFriendsConfirm();
-        });
-
-        $(document).on('click', '#enhancedBtnDeleteBlockedFriendConfirm', function() {
-            deleteBlockedFriendsConfirm();
-        });
-
-        $(document).on('click', '#deleteFriendConfirmCancel', function() {
+        eventHandlerModule.addClickEventById('enhancedBtnDeleteFriendConfirm', deleteFriendsConfirm);
+        eventHandlerModule.addClickEventById('enhancedBtnDeleteBlockedFriendConfirm', deleteBlockedFriendsConfirm);
+        eventHandlerModule.addClickEventById('deleteFriendConfirmCancel', function() {
             document.getElementById("deleteLayer").remove();
         });
-
-        $(document).on('click', '#deleteFriendConfirmOK', function() {
+        eventHandlerModule.addClickEventById('deleteFriendConfirmOK', function() {
             document.getElementById("deleteLayer").remove();
             deleteFriendsReConfirm();
         });
-
-        $(document).on('click', '#deleteBlockedFriendConfirmCancel', function() {
+        eventHandlerModule.addClickEventById('deleteBlockedFriendConfirmCancel', function() {
             document.getElementById("deleteBlockedLayer").remove();
         });
-
-        $(document).on('click', '#deleteBlockedFriendConfirmOK', function() {
-            loadForDeleteFriends(true);
+        eventHandlerModule.addClickEventById('deleteBlockedFriendConfirmOK', function() {
+           loadForDeleteFriends(true);
         });
-
-        $(document).on('click', '#deleteFriendReConfirmCancel', function() {
+        eventHandlerModule.addClickEventById('deleteFriendReConfirmCancel', function() {
             document.getElementById("deleteLayer").remove();
         });
-
-        $(document).on('click', '#deleteFriendReConfirmOK', function() {
+        eventHandlerModule.addClickEventById('deleteFriendReConfirmOK', function() {
             loadForDeleteFriends(false);
         });
-
-        $(document).on('click', '#deleteFriendComplete', function() {
+        eventHandlerModule.addClickEventById('deleteFriendComplete', function() {
             document.getElementById("deleteLayer").remove();
             document.getElementById("deleteCountLayer").remove();
         });
-
-        $('body').on('click', '#enhancedFastDeleteClose', function() {
+        eventHandlerModule.addClickEventById('enhancedFastDeleteClose', function() {
             document.getElementById("fastDeleteLayer").remove();
         });
-
-        $('body').on('click', '#enhancedBtnFastDeleteFriendConfirm', function() {
+        eventHandlerModule.addClickEventById('enhancedBtnFastDeleteFriendConfirm', function() {
             OpenFastDeleteFriend();
         });
     }
@@ -327,28 +337,21 @@ const removeAllArticlesModule = (function() {
 
     function initialize()
     {
-        $(document).on('click', '#enhancedBtnRemoveAllArticlesConfirm', function() {
-            removeAllArticlesConfirm();
-        });
-
-        $(document).on('click', '#removeAllArticlesConfirmCancel', function() {
+        eventHandlerModule.addClickEventById('enhancedBtnRemoveAllArticlesConfirm', removeAllArticlesConfirm);
+        eventHandlerModule.addClickEventById('removeAllArticlesConfirmCancel', function() {
             document.getElementById("deleteLayer").remove();
         });
-
-        $(document).on('click', '#removeAllArticlesConfirmOK', function() {
+        eventHandlerModule.addClickEventById('removeAllArticlesConfirmOK', function() {
             document.getElementById("deleteLayer").remove();
             removeAllArticlesReConfirm();
         });
-
-        $(document).on('click', '#removeAllArticlesReConfirmCancel', function() {
+        eventHandlerModule.addClickEventById('removeAllArticlesReConfirmCancel', function() {
             document.getElementById("deleteLayer").remove();
         });
-
-        $(document).on('click', '#removeAllArticlesReConfirmOK', function() {
+        eventHandlerModule.addClickEventById('removeAllArticlesReConfirmOK', function() {
             prepareRemoveAllArticles();
         });
-
-        $(document).on('click', '#removeAllArticlesBtnOK', function() {
+        eventHandlerModule.addClickEventById('removeAllArticlesBtnOK', function() {
             document.getElementById("deleteLayer").remove();
             document.getElementById("removeAllArticlesCountLayer").remove();
         });
@@ -508,19 +511,12 @@ const changePermissionModule = (function() {
     let changePermActivityCount;
 
     function initialize() {
-        $(document).on('click', '#enhancedBtnChangePermConfirm', function() {
-            ChangePermissionConfirm();
-        });
-
-        $(document).on('click', '#changePermissionConfirmOK', function() {
-            PrepareChangePermission();
-        });
-
-        $(document).on('click', '#changePermissionConfirmCancel', function() {
+        eventHandlerModule.addClickEventById('enhancedBtnChangePermConfirm', ChangePermissionConfirm);
+        eventHandlerModule.addClickEventById('changePermissionConfirmOK', PrepareChangePermission);
+        eventHandlerModule.addClickEventById('changePermissionConfirmCancel', function() {
             document.getElementById("changePermLayer").remove();
         });
-
-        $(document).on('click', '#changePermissionBtnOK', function() {
+        eventHandlerModule.addClickEventById('changePermissionBtnOK', function() {
             document.getElementById("changePermLayer").remove();
             document.getElementById("changePermissionCountLayer").remove();
         });
@@ -3185,6 +3181,7 @@ function MoveBirthdayFriendsToTop()
 
 function MainKakaoStory()
 {
+    eventHandlerModule.initialize();
     InitEnhancedSettingsPage();
     InitCustomThemePage();
     LoadCommonEvents();
