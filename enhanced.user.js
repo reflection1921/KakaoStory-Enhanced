@@ -567,7 +567,7 @@ const changePermissionModule = (function() {
         let xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
             if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-                var activities = JSON.parse(xmlHttp.responseText);
+                let activities = JSON.parse(xmlHttp.responseText);
 
                 if (activities.length === 0) {
                     jsonPermActivities = null;
@@ -913,10 +913,10 @@ function HighlightCommentLikeDiscord() {
 
 // Settings Page
 function InitEnhancedSettingsPage() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var html = xmlHttp.responseText;
+            let html = xmlHttp.responseText;
 
             AttachEnhancedSettingsPage(html);
             InitEnhancedValues();
@@ -929,7 +929,7 @@ function InitEnhancedSettingsPage() {
 
 function AttachEnhancedSettingsPage(html)
 {
-    var settings = document.createElement('div');
+    let settings = document.createElement('div');
     settings.id = 'enhancedLayer';
     settings.className = 'cover _cover';
     settings.style.cssText = 'display: none;  overflow-y: scroll;';
@@ -939,13 +939,13 @@ function AttachEnhancedSettingsPage(html)
 
 function InitEnhancedValues()
 {
-    var selectedTheme = GetValue('enhancedSelectTheme', 'dark');
+    let selectedTheme = GetValue('enhancedSelectTheme', 'dark');
     $('input:radio[name="enhancedSelectTheme"]:input[value=' + selectedTheme + ']').attr("checked", true);
 
     LoadThemeList();
     ChangeTheme(selectedTheme);
 
-    var useDiscordMention = GetValue('enhancedDiscordMention', 'false');
+    let useDiscordMention = GetValue('enhancedDiscordMention', 'false');
     $('input:radio[name="enhancedSelectDiscordMention"]:input[value=' + useDiscordMention + ']').attr("checked", true);
 
     if (GetValue('enhancedSystemTheme', 'true') == 'true'){
@@ -956,7 +956,7 @@ function InitEnhancedValues()
         document.getElementById('enhancedSystemTheme').checked = false;
     }
 
-    var fontName = GetValue('enhancedFontName', 'Pretendard');
+    let fontName = GetValue('enhancedFontName', 'Pretendard');
     document.getElementById("enhancedTxtFontName").value = fontName;
     document.getElementById("enhancedTxtFontCSS").value = GetValue('enhancedFontCSS', 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css');
     SetFont();
@@ -980,11 +980,11 @@ function InitEnhancedValues()
     document.getElementById('enhancedTxtFontSize').value = GetValue('enhancedFontSize', '0');
     SetFontSize();
 
-    var notifyEnabled = GetValue('enhancedNotify', 'false');
+    let notifyEnabled = GetValue('enhancedNotify', 'false');
     $('input:radio[name="enhancedSelectNotifyUse"]:input[value=' + notifyEnabled + ']').attr("checked", true);
     document.getElementById("groupEnhancedNotifyEnable").style.display = (notifyEnabled == "true")? "block" : "none";
 
-    var notifySoundEnabled = GetValue('enhancedNotifySound', 'true');
+    let notifySoundEnabled = GetValue('enhancedNotifySound', 'true');
     notyOption.silent = (notifySoundEnabled == 'true')? false : true;
     $('input:radio[name="enhancedSelectNotifySoundUse"]:input[value=' + notifySoundEnabled + ']').attr("checked", true);
 
@@ -1657,14 +1657,14 @@ function LoadCommonEvents()
 
 function GetSelectedActivity()
 {
-    var articles = document.getElementsByClassName("section _activity");
-    var visibleArticles = Array.from(articles).filter(function(element) {
+    let articles = document.getElementsByClassName("section _activity");
+    let visibleArticles = Array.from(articles).filter(function(element) {
         return window.getComputedStyle(element).display !== "none";
     });
 
-    var selectedIdx = -1;
+    let selectedIdx = -1;
 
-    for (var i = 0; i < visibleArticles.length; i++)
+    for (let i = 0; i < visibleArticles.length; i++)
     {
         if (visibleArticles[i].classList.contains("enhanced_activty_selected"))
         {
@@ -1785,10 +1785,10 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on("change",'select[name="enhancedSelectDarkStyle"]',function(){
-        var styleName = document.getElementById("enhancedOptionDarkTheme").value;
-        var authorIdx = document.getElementById("enhancedOptionDarkTheme").selectedIndex;
-        var authorEl = document.getElementById("themeAuthor");
-        var authorLink = jThemes.themes[authorIdx].url;
+        let styleName = document.getElementById("enhancedOptionDarkTheme").value;
+        let authorIdx = document.getElementById("enhancedOptionDarkTheme").selectedIndex;
+        let authorEl = document.getElementById("themeAuthor");
+        let authorLink = jThemes.themes[authorIdx].url;
         authorEl.innerText = jThemes.themes[authorIdx].author;
         authorEl.href = authorLink;
         SetValue("enhancedDarkThemeStyle", styleName);
@@ -1796,7 +1796,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on("change",'input[name="enhancedSelectDiscordMention"]',function(){
-        var useMention = $('[name="enhancedSelectDiscordMention"]:checked').val();
+        let useMention = $('[name="enhancedSelectDiscordMention"]:checked').val();
         SetValue("enhancedDiscordMention", useMention);
         if (useMention == 'true')
         {
@@ -2441,12 +2441,12 @@ function SaveText(text, name, type, btnID) {
 }
 
 function BackupFriendsList() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var jsonFriends = JSON.parse(xmlHttp.responseText);
-            var friendsText = '';
-            for (var i = 0; i < jsonFriends.profiles.length; i ++) {
+            let jsonFriends = JSON.parse(xmlHttp.responseText);
+            let friendsText = '';
+            for (let i = 0; i < jsonFriends.profiles.length; i ++) {
                 friendsText = friendsText + String(jsonFriends.profiles[i]["display_name"]) + " : " + String(jsonFriends.profiles[i]["id"]) + '\n';
             }
             document.getElementById("enhancedFriendsBackupDescription").innerHTML = "※백업 데이터가 생성 되었습니다! 한번 더 클릭하여 다운로드를 진행하세요.<br>만약 다운로드가 진행되지 않을 경우, 우클릭하여 다른 이름으로 링크 저장을 사용해보세요.<br>다시 새로운 정보로 다운로드 하시려면, 새로고침이 필요합니다.";
@@ -2462,12 +2462,12 @@ function BackupFriendsList() {
 }
 
 function BackupBannedUserList() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var jsonBannedUsers = JSON.parse(xmlHttp.responseText);
-            var bannedUsersText = '';
-            for (var i = 0; i < jsonBannedUsers.length; i ++) {
+            let jsonBannedUsers = JSON.parse(xmlHttp.responseText);
+            let bannedUsersText = '';
+            for (let i = 0; i < jsonBannedUsers.length; i ++) {
                 bannedUsersText = bannedUsersText + String(jsonBannedUsers[i]["display_name"]) + " : " + String(jsonBannedUsers[i]["id"]) + '\n';
             }
             document.getElementById("enhancedBannedUserBackupDescription").innerHTML = "※백업 데이터가 생성 되었습니다! 한번 더 클릭하여 다운로드를 진행하세요.<br>만약 다운로드가 진행되지 않을 경우, 우클릭하여 다른 이름으로 링크 저장을 사용해보세요.<br>다시 새로운 정보로 다운로드 하시려면, 새로고침이 필요합니다.";
@@ -2483,12 +2483,12 @@ function BackupBannedUserList() {
 }
 
 function AddDownloadVideoButton() {
-    var videoControl = document.getElementsByClassName("mejs-controls");
-    for (var i = 0; i < videoControl.length; i++) {
-        var checkDownExists = videoControl[i].getElementsByClassName("mejs-button mejs-videodown-button");
+    let videoControl = document.getElementsByClassName("mejs-controls");
+    for (let i = 0; i < videoControl.length; i++) {
+        let checkDownExists = videoControl[i].getElementsByClassName("mejs-button mejs-videodown-button");
         if (checkDownExists.length === 0) {
-            var videoURL = videoControl[i].parentElement.getElementsByClassName("mejs-mediaelement")[0].getElementsByClassName("mejs-kakao")[0].getAttribute("src");
-            var downloadBtnEl = document.createElement('div');
+            let videoURL = videoControl[i].parentElement.getElementsByClassName("mejs-mediaelement")[0].getElementsByClassName("mejs-kakao")[0].getAttribute("src");
+            let downloadBtnEl = document.createElement('div');
             downloadBtnEl.id = 'videodown';
             downloadBtnEl.className = 'mejs-button mejs-videodown-button';
             videoControl[i].appendChild(downloadBtnEl);
@@ -2498,15 +2498,15 @@ function AddDownloadVideoButton() {
 }
 
 function HideChannelButton() {
-    var isHidden = GetValue("enhancedHideChannelButton", "true");
-    var val = isHidden == "true" ? 'none' : 'block';
+    let isHidden = GetValue("enhancedHideChannelButton", "true");
+    let val = isHidden == "true" ? 'none' : 'block';
     document.getElementsByClassName("storyteller_gnb")[0].style.display = val;
     document.getElementsByClassName("group_gnb")[0].style.display = val;
 }
 
 function HideMemorize() {
-    var memorize = document.getElementsByClassName("section section_time");
-    for (var i = 0; i < memorize.length; i++) {
+    let memorize = document.getElementsByClassName("section section_time");
+    for (let i = 0; i < memorize.length; i++) {
         memorize[i].parentElement.style.display = 'none';
     }
 }
@@ -2566,30 +2566,30 @@ function HideBlockedUserComment() {
 
 function HideBlockedUserArticle()
 {
-    var articles = document.getElementsByClassName("section _activity");
-    for (var i = 0; i < articles.length; i++)
+    let articles = document.getElementsByClassName("section _activity");
+    for (let i = 0; i < articles.length; i++)
     {
         if (articles[i].getElementsByClassName("fd_cont _contentWrapper").length <= 0) //this is not article
         {
             continue;
         }
 
-        var content = articles[i].getElementsByClassName("fd_cont _contentWrapper")[0];
+        let content = articles[i].getElementsByClassName("fd_cont _contentWrapper")[0];
 
         if (content.getElementsByClassName("share_wrap share_wrap_v2").length <= 0) //this is not shared article
         {
             continue;
         }
 
-        var shared_content = content.getElementsByClassName("share_wrap share_wrap_v2")[0];
+        let shared_content = content.getElementsByClassName("share_wrap share_wrap_v2")[0];
 
         if (shared_content.getElementsByClassName("pf") <= 0) //???
         {
             continue;
         }
 
-        var profile_info = shared_content.getElementsByClassName("pf")[0];
-        var bannedID = profile_info.getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
+        let profile_info = shared_content.getElementsByClassName("pf")[0];
+        let bannedID = profile_info.getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
 
         if (blockedList.has(bannedID) == true || feedBlockedList.has(bannedID) == true) {
 
@@ -2611,15 +2611,15 @@ function HideBlockedUserArticle()
 
     }
 
-    var bundle_articles = document.getElementsByClassName("section section_bundle");
-    for (var i = 0; i < bundle_articles.length; i++)
+    let bundle_articles = document.getElementsByClassName("section section_bundle");
+    for (let i = 0; i < bundle_articles.length; i++)
     {
         if (bundle_articles[i].getElementsByClassName("fd_cont").length <= 0) //this is not valid bundled article
         {
             continue;
         }
 
-        var content = bundle_articles[i].getElementsByClassName("fd_cont")[0];
+        let content = bundle_articles[i].getElementsByClassName("fd_cont")[0];
 
         if (content.getElementsByClassName("_bundleContainer").length <= 0) //this is not valid bundled article
         {
@@ -2631,8 +2631,8 @@ function HideBlockedUserArticle()
             continue;
         }
 
-        var profile_info = content.querySelector("div[data-part-name='originalActivity']").getElementsByClassName("pf")[0];
-        var bannedID = profile_info.getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
+        let profile_info = content.querySelector("div[data-part-name='originalActivity']").getElementsByClassName("pf")[0];
+        let bannedID = profile_info.getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
 
         if (blockedList.has(bannedID) == true) {
 
@@ -2657,14 +2657,14 @@ function HideBlockedUserArticle()
 
 function GetFeedBlockedUsers()
 {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
             if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
                 feedBlockedList.clear();
-                var friends = JSON.parse(xmlHttp.responseText);
-                for (var i = 0; i < friends.profiles.length; i++)
+                let friends = JSON.parse(xmlHttp.responseText);
+                for (let i = 0; i < friends.profiles.length; i++)
                 {
-                    var isFeedBlocked = friends['profiles'][i]['is_feed_blocked'];
+                    let isFeedBlocked = friends['profiles'][i]['is_feed_blocked'];
                     let friendID = friends['profiles'][i]['id'];
                     if (isFeedBlocked == true)
                     {
@@ -2682,12 +2682,12 @@ function GetFeedBlockedUsers()
 }
 
 function GetBlockedUsers() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var jsonBlocked = JSON.parse(xmlHttp.responseText);
+            let jsonBlocked = JSON.parse(xmlHttp.responseText);
             blockedList.clear();
-            for (var i = 0; i < jsonBlocked.length; i ++) {
+            for (let i = 0; i < jsonBlocked.length; i ++) {
                 blockedList.add(String(jsonBlocked[i]["id"]));
             }
         }
@@ -2710,12 +2710,12 @@ function ShowBlockStringPage() {
 }
 
 function InitCustomThemePage() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var html = xmlHttp.responseText;
+            let html = xmlHttp.responseText;
 
-            var customThemeLayer = document.createElement('div');
+            let customThemeLayer = document.createElement('div');
             customThemeLayer.id = "customThemeLayer";
             customThemeLayer.className = "cover _cover";
             customThemeLayer.style.display = "none";
@@ -2732,14 +2732,14 @@ function InitCustomThemePage() {
 
 function InitCustomThemeValues()
 {
-    for (var i = 1; i <= 3; i++)
+    for (let i = 1; i <= 3; i++)
     {
-        var color = GetValue('enhancedCustomThemeColor' + i, GetRandomHexColor());
+        let color = GetValue('enhancedCustomThemeColor' + i, GetRandomHexColor());
         document.getElementById("enhancedCustomThemeColor" + i).value = color;
         document.getElementById("enhancedCustomThemePercent" + i).value = GetValue('enhancedCustomThemePercent' + i, Math.floor(Math.random() * 100));
-        var isBright = IsBrightColor(color);
-        var el = document.getElementsByClassName("enhanced_custom_gradient_color_" + i);
-        for (var j = 0; j < el.length; j++)
+        let isBright = IsBrightColor(color);
+        let el = document.getElementsByClassName("enhanced_custom_gradient_color_" + i);
+        for (let j = 0; j < el.length; j++)
         {
             el[j].style.backgroundColor = color;
             el[j].style.color = (isBright)? 'black' : 'white';
@@ -2757,12 +2757,12 @@ function InitCustomThemePageEvents()
     });
 
     document.getElementById("enhancedCustomThemeColor2").addEventListener("input", function() {
-        var color = this.value;
+        let color = this.value;
         CustomThemeColorEventFunc(color, 2);
     });
 
     document.getElementById("enhancedCustomThemeColor3").addEventListener("input", function() {
-        var color = this.value;
+        let color = this.value;
         CustomThemeColorEventFunc(color, 3);
     });
 
@@ -2847,8 +2847,8 @@ function GetRandomHexColor()
 
 function IsBrightColor(hexColor)
 {
-    var rgb = HexToRGB(hexColor);
-    var brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
+    let rgb = HexToRGB(hexColor);
+    let brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
     return brightness > 125;
 }
 
@@ -3015,9 +3015,9 @@ function GetHideLogoIconTitle()
 
 function HideLogo()
 {
-    var link = document.querySelector("link[rel~='icon']");
-    var icon = currentFavicon + ".ico";
-    var addNotiEnabled = false;
+    let link = document.querySelector("link[rel~='icon']");
+    let icon = currentFavicon + ".ico";
+    let addNotiEnabled = false;
 
     //innerText starts with (N) means notification
 
@@ -3031,7 +3031,7 @@ function HideLogo()
         icon = GetValue('enhancedFaviconURL', resourceURL + 'images/naver.ico');
     }
 
-    var _title = currentTitle;
+    let _title = currentTitle;
     if (addNotiEnabled)
     {
         _title = '(N) ' + currentTitle;
@@ -3238,7 +3238,7 @@ function MainKakaoStory()
 
         ViewDetailNotFriendArticle();
 
-        var hideLogoEnabled = (GetValue('enhancedHideLogo', 'false') == 'true');
+        let hideLogoEnabled = (GetValue('enhancedHideLogo', 'false') == 'true');
 
         if (hideLogoEnabled == true)
         {
