@@ -873,7 +873,7 @@ function DisableScroll() {
 
 function GetMyID() {
     let tmpMyID = $('a[data-kant-id="737"]').attr('href').substring(1);
-    if (tmpMyID.charAt(0) == '_') {
+    if (tmpMyID.charAt(0) === '_') {
         myID = tmpMyID;
     } else {
         GetMySID(tmpMyID);
@@ -1083,8 +1083,7 @@ function GetCSSVersion() {
     let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            let cssVersion = xmlHttp.responseText;
-            document.getElementById('enhancedCSSVersion').innerText = cssVersion;
+            document.getElementById('enhancedCSSVersion').innerText = xmlHttp.responseText;
         }
     }
     xmlHttp.open("GET", resourceURL + "versions/css_version.txt");
@@ -1092,25 +1091,20 @@ function GetCSSVersion() {
 }
 
 function GetLatestVersion() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var scriptData = xmlHttp.responseText;
-            var latestVersion = scriptData.split("// @version      ")[1].split("\n")[0];
+            let scriptData = xmlHttp.responseText;
+            let latestVersion = scriptData.split("// @version      ")[1].split("\n")[0];
             document.getElementById('enhancedLatestVersion').innerText = "최신버전: " + latestVersion;
             //Update
-            var majorLatestVersion = latestVersion.split(".")[0];
-            majorLatestVersion = Number(majorLatestVersion);
-            var minorLatestVersion = latestVersion.split(".")[1];
-            minorLatestVersion = Number(minorLatestVersion);
+            let majorLatestVersion = Number(latestVersion.split(".")[0]);
+            let minorLatestVersion = Number(latestVersion.split(".")[1]);
 
-            var majorScriptVersion = scriptVersion.split(".")[0];
-            majorScriptVersion = Number(majorScriptVersion);
+            let majorScriptVersion = Number(scriptVersion.split(".")[0]);
+            let minorScriptVersion = Number(scriptVersion.split(".")[1]);
 
-            var minorScriptVersion = scriptVersion.split(".")[1];
-            minorScriptVersion = Number(minorScriptVersion);
-
-            if (majorLatestVersion > majorScriptVersion || (majorLatestVersion == majorScriptVersion && minorLatestVersion > minorScriptVersion))
+            if (majorLatestVersion > majorScriptVersion || (majorLatestVersion === majorScriptVersion && minorLatestVersion > minorScriptVersion))
             {
                 ViewUpdatePage();
             }
@@ -1121,7 +1115,7 @@ function GetLatestVersion() {
 }
 
 function ViewUpdatePage() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             let updateHtml = xmlHttp.responseText;
@@ -1139,7 +1133,7 @@ function ViewUpdatePage() {
 }
 
 function ViewUpdateAllPage() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             let updateHtml = xmlHttp.responseText;
@@ -1157,7 +1151,7 @@ function ViewUpdateAllPage() {
 
 function ViewDetailNotFriendArticle()
 {
-    var detail = document.getElementsByClassName("_btnViewDetailInShare");
+    let detail = document.getElementsByClassName("_btnViewDetailInShare");
     for (let i = 0; i < detail.length; i++)
     {
         if (detail[i].innerText === "...더보기")
@@ -2187,15 +2181,15 @@ function SetFont()
 }
 
 function SetFontSize() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var lines = xmlHttp.responseText.split("\n");
-            for (var i = 0; i < lines.length; i++) {
+            let lines = xmlHttp.responseText.split("\n");
+            for (let i = 0; i < lines.length; i++) {
 
-                var originSize = parseInt(lines[i].split("font-size:")[1].split("px")[0]);
-                var changedSize = originSize + parseInt(GetValue('enhancedFontSize', '0'));
-                var modifiedCSS = lines[i].replace( originSize , changedSize);
+                let originSize = parseInt(lines[i].split("font-size:")[1].split("px")[0]);
+                let changedSize = originSize + parseInt(GetValue('enhancedFontSize', '0'));
+                let modifiedCSS = lines[i].replace(String(originSize), String(changedSize));
                 SetCSS('enhancedFontSizeCSS' + i, modifiedCSS);
             }
         }
@@ -2213,13 +2207,13 @@ function GetOSTheme() {
 }
 
 function SetDarkThemeStyle(styleName) {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var lines = xmlHttp.responseText.split("\n");
-            for (var i = 0; i < lines.length; i++) {
-                var variableName = lines[i].split(":")[0];
-                var variableValue = lines[i].split(": ")[1].split(";")[0];
+            let lines = xmlHttp.responseText.split("\n");
+            for (let i = 0; i < lines.length; i++) {
+                let variableName = lines[i].split(":")[0];
+                let variableValue = lines[i].split(": ")[1].split(";")[0];
                 document.documentElement.style.setProperty(variableName, variableValue);
             }
             document.documentElement.style.setProperty('--saturation-factor', GetValue('enhancedThemeSaturation', '1'));
@@ -2239,25 +2233,25 @@ function SetDarkThemeStyle(styleName) {
 }
 
 function LoadThemeList() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             jThemes = JSON.parse(xmlHttp.responseText);
-            for (var i = 0; i < jThemes.themes.length; i++)
+            for (let i = 0; i < jThemes.themes.length; i++)
             {
-                var opTheme = document.getElementById("enhancedOptionDarkTheme").options;
-                var op = new Option();
+                let opTheme = document.getElementById("enhancedOptionDarkTheme").options;
+                let op = new Option();
                 op.value = jThemes.themes[i].id;
                 op.text = jThemes.themes[i].name;
 
                 opTheme.add(op);
             }
 
-            var selectedDarkStyle = GetValue('enhancedDarkThemeStyle', 'discord');
+            let selectedDarkStyle = GetValue('enhancedDarkThemeStyle', 'discord');
             document.getElementById("enhancedOptionDarkTheme").value = selectedDarkStyle;
-            var authorIdx = document.getElementById("enhancedOptionDarkTheme").selectedIndex;
-            var authorEl = document.getElementById("themeAuthor");
-            var authorLink = jThemes.themes[authorIdx].url;
+            let authorIdx = document.getElementById("enhancedOptionDarkTheme").selectedIndex;
+            let authorEl = document.getElementById("themeAuthor");
+            let authorLink = jThemes.themes[authorIdx].url;
             authorEl.innerText = jThemes.themes[authorIdx].author;
             authorEl.href = authorLink;
             if (GetValue('enhancedSelectTheme', 'dark') == 'dark')
@@ -2271,11 +2265,11 @@ function LoadThemeList() {
 }
 
 function LoadDarkThemeCSS() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var darkcss = xmlHttp.responseText;
-            SetCSS("enhancedDarkCSS", darkcss);
+            let darkCSS = xmlHttp.responseText;
+            SetCSS("enhancedDarkCSS", darkCSS);
         }
     }
     xmlHttp.open("GET", resourceURL + "css/darktheme.css");
@@ -2283,11 +2277,11 @@ function LoadDarkThemeCSS() {
 }
 
 function LoadEnhancedCSS() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var darkcss = xmlHttp.responseText;
-            SetCSS('enhancedCSS', darkcss);
+            let enhancedCSS = xmlHttp.responseText;
+            SetCSS('enhancedCSS', enhancedCSS);
         }
     }
     xmlHttp.open("GET", resourceURL + "css/enhanced.css");
@@ -2295,11 +2289,11 @@ function LoadEnhancedCSS() {
 }
 
 function LoadExtendFeedCSS() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var darkcss = xmlHttp.responseText;
-            SetCSS('enhancedExtendFeedCSS', darkcss);
+            let extendFeedCSS = xmlHttp.responseText;
+            SetCSS('enhancedExtendFeedCSS', extendFeedCSS);
         }
     }
     xmlHttp.open("GET", resourceURL + "css/extend_feed.css");
@@ -2307,11 +2301,11 @@ function LoadExtendFeedCSS() {
 }
 
 function LoadExtendFeed1024CSS() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var darkcss = xmlHttp.responseText;
-            SetCSS('enhancedExtendFeedCSS', darkcss);
+            let extend1024CSS = xmlHttp.responseText;
+            SetCSS('enhancedExtendFeedCSS', extend1024CSS);
         }
     }
     xmlHttp.open("GET", resourceURL + "css/extend_feed_1024.css");
@@ -2319,11 +2313,11 @@ function LoadExtendFeed1024CSS() {
 }
 
 function LoadExtendFeedFlexibleCSS() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var darkcss = xmlHttp.responseText;
-            SetCSS('enhancedExtendFeedCSS', darkcss);
+            let extendFlexibleFeedCSS = xmlHttp.responseText;
+            SetCSS('enhancedExtendFeedCSS', extendFlexibleFeedCSS);
         }
     }
     xmlHttp.open("GET", resourceURL + "css/extend_feed_flexible.css");
@@ -2331,10 +2325,10 @@ function LoadExtendFeedFlexibleCSS() {
 }
 
 function LoadLeftSidebarCSS() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var leftSideCSS = xmlHttp.responseText;
+            let leftSideCSS = xmlHttp.responseText;
             SetCSS('enhancedLeftSidebarCSS', leftSideCSS);
         }
     }
@@ -2342,11 +2336,11 @@ function LoadLeftSidebarCSS() {
     xmlHttp.send();
 }
 
-function LoadDevCSS() {
-    var xmlHttp = new XMLHttpRequest();
+function __NotUsedMethod() {
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var darkcss = xmlHttp.responseText;
+            let darkcss = xmlHttp.responseText;
             SetCSS("enhancedDevCSS", darkcss);
         }
     }
@@ -2864,10 +2858,9 @@ function IsBrightColor(hexColor)
 
 function GetHSLCSS(hexColor)
 {
-    var rgb = HexToRGB(hexColor);
-    var hsl = RGBToHSL(rgb);
-    //000 calc(var(--saturation-factor, 1)*0%) 100%;
-    //115 calc(var(--saturation-factor, 1)*10.5%) 42.9%;
+    let rgb = HexToRGB(hexColor);
+    let hsl = RGBToHSL(rgb);
+
     return hsl[0] + ' calc(var(--saturation-factor, 1)*' + hsl[1] + '%) ' + hsl[2] + '%';
 }
 
@@ -2968,7 +2961,7 @@ function MoveKitty()
 }
 
 function GetValue(key, defaultValue) {
-    var value = localStorage[key];
+    let value = localStorage[key];
     if (value == "" || value == null) {
         SetValue(key, defaultValue);
         value = defaultValue;
@@ -2997,13 +2990,6 @@ function RemoveCSSCollection(elID)
     {
         elem.remove();
     }
-}
-
-function DownloadText(text, name, type) {
-    var a = document.getElementById("a");
-    var file = new Blob([text], {type: type});
-    a.href = URL.createObjectURL(file);
-    a.download = name;
 }
 
 function GetHideLogoIconTitle()
