@@ -462,7 +462,7 @@ body { color: var(--text-color) !important; }
 .friend_collection .tool_pub .btn_tool { color: var(--text-title-color) !important; }
 .friend_collection .tool_pub:hover { background: var(--background-hover-color) !important; }
 .section .open_layer .li_v4 { border-top: 1px solid var(--background-border-color) !important; }
-.feed .section .open_layer li .bg_chk { background: rgba(0,0,0,0) !important; }
+.feed .section .open_layer li .bg_chk { background-color: rgba(0,0,0,0) !important; }
 .feed_mystory { background: var(--light-background-color) !important; }
 .feed_mystory .tit_wrap .tit_feed { color: var(--text-highlight-color) !important; }
 .feed_mystory .tool_pub:hover { background: var(--background-color) !important;}
