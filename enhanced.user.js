@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.31
+// @version      1.32
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -13,11 +13,11 @@
 // ==/UserScript==
 
 
-let scriptVersion = "1.31";
+let scriptVersion = "1.32";
 
-let resourceURL = 'http://127.0.0.1:9011/kakaostory-enhanced/'; //for debug
+//let resourceURL = 'http://127.0.0.1:9011/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 let notyTimeCount = 0; //for notification feature
 let blockedList = new Set(); //block users
