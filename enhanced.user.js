@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.31
+// @version      1.32
 // @description  Add-on for KakaoStory
 // @author       Reflection, 박종우
 // @match        https://story.kakao.com/*
@@ -13,45 +13,37 @@
 // ==/UserScript==
 
 
-let scriptVersion = "1.31";
+let scriptVersion = "1.32";
 
-//let resourceURL = 'http://127.0.0.1:8188/kakaostory-enhanced/'; //for debug
+//let resourceURL = 'http://127.0.0.1:9011/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
 let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
-//let latestNotyID = ''; //for notification feature
 let notyTimeCount = 0; //for notification feature
 let blockedList = new Set(); //block users
-let blockedStringList = new Array(); //block strings
+let blockedStringList = []; //block strings
 let feedBlockedList = new Set(); //blocked feed users
 let catEffect = new Audio(resourceURL + 'sounds/cat-meow.mp3');
-let catEffect2 = new Audio(resourceURL + 'sounds/cat-meow-2.mp3');
 let dogEffect = new Audio(resourceURL + 'sounds/dog-bark.mp3');
 let jThemes;
 
 let powerComboCnt = 0;
 let powerComboTimeCnt = 0;
 
-let deletedFriendCount = 0;
-let jsonMyFriends;
-
-let jsonPermActivities;
-let changePermCount = 0;
-let changeInternalPermCount = 0;
-let changePermUserID;
-let changePermActivityCount;
 let currentFavicon = "naver";
 let currentTitle = "NAVER";
 //let selCurPerm = 'Z'; //A = 전체공개, F = 친구공개, M = 나만보기, Z = 기본설정(모든 게시글)
 //let selNewPerm = 'F'; //A = 전체공개, F = 친구공개, M = 나만보기
 
+let notyOption = {
+    body: '',
+    icon: 'https://i.imgur.com/FSvg18g.png',
+    silent: false
+}
+
 //konami command to restore kakaostory favicon classic
 let konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
 let konamiCount = 0;
-
-/* For Login Page */
-let svgDark = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
-let svgLight = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
 
 function AddEnhancedMenu() {
     document.getElementsByClassName("menu_util")[0].innerHTML = '<li><a href="#" id="enhancedHideSidebar" class="link_menu _btnSettingProfile">사이드바 숨기기</a></li><li class="enhanced_settings_menu"><a href="#" id="enhancedOpenSettings" class="link_menu _btnSettingProfile">Enhanced 설정</a></li>' + document.getElementsByClassName("menu_util")[0].innerHTML;
@@ -66,9 +58,9 @@ function AddEnhancedMenu() {
         SetValue('enhancedSidebarShow', 'false');
     });
 
-    var showBtn = document.createElement('div');
+    let showBtn = document.createElement('div');
     showBtn.id = 'enhancedShowSidebar';
-    if (GetValue('enhancedSidebarLocation', 'right') == 'right')
+    if (GetValue('enhancedSidebarLocation', 'right') === 'right')
     {
         showBtn.className = 'enhanced_sidebar_show';
         showBtn.innerHTML = '<span class="enhanced_sidebar_show_btn_to_left"></span>'
@@ -99,6 +91,772 @@ function AddEnhancedMenu() {
     }
 }
 
+const eventHandlerModule = (function() {
+    let clickEventByIdMap = new Map();
+
+    function initialize()
+    {
+        document.addEventListener('click', function(event) {
+            if (clickEventByIdMap.has(event.target.id))
+            {
+                clickEventByIdMap.get(event.target.id)();
+            }
+        });
+    }
+
+    function addClickEventById(elemId, func)
+    {
+        clickEventByIdMap.set(elemId, func);
+    }
+
+    return {
+        initialize: initialize,
+        addClickEventById: addClickEventById
+    }
+})();
+
+const deleteFriendsModule = (function() {
+    let deletedFriendCount = 0;
+    let jsonMyFriends;
+
+    function initialize()
+    {
+        eventHandlerModule.addClickEventById('enhancedBtnDeleteFriendConfirm', deleteFriendsConfirm);
+        eventHandlerModule.addClickEventById('enhancedBtnDeleteBlockedFriendConfirm', deleteBlockedFriendsConfirm);
+        eventHandlerModule.addClickEventById('deleteFriendConfirmCancel', function() {
+            document.getElementById("deleteLayer").remove();
+        });
+        eventHandlerModule.addClickEventById('deleteFriendConfirmOK', function() {
+            document.getElementById("deleteLayer").remove();
+            deleteFriendsReConfirm();
+        });
+        eventHandlerModule.addClickEventById('deleteBlockedFriendConfirmCancel', function() {
+            document.getElementById("deleteBlockedLayer").remove();
+        });
+        eventHandlerModule.addClickEventById('deleteBlockedFriendConfirmOK', function() {
+           loadForDeleteFriends(true);
+        });
+        eventHandlerModule.addClickEventById('deleteFriendReConfirmCancel', function() {
+            document.getElementById("deleteLayer").remove();
+        });
+        eventHandlerModule.addClickEventById('deleteFriendReConfirmOK', function() {
+            loadForDeleteFriends(false);
+        });
+        eventHandlerModule.addClickEventById('deleteFriendComplete', function() {
+            document.getElementById("deleteLayer").remove();
+            document.getElementById("deleteCountLayer").remove();
+        });
+        eventHandlerModule.addClickEventById('enhancedFastDeleteClose', function() {
+            document.getElementById("fastDeleteLayer").remove();
+        });
+        eventHandlerModule.addClickEventById('enhancedBtnFastDeleteFriendConfirm', function() {
+            OpenFastDeleteFriend();
+        });
+    }
+
+    function loadForDeleteFriends(blockedUserOnly) {
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                jsonMyFriends = JSON.parse(xmlHttp.responseText);
+
+                let deleteCountLayer = document.createElement('div');
+                deleteCountLayer.id = "deleteCountLayer";
+                deleteCountLayer.className = "cover _cover";
+                document.body.appendChild(deleteCountLayer);
+                document.getElementById('deleteCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="deleteFriendText">친구 삭제 중... (0 / 0)</p><div>※정책상 삭제 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendComplete" style="display: none;"><span>확인</span></a> </div></div></div></div>';
+                //deletedFriendCount = 0;
+                if (blockedUserOnly)
+                {
+                    verifyBlockedUserForDeleteFriends();
+                }
+                deleteFriends();
+            }
+        }
+        xmlHttp.open("GET", "https://story.kakao.com/a/friends");
+        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+        xmlHttp.setRequestHeader("Accept", "application/json");
+        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xmlHttp.send();
+    }
+
+    // Remove unblocked users to remove blocked users only
+    function verifyBlockedUserForDeleteFriends()
+    {
+        for (let i = 0; i < jsonMyFriends.profiles.length; i++)
+        {
+            if (!jsonMyFriends.profiles[i].hasOwnProperty("blocked") || jsonMyFriends.profiles[i]["blocked"] === false)
+            {
+                jsonMyFriends.profiles.splice(i, 1);
+                i--;
+            }
+        }
+    }
+
+    function deleteBlockedFriendsConfirm()
+    {
+        let deleteLayer = document.createElement('div');
+        deleteLayer.id = "deleteBlockedLayer";
+        deleteLayer.className = "cover _cover";
+        document.body.appendChild(deleteLayer);
+        document.getElementById('deleteBlockedLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' +
+            '<div class="cover_wrapper" style="z-index: 201;">' +
+            '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
+            '<div class="inner_toast_layer _toastBody">' +
+            '<p class="txt _dialogText">정말 제한된 사용자를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
+            '<div class="btn_group">' +
+            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteBlockedFriendConfirmCancel"><span>취소</span></a>' +
+            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteBlockedFriendConfirmOK"><span>확인</span></a>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+    }
+
+    function deleteFriendsConfirm()
+    {
+        let deleteLayer = document.createElement('div');
+        deleteLayer.id = "deleteLayer";
+        deleteLayer.className = "cover _cover";
+        document.body.appendChild(deleteLayer);
+        document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' +
+            '<div class="cover_wrapper" style="z-index: 201;">' +
+            '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
+            '<div class="inner_toast_layer _toastBody">' +
+            '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.<br>취소하더라도 이미 삭제된 친구는 복구되지 않습니다!</p>' +
+            '<div class="btn_group">' +
+            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendConfirmCancel"><span>취소</span></a>' +
+            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendConfirmOK"><span>확인</span></a>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+    }
+
+    function deleteFriendsReConfirm()
+    {
+        let deleteLayer = document.createElement('div');
+        deleteLayer.id = "deleteLayer";
+        deleteLayer.className = "cover _cover";
+        document.body.appendChild(deleteLayer);
+        document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' +
+            '<div class="cover_wrapper" style="z-index: 201;">' +
+            '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
+            '<div class="inner_toast_layer _toastBody">' +
+            '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>진행하면 되돌릴 수 없습니다!<br>다시 한 번 신중하게 생각해주세요!<br>취소하시려면 새로고침해야 합니다.<br>취소하더라도 이미 삭제된 친구는 복구되지 않습니다!</p>' +
+            '<div class="btn_group">' +
+            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendReConfirmCancel"><span>취소</span></a>' +
+            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendReConfirmOK"><span>확인</span></a>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+    }
+
+    function deleteFriends() {
+        setTimeout(function() {
+            if (deletedFriendCount < jsonMyFriends.profiles.length) {
+                _deleteFriend(jsonMyFriends.profiles[deletedFriendCount]["id"]);
+                document.getElementById('deleteFriendText').innerHTML = '친구 삭제 중... (' + (deletedFriendCount + 1) + ' / ' + jsonMyFriends.profiles.length + ')';
+                deletedFriendCount++;
+                deleteFriends();
+            } else {
+                document.getElementById('deleteFriendText').innerHTML = '전체 삭제 완료';
+                document.getElementById('deleteFriendComplete').style.display = 'block';
+            }
+        }, 300);
+    }
+
+    function _deleteFriend(userid) {
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                //Deleted Message;
+            }
+        }
+        xmlHttp.open("DELETE", "https://story.kakao.com/a/friends/" + userid);
+        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+        xmlHttp.setRequestHeader("Accept", "application/json");
+        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xmlHttp.send();
+    }
+
+    function OpenFastDeleteFriend()
+    {
+        let fastDeleteLayer = document.createElement('div');
+        fastDeleteLayer.id = "fastDeleteLayer";
+        fastDeleteLayer.className = "cover _cover";
+        document.body.appendChild(fastDeleteLayer);
+        document.getElementById('fastDeleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="story_layer story_feed_layer cover_content cover_center" data-kant-group="like"><div class="inner_story_layer _layerContainer" style="top: 630px;"><div class="layer_head"><strong class="tit_story">빠른 친구삭제</strong></div><div class="layer_body"><div class="fake_scroll"><ul id="enhancedFastDeleteTable" class="list_people list_people_v2 _listContainer" style="overflow-y: scroll;"></ul><div class="scroll" style="display: none; height: 60px;"><span class="top"></span><span class="bottom"></span></div></div></div><div class="layer_foot"><a href="#" class="btn_close _close" data-kant-id="false"><span id="enhancedFastDeleteClose" class="ico_ks ico_close">닫기</span></a></div></div></div></div>';
+        document.body.scrollTop = 0;
+
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                let friends = JSON.parse(xmlHttp.responseText);
+                for (let i = 0; i < friends.profiles.length; i++)
+                {
+                    let liFriend = document.createElement('li');
+                    let friendProfileImageL = friends['profiles'][i]['profile_image_url'];
+                    let friendProfileImageS = friends['profiles'][i]['profile_thumbnail_url'];
+                    let friendName = friends['profiles'][i]['display_name'];
+                    let friendID = friends['profiles'][i]['id'];
+                    liFriend.id = "enhancedFastDelFriend_" + friendID;
+                    document.getElementById("enhancedFastDeleteTable").appendChild(liFriend);
+                    document.getElementById("enhancedFastDelFriend_" + friendID).innerHTML = '<a href="/' + friendID + '" class="link_people"><span class="thumb_user"><span class="img_profile thumb_img"><img src="' + friendProfileImageL + '" width="36" height="36" data-image-src="' + friendProfileImageS + '" data-movie-src="" class="img_thumb" alt=""></span></span> <span class="info_user"><span class="inner_user"><span class="txt_user"><em class="tit_userinfo">' + friendName + '</em></span></span></span></a><div class="btn_group btn_group_v2"><a href="#" id="' + 'btnEnhancedFastDelFriend_' + friendID + '" class="btn_com btn_wh _acceptFriend fastDelBtn"><span>삭제</span></a></div>';
+                    document.getElementById("btnEnhancedFastDelFriend_" + friendID).addEventListener("click", function() {
+                        _deleteFriend(friendID);
+                        liFriend.remove();
+                    });
+
+                }
+            }
+        }
+        xmlHttp.open("GET", "https://story.kakao.com/a/friends");
+        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+        xmlHttp.setRequestHeader("Accept", "application/json");
+        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xmlHttp.send();
+    }
+
+    return {
+        initialize: initialize
+    };
+})();
+
+const removeAllArticlesModule = (function() {
+
+    let jsonRemoveActivities;
+    let removedArticleCount = 0;
+    let removedArticleInternalCount = 0;
+    let removeArticlesUserID;
+    let removeArticlesActivityCount;
+
+    function initialize()
+    {
+        eventHandlerModule.addClickEventById('enhancedBtnRemoveAllArticlesConfirm', removeAllArticlesConfirm);
+        eventHandlerModule.addClickEventById('removeAllArticlesConfirmCancel', function() {
+            document.getElementById("deleteLayer").remove();
+        });
+        eventHandlerModule.addClickEventById('removeAllArticlesConfirmOK', function() {
+            document.getElementById("deleteLayer").remove();
+            removeAllArticlesReConfirm();
+        });
+        eventHandlerModule.addClickEventById('removeAllArticlesReConfirmCancel', function() {
+            document.getElementById("deleteLayer").remove();
+        });
+        eventHandlerModule.addClickEventById('removeAllArticlesReConfirmOK', function() {
+            prepareRemoveAllArticles();
+        });
+        eventHandlerModule.addClickEventById('removeAllArticlesBtnOK', function() {
+            document.getElementById("deleteLayer").remove();
+            document.getElementById("removeAllArticlesCountLayer").remove();
+        });
+    }
+
+    function removeAllArticlesConfirm()
+    {
+        let deleteLayer = document.createElement('div');
+        deleteLayer.id = "deleteLayer";
+        deleteLayer.className = "cover _cover";
+        document.body.appendChild(deleteLayer);
+        document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' +
+            '<div class="cover_wrapper" style="z-index: 201;">' +
+            '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
+            '<div class="inner_toast_layer _toastBody">' +
+            '<p class="txt _dialogText">정말 게시글을 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.<br>취소하더라도 이미 삭제된 게시글은 복구되지 않습니다!</p>' +
+            '<div class="btn_group">' +
+            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="removeAllArticlesConfirmCancel"><span>취소</span></a>' +
+            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="removeAllArticlesConfirmOK"><span>확인</span></a>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+    }
+
+    function removeAllArticlesReConfirm()
+    {
+        let deleteLayer = document.createElement('div');
+        deleteLayer.id = "deleteLayer";
+        deleteLayer.className = "cover _cover";
+        document.body.appendChild(deleteLayer);
+        document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' +
+            '<div class="cover_wrapper" style="z-index: 201;">' +
+            '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
+            '<div class="inner_toast_layer _toastBody">' +
+            '<p class="txt _dialogText">정말 게시글을 전체 삭제하시겠습니까?<br>진행하면 되돌릴 수 없습니다!<br>다시 한 번 신중하게 생각해주세요!<br>취소하시려면 새로고침해야 합니다.<br>취소하더라도 이미 삭제된 게시글은 복구되지 않습니다!</p>' +
+            '<div class="btn_group">' +
+            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="removeAllArticlesReConfirmCancel"><span>취소</span></a>' +
+            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="removeAllArticlesReConfirmOK"><span>확인</span></a>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+    }
+
+    function _removeArticle(articleID)
+    {
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                // Removed
+            }
+        }
+        xmlHttp.open("DELETE", "https://story.kakao.com/a/activities/" + articleID);
+        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+        xmlHttp.setRequestHeader("Accept", "application/json");
+        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xmlHttp.setRequestHeader("Accept-Language", "ko");
+        xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+        xmlHttp.send();
+    }
+
+    function loadActivitiesForRemove(userID, lastArticleID) {
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                let activities = JSON.parse(xmlHttp.responseText);
+
+                if (activities.length === 0) {
+                    jsonRemoveActivities = null;
+                    document.getElementById('removeAllArticlesText').innerHTML = '게시글이 성공적으로 삭제되었습니다.';
+                    document.getElementById('removeAllArticlesBtnOK').style.display = 'block';
+                    return;
+                }
+
+                jsonRemoveActivities = activities;
+
+                removeActivities();
+            }
+        }
+        xmlHttp.open("GET", "https://story.kakao.com/a/profiles/" + userID + "/activities?ag=false&since=" + lastArticleID);
+        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+        xmlHttp.setRequestHeader("Accept", "application/json");
+        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xmlHttp.send();
+    }
+
+    function removeActivities()
+    {
+        setTimeout(function() {
+            if (removedArticleInternalCount < jsonRemoveActivities.length - 1)
+            {
+                let activity = jsonRemoveActivities[removedArticleInternalCount];
+
+                let lArticleID = activity["sid"];
+                _removeArticle(lArticleID);
+
+                document.getElementById('removeAllArticlesText').innerHTML = '게시글 삭제 중... (' + (removedArticleCount + 1) + '/' + removeArticlesActivityCount + '개 완료)';
+                removedArticleCount++;
+                removedArticleInternalCount++;
+                removeActivities();
+            }
+            else
+            {
+
+                let activity = jsonRemoveActivities[removedArticleInternalCount];
+                let lArticleID = activity["sid"];
+
+                removedArticleInternalCount = 0;
+                loadActivitiesForRemove(removeArticlesUserID, jsonRemoveActivities[jsonRemoveActivities.length - 1]["sid"]);
+
+                _removeArticle(lArticleID);
+            }
+        }, 550);
+
+    }
+
+    function prepareRemoveAllArticles() {
+
+        removedArticleCount = 0; //reset count
+
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                let jsonProfile = JSON.parse(xmlHttp.responseText);
+                removeArticlesUserID = jsonProfile.id;
+                removeArticlesActivityCount = jsonProfile.activity_count;
+
+                let removeAllArticlesCountLayer = document.createElement('div');
+                removeAllArticlesCountLayer.id = "removeAllArticlesCountLayer";
+                removeAllArticlesCountLayer.className = "cover _cover";
+                document.body.appendChild(removeAllArticlesCountLayer);
+                document.getElementById('removeAllArticlesCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="removeAllArticlesText">게시글 삭제 중... (0 / 0)</p><div>※정책상 변경 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="removeAllArticlesBtnOK" style="display: none;"><span>확인</span></a> </div></div></div></div>';
+                loadActivitiesForRemove(removeArticlesUserID, "");
+            }
+        }
+        xmlHttp.open("GET", "https://story.kakao.com/a/settings/profile");
+        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+        xmlHttp.setRequestHeader("Accept", "application/json");
+        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xmlHttp.send();
+    }
+
+    return {
+        initialize: initialize
+    };
+})();
+
+const changePermissionModule = (function() {
+    let jsonPermActivities;
+    let changePermCount = 0;
+    let changeInternalPermCount = 0;
+    let changePermUserID;
+    let changePermActivityCount;
+
+    function initialize() {
+        eventHandlerModule.addClickEventById('enhancedBtnChangePermConfirm', ChangePermissionConfirm);
+        eventHandlerModule.addClickEventById('changePermissionConfirmOK', PrepareChangePermission);
+        eventHandlerModule.addClickEventById('changePermissionConfirmCancel', function() {
+            document.getElementById("changePermLayer").remove();
+        });
+        eventHandlerModule.addClickEventById('changePermissionBtnOK', function() {
+            document.getElementById("changePermLayer").remove();
+            document.getElementById("changePermissionCountLayer").remove();
+        });
+    }
+
+    function ChangePermissionConfirm()
+    {
+        let sourcePermissionElem = document.getElementById("enhancedOptionSourcePerm");
+        let sourcePermissionText = sourcePermissionElem.options[sourcePermissionElem.selectedIndex].text;
+
+        let changePermLayer = document.createElement('div');
+        changePermLayer.id = "changePermLayer";
+        changePermLayer.className = "cover _cover";
+        document.body.appendChild(changePermLayer);
+        document.getElementById('changePermLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' +
+            '<div class="cover_wrapper" style="z-index: 201;">' +
+            '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
+            '<div class="inner_toast_layer _toastBody">' +
+            '<p class="txt _dialogText">' + sourcePermissionText + ' 권한 게시글을 나만보기로 변경할까요? 취소하시려면 새로고침해야 합니다.</p>' +
+            '<div class="btn_group">' +
+            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="changePermissionConfirmCancel"><span>취소</span></a>' +
+            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionConfirmOK"><span>확인</span></a>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+    }
+
+    function _ChangePermission(articleID/*, perm, enableShare, commentWriteable, isMustRead*/)
+    {
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                //Changed
+            }
+        }
+        xmlHttp.open("PUT", "https://story.kakao.com/a/activities/" + articleID);
+        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+        xmlHttp.setRequestHeader("Accept", "application/json");
+        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xmlHttp.setRequestHeader("Accept-Language", "ko");
+        xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+        xmlHttp.send("permission=M&enable_share=false&comment_all_writable=true&is_must_read=false");
+    }
+
+    function LoadActivitiesForPermission(userID, lastArticleID) {
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                let activities = JSON.parse(xmlHttp.responseText);
+
+                if (activities.length === 0) {
+                    jsonPermActivities = null;
+                    document.getElementById('changePermissionText').innerHTML = '게시글 권한이 성공적으로 변경되었습니다.';
+                    document.getElementById('changePermissionBtnOK').style.display = 'block';
+                    return;
+                }
+
+                jsonPermActivities = activities;
+
+                SetPermissionActivities();
+            }
+        }
+        xmlHttp.open("GET", "https://story.kakao.com/a/profiles/" + userID + "/activities?ag=false&since=" + lastArticleID);
+        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+        xmlHttp.setRequestHeader("Accept", "application/json");
+        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xmlHttp.send();
+    }
+
+    function SetPermissionActivities()
+    {
+        setTimeout(function() {
+            if (changeInternalPermCount < jsonPermActivities.length)
+            {
+                let activity = jsonPermActivities[changeInternalPermCount];
+
+                let lArticleID = activity["sid"];
+                let permission = activity["permission"];
+                let sourcePermission = document.getElementById("enhancedOptionSourcePerm").value;
+                /* For user-set permissions */
+                //var isMustRead = activity["is_must_read"];
+                //var commentWriteable = activity["comment_all_writable"];
+                //var shareable = activity["shareable"];
+                if (permission !== 'M' && (permission === sourcePermission || sourcePermission === 'N'))
+                {
+                    _ChangePermission(lArticleID/*, selNewPerm, shareable, commentWriteable, isMustRead*/);
+                }
+
+                document.getElementById('changePermissionText').innerHTML = '게시글 권한 변경 중... (' + (changePermCount + 1) + '/' + changePermActivityCount + '개 완료)';
+                changePermCount++;
+                changeInternalPermCount++;
+                SetPermissionActivities();
+            }
+            else
+            {
+                changeInternalPermCount = 0;
+                LoadActivitiesForPermission(changePermUserID, jsonPermActivities[jsonPermActivities.length - 1]["sid"]);
+            }
+        }, 550);
+
+    }
+
+    function PrepareChangePermission() {
+
+        changePermCount = 0; //reset count
+
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                let jsonProfile = JSON.parse(xmlHttp.responseText);
+                changePermUserID = jsonProfile.id;
+                changePermActivityCount = jsonProfile.activity_count;
+
+                let permissionCountLayer = document.createElement('div');
+                permissionCountLayer.id = "changePermissionCountLayer";
+                permissionCountLayer.className = "cover _cover";
+                document.body.appendChild(permissionCountLayer);
+                document.getElementById('changePermissionCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="changePermissionText">게시글 권한 변경 중... (0 / 0)</p><div>※정책상 변경 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionBtnOK" style="display: none;"><span>확인</span></a> </div></div></div></div>';
+                LoadActivitiesForPermission(changePermUserID, "");
+            }
+        }
+        xmlHttp.open("GET", "https://story.kakao.com/a/settings/profile");
+        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+        xmlHttp.setRequestHeader("Accept", "application/json");
+        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xmlHttp.send();
+    }
+
+    return {
+        initialize: initialize
+    }
+})();
+
+const loginThemeModule = (function() {
+    let svgDark = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+    let svgLight = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+
+    function initialize()
+    {
+        addThemeButton();
+
+        changeLoginTheme(GetValue('enhancedSelectThemeLogin', 'dark'));
+    }
+
+    function changeLoginTheme(theme)
+    {
+        if (theme === 'light')
+        {
+            document.querySelector('style').remove(); //Remove Dark Theme CSS
+            document.getElementById('enhancedLoginThemeChangeBtn').innerHTML = svgDark;
+        }
+        else // Light
+        {
+            setLoginDarkThemeCSS();
+            document.getElementById('enhancedLoginThemeChangeBtn').innerHTML = svgLight;
+            SetValue('enhancedSelectThemeLogin', 'dark');
+        }
+    }
+
+    function addThemeButton()
+    {
+        let btnLoginThemeElem = document.createElement('button');
+        btnLoginThemeElem.id = 'enhancedLoginThemeChangeBtn';
+        btnLoginThemeElem.innerHTML = svgDark;
+        btnLoginThemeElem.style.height = '48px';
+        btnLoginThemeElem.style.width = '48px';
+        btnLoginThemeElem.style.background = 'none';
+        btnLoginThemeElem.style.position = 'absolute';
+        btnLoginThemeElem.style.right = '10px';
+        btnLoginThemeElem.style.bottom = '10px';
+
+        let loginTheme = GetValue('enhancedSelectThemeLogin', 'dark');
+        btnLoginThemeElem.innerHTML = loginTheme === 'dark'? svgLight : svgDark;
+
+        btnLoginThemeElem.onclick = function() {
+            let theme = GetValue('enhancedSelectThemeLogin', 'dark');
+            theme = theme === 'dark'? 'light' : 'dark';
+            SetValue('enhancedSelectThemeLogin', theme);
+            changeLoginTheme(theme);
+        }
+
+        document.body.appendChild(btnLoginThemeElem);
+    }
+
+    function setLoginDarkThemeCSS()
+    {
+        const loginDarkThemeStyle = {
+            '--background-color': '#2f3136',
+            '--text-color': '#dcddde',
+            '--text-highlight-color': '#fff',
+            '--text-menu-color': '#b9bbbe',
+            '--discord-blue': '#7289da',
+            '--dark-background-color': '#202225'
+        }
+
+        for (const [key, value] of Object.entries(loginDarkThemeStyle))
+        {
+            document.documentElement.style.setProperty(key, value);
+        }
+
+        let styleElem = document.createElement('style');
+        styleElem.id = 'enhancedLoginDarkThemeCSS';
+        document.head.appendChild(styleElem);
+        document.getElementById('enhancedLoginDarkThemeCSS').innerHTML =
+            'body { background: var(--background-color) !important; }' +
+            '.set_login .lab_choice { color: var(--text-color) !important; }' +
+            '.doc-footer .txt_copyright { color: var(--text-color) !important; }' +
+            'a { color: var(--text-highlight-color) !important; }' +
+            '.cont_login a { color: var(--text-menu-color) !important; }' +
+            '.doc-footer .service_info .link_info { color: var(--text-menu-color) !important; }' +
+            '.item_select .link_selected { color: var(--text-menu-color) !important; }' +
+            '.box_tf { border: solid 0px var(--text-highlight-color) !important; background: var(--dark-background-color) !important; padding-left: 10px; padding-right: 10px; }' +
+            '.box_tf .tf_g { color: var(--text-color) !important; caret-color: auto !important; }' +
+            '.info_tip, .line_or .txt_or { color: var(--text-color) !important;}' +
+            '.info_tip .txt_tip { color: var(--discord-blue) !important; }' +
+            '.box_tf .txt_mail { color: var(--text-color) !important; margin-right: 10px !important }' +
+            '.doc-title .tit_service .logo_kakao { background: var(--background-color) url(/images/pc/logo_kakao.png) no-repeat 0 0 !important; background-size: 100px 80px !important; background-position: 0 -41px !important};';
+    }
+
+    return {
+        initialize: initialize
+    }
+})();
+
+const visitorChartModule = ( function() {
+
+    function addVisitorCountLayer()
+    {
+        let visitorCountLayer = document.createElement("div");
+        visitorCountLayer.id = "enhancedVisitorCountLayer";
+        visitorCountLayer.className = "profile_collection visitor_count_layer";
+        document.getElementsByClassName("profile_collection")[0].parentElement.appendChild(visitorCountLayer);
+        visitorCountLayer.innerHTML = '<fieldset><h4 class="tit_collection">방문자수</h4></br><div style=""><canvas id="visitorChartCanvas"></canvas></div></fieldset>';
+    }
+
+    function parseVisitorCount(jsonData)
+    {
+        let counterJSON = null;
+        for (let i = 0; i < jsonData.length; i++)
+        {
+            if (jsonData[i].type === "visit_counter")
+            {
+                counterJSON = jsonData[i].object.items;
+                break;
+            }
+        }
+
+        if (counterJSON == null)
+        {
+            document.getElementById("enhancedVisitorCountLayer").style.display = 'none';
+            return;
+        }
+
+        let labelData = ['', '', '', '', '', '', ''];
+        let countData = [0, 0, 0, 0, 0, 0, 0];
+
+        for (let i = 0; i < counterJSON.length; i++)
+        {
+            labelData[i] = counterJSON[i].date;
+            countData[i] = (counterJSON[i].count === -1? 0 : counterJSON[i].count);
+        }
+
+        let chartCanvas = document.getElementById('visitorChartCanvas').getContext('2d');
+
+        new Chart(chartCanvas, {
+            type: 'line',
+            data: {
+                labels: labelData,
+                datasets: [
+                    {
+                        fill: false,
+                        data: countData,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                        ],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        })
+    }
+
+    function viewVisitorChart()
+    {
+        if (document.getElementById("enhancedVisitorCountLayer") != null)
+        {
+            return;
+        }
+
+        if (document.getElementsByClassName("profile_collection").length < 1)
+        {
+            return;
+        }
+
+        let pathname = window.location.pathname;
+        let pathList = pathname.split("/");
+        if (pathList.length < 3)
+        {
+            return;
+        }
+
+        let curUserID = pathList[1];
+
+        addVisitorCountLayer();
+
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                let highlights = JSON.parse(xmlHttp.responseText);
+
+                parseVisitorCount(highlights.highlight);
+            }
+        }
+        xmlHttp.open("GET", "https://story.kakao.com/a/profiles/" + curUserID + "/highlight");
+        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
+        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
+        xmlHttp.setRequestHeader("Accept", "application/json");
+        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xmlHttp.send();
+    }
+
+    return {
+        viewVisitorChart: viewVisitorChart
+    }
+})();
+
 function EnableScroll() {
     window.onscroll = function() {};
 }
@@ -110,8 +868,8 @@ function DisableScroll() {
 }
 
 function GetMyID() {
-    var tmpMyID = $('a[data-kant-id="737"]').attr('href').substring(1);
-    if (tmpMyID.charAt(0) == '_') {
+    let tmpMyID = $('a[data-kant-id="737"]').attr('href').substring(1);
+    if (tmpMyID.charAt(0) === '_') {
         myID = tmpMyID;
     } else {
         GetMySID(tmpMyID);
@@ -119,14 +877,14 @@ function GetMyID() {
 }
 
 function GetMySID(val) {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var jsonProf = JSON.parse(xmlHttp.responseText);
-            if (jsonProf.activities.length == 0) {
+            let jsonProf = JSON.parse(xmlHttp.responseText);
+            if (jsonProf.activities.length === 0) {
                 myID = '';
             } else {
-                var tmpID = jsonProf.activities[0].id;
+                let tmpID = jsonProf.activities[0].id;
                 myID = tmpID.split(".")[0];
             }
         }
@@ -140,12 +898,12 @@ function GetMySID(val) {
 }
 
 function HighlightCommentLikeDiscord() {
-    var comments = document.getElementsByClassName("_commentContent");
-    for (var i = 0; i < comments.length; i++) {
-        var tmpComment = comments[i].getElementsByClassName("txt")[0].getElementsByClassName("_decoratedProfile");
-        for ( var j = 0; j < tmpComment.length; j++) {
-            var tmpUserID = tmpComment[j].getAttribute("data-id");
-            if (myID == tmpUserID) {
+    let comments = document.getElementsByClassName("_commentContent");
+    for (let i = 0; i < comments.length; i++) {
+        let tmpComment = comments[i].getElementsByClassName("txt")[0].getElementsByClassName("_decoratedProfile");
+        for ( let j = 0; j < tmpComment.length; j++) {
+            let tmpUserID = tmpComment[j].getAttribute("data-id");
+            if (myID === tmpUserID) {
                 tmpComment[j].style.cssText = "background-color:rgba(0,0,0,0) !important;";
                 comments[i].parentElement.style.cssText = 'background-color: rgba(250,166,26,0.1); border-left: 5px solid #f6a820; padding-left: 4px;';
             }
@@ -155,10 +913,10 @@ function HighlightCommentLikeDiscord() {
 
 // Settings Page
 function InitEnhancedSettingsPage() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var html = xmlHttp.responseText;
+            let html = xmlHttp.responseText;
 
             AttachEnhancedSettingsPage(html);
             InitEnhancedValues();
@@ -171,7 +929,7 @@ function InitEnhancedSettingsPage() {
 
 function AttachEnhancedSettingsPage(html)
 {
-    var settings = document.createElement('div');
+    let settings = document.createElement('div');
     settings.id = 'enhancedLayer';
     settings.className = 'cover _cover';
     settings.style.cssText = 'display: none;  overflow-y: scroll;';
@@ -181,13 +939,13 @@ function AttachEnhancedSettingsPage(html)
 
 function InitEnhancedValues()
 {
-    var selectedTheme = GetValue('enhancedSelectTheme', 'dark');
+    let selectedTheme = GetValue('enhancedSelectTheme', 'dark');
     $('input:radio[name="enhancedSelectTheme"]:input[value=' + selectedTheme + ']').attr("checked", true);
-    
+
     LoadThemeList();
     ChangeTheme(selectedTheme);
 
-    var useDiscordMention = GetValue('enhancedDiscordMention', 'false');
+    let useDiscordMention = GetValue('enhancedDiscordMention', 'false');
     $('input:radio[name="enhancedSelectDiscordMention"]:input[value=' + useDiscordMention + ']').attr("checked", true);
 
     if (GetValue('enhancedSystemTheme', 'true') == 'true'){
@@ -198,7 +956,7 @@ function InitEnhancedValues()
         document.getElementById('enhancedSystemTheme').checked = false;
     }
 
-    var fontName = GetValue('enhancedFontName', 'Pretendard');
+    let fontName = GetValue('enhancedFontName', 'Pretendard');
     document.getElementById("enhancedTxtFontName").value = fontName;
     document.getElementById("enhancedTxtFontCSS").value = GetValue('enhancedFontCSS', 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css');
     SetFont();
@@ -222,11 +980,12 @@ function InitEnhancedValues()
     document.getElementById('enhancedTxtFontSize').value = GetValue('enhancedFontSize', '0');
     SetFontSize();
 
-    var notifyEnabled = GetValue('enhancedNotify', 'false');
+    let notifyEnabled = GetValue('enhancedNotify', 'false');
     $('input:radio[name="enhancedSelectNotifyUse"]:input[value=' + notifyEnabled + ']').attr("checked", true);
     document.getElementById("groupEnhancedNotifyEnable").style.display = (notifyEnabled == "true")? "block" : "none";
 
-    var notifySoundEnabled = GetValue('enhancedNotifySound', 'true');
+    let notifySoundEnabled = GetValue('enhancedNotifySound', 'true');
+    notyOption.silent = (notifySoundEnabled == 'true')? false : true;
     $('input:radio[name="enhancedSelectNotifySoundUse"]:input[value=' + notifySoundEnabled + ']').attr("checked", true);
 
     document.getElementById('enhancedTxtNotifyTime').value = GetValue('enhancedNotifyTime', '20');
@@ -257,6 +1016,7 @@ function InitEnhancedValues()
 
     var isHiddenRecommendFriend = GetValue('enhancedHideRecommendFriend', 'false');
     $('input:radio[name="enhancedSelectRecommendFriend"]:input[value=' + isHiddenRecommendFriend + ']').attr("checked", true);
+    HideRecommendFriend();
 
     var size = GetValue('enhancedEmoticonSize', 'small');
     $('input:radio[name="enhancedSelectEmoticonSize"]:input[value=' + size + ']').attr("checked", true);
@@ -306,14 +1066,7 @@ function InitEnhancedValues()
     GetCSSVersion();
     GetLatestVersion();
 
-    CreateBlockStringList(); 
-}
-
-function RemoveRecommendFeed() {
-    var recommendFeed = document.getElementsByClassName("section recommend");
-    for (var i = 0; i < recommendFeed.length; i++) {
-        recommendFeed[i].remove();
-    }
+    CreateBlockStringList();
 }
 
 function CloseSettingsPage()
@@ -323,11 +1076,10 @@ function CloseSettingsPage()
 }
 
 function GetCSSVersion() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var cssVersion = xmlHttp.responseText;
-            document.getElementById('enhancedCSSVersion').innerText = cssVersion;
+            document.getElementById('enhancedCSSVersion').innerText = xmlHttp.responseText;
         }
     }
     xmlHttp.open("GET", resourceURL + "versions/css_version.txt");
@@ -335,25 +1087,20 @@ function GetCSSVersion() {
 }
 
 function GetLatestVersion() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var scriptData = xmlHttp.responseText;
-            var latestVersion = scriptData.split("// @version      ")[1].split("\n")[0];
+            let scriptData = xmlHttp.responseText;
+            let latestVersion = scriptData.split("// @version      ")[1].split("\n")[0];
             document.getElementById('enhancedLatestVersion').innerText = "최신버전: " + latestVersion;
             //Update
-            var majorLatestVersion = latestVersion.split(".")[0];
-            majorLatestVersion = Number(majorLatestVersion);
-            var minorLatestVersion = latestVersion.split(".")[1];
-            minorLatestVersion = Number(minorLatestVersion);
+            let majorLatestVersion = Number(latestVersion.split(".")[0]);
+            let minorLatestVersion = Number(latestVersion.split(".")[1]);
 
-            var majorScriptVersion = scriptVersion.split(".")[0];
-            majorScriptVersion = Number(majorScriptVersion);
+            let majorScriptVersion = Number(scriptVersion.split(".")[0]);
+            let minorScriptVersion = Number(scriptVersion.split(".")[1]);
 
-            var minorScriptVersion = scriptVersion.split(".")[1];
-            minorScriptVersion = Number(minorScriptVersion);
-
-            if (majorLatestVersion > majorScriptVersion || (majorLatestVersion == majorScriptVersion && minorLatestVersion > minorScriptVersion))
+            if (majorLatestVersion > majorScriptVersion || (majorLatestVersion === majorScriptVersion && minorLatestVersion > minorScriptVersion))
             {
                 ViewUpdatePage();
             }
@@ -364,7 +1111,7 @@ function GetLatestVersion() {
 }
 
 function ViewUpdatePage() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             let updateHtml = xmlHttp.responseText;
@@ -382,7 +1129,7 @@ function ViewUpdatePage() {
 }
 
 function ViewUpdateAllPage() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             let updateHtml = xmlHttp.responseText;
@@ -400,7 +1147,7 @@ function ViewUpdateAllPage() {
 
 function ViewDetailNotFriendArticle()
 {
-    var detail = document.getElementsByClassName("_btnViewDetailInShare");
+    let detail = document.getElementsByClassName("_btnViewDetailInShare");
     for (let i = 0; i < detail.length; i++)
     {
         if (detail[i].innerText === "...더보기")
@@ -572,7 +1319,7 @@ function LoadCommonEvents()
                 {
                     settingElem.click();
                 }
-                
+
                 setTimeout(() => {
                     var permElem = selElem.querySelector('li[data-permission="M"]');
                     if (permElem)
@@ -838,7 +1585,7 @@ function LoadCommonEvents()
             if (prevElem)
                 prevElem.click();
         }
-        
+
         //C - First Comment
         if (e.code === 'KeyC')
         {
@@ -872,9 +1619,9 @@ function LoadCommonEvents()
             if (likeElem)
             {
                 likeElem.click();
-            }       
+            }
         }
-        
+
         //D - Delete My Selected Article
         if (e.code === 'KeyD')
         {
@@ -910,14 +1657,14 @@ function LoadCommonEvents()
 
 function GetSelectedActivity()
 {
-    var articles = document.getElementsByClassName("section _activity");
-    var visibleArticles = Array.from(articles).filter(function(element) {
+    let articles = document.getElementsByClassName("section _activity");
+    let visibleArticles = Array.from(articles).filter(function(element) {
         return window.getComputedStyle(element).display !== "none";
     });
 
-    var selectedIdx = -1;
-    
-    for (var i = 0; i < visibleArticles.length; i++)
+    let selectedIdx = -1;
+
+    for (let i = 0; i < visibleArticles.length; i++)
     {
         if (visibleArticles[i].classList.contains("enhanced_activty_selected"))
         {
@@ -967,7 +1714,7 @@ function ScrollToTargetSmoothly(elem)
     //     top: elem.offsetTop - 64,
     //     behavior: "smooth"
     // });
-    
+
     //64: Header Height
     window.scrollTo(0, elem.offsetTop - 64);
 }
@@ -987,7 +1734,7 @@ function VisibleEnhancedPowerModeCount()
         document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_l");
     }
     else if (powerComboCnt > 300 && powerComboCnt < 500)
-    {  
+    {
         document.getElementById("enhancedPowerModeScore").classList.add("shake_text");
         document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_s");
         document.getElementById("enhancedPowerModeScore").classList.remove("shake_text_l");
@@ -1038,10 +1785,10 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on("change",'select[name="enhancedSelectDarkStyle"]',function(){
-        var styleName = document.getElementById("enhancedOptionDarkTheme").value;
-        var authorIdx = document.getElementById("enhancedOptionDarkTheme").selectedIndex;
-        var authorEl = document.getElementById("themeAuthor");
-        var authorLink = jThemes.themes[authorIdx].url;
+        let styleName = document.getElementById("enhancedOptionDarkTheme").value;
+        let authorIdx = document.getElementById("enhancedOptionDarkTheme").selectedIndex;
+        let authorEl = document.getElementById("themeAuthor");
+        let authorLink = jThemes.themes[authorIdx].url;
         authorEl.innerText = jThemes.themes[authorIdx].author;
         authorEl.href = authorLink;
         SetValue("enhancedDarkThemeStyle", styleName);
@@ -1049,7 +1796,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on("change",'input[name="enhancedSelectDiscordMention"]',function(){
-        var useMention = $('[name="enhancedSelectDiscordMention"]:checked').val();
+        let useMention = $('[name="enhancedSelectDiscordMention"]:checked').val();
         SetValue("enhancedDiscordMention", useMention);
         if (useMention == 'true')
         {
@@ -1113,61 +1860,9 @@ function LoadSettingsPageEvents()
         ViewUpdateAllPage();
     });
 
-    $(document).on('click', '#enhancedBtnDeleteFriendConfirm', function() {
-        DeleteFriendsConfirm();
-    });
-
-    $(document).on('click', '#enhancedBtnDeleteBlockedFriendConfirm', function() {
-        DeleteBlockedFriendsConfirm();
-    });
-
-    $(document).on('click', '#deleteFriendConfirmCancel', function() {
-        document.getElementById("deleteLayer").remove();
-    });
-
-    $(document).on('click', '#deleteFriendConfirmOK', function() {
-        document.getElementById("deleteLayer").remove();
-        DeleteFriendsReConfirm();
-    });
-
-    $(document).on('click', '#deleteBlockedFriendConfirmCancel', function() {
-        document.getElementById("deleteBlockedLayer").remove();
-    });
-
-    $(document).on('click', '#deleteBlockedFriendConfirmOK', function() {
-        LoadForDeleteFriends(true);
-    });
-
-    $(document).on('click', '#deleteFriendReConfirmCancel', function() {
-        document.getElementById("deleteLayer").remove();
-    });
-
-    $(document).on('click', '#deleteFriendReConfirmOK', function() {
-        LoadForDeleteFriends(false);
-    });
-
-    $(document).on('click', '#deleteFriendComplete', function() {
-        document.getElementById("deleteLayer").remove();
-        document.getElementById("deleteCountLayer").remove();
-    });
-
-    //Permission Maker
-    $(document).on('click', '#enhancedBtnChangePermConfirm', function() {
-        ChangePermissionConfirm();
-    });
-
-    $(document).on('click', '#changePermissionConfirmOK', function() {
-        PrepareChangePermission();
-    });
-
-    $(document).on('click', '#changePermissionConfirmCancel', function() {
-        document.getElementById("changePermLayer").remove();
-    });
-
-    $(document).on('click', '#changePermissionBtnOK', function() {
-        document.getElementById("changePermLayer").remove();
-        document.getElementById("changePermissionCountLayer").remove();
-    });
+    deleteFriendsModule.initialize();
+    removeAllArticlesModule.initialize();
+    changePermissionModule.initialize();
 
     $(document).on("change",'input[name="enhancedSelectNotifyUse"]',function(){
         var changed = $('[name="enhancedSelectNotifyUse"]:checked').val();
@@ -1182,6 +1877,7 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedSelectNotifySoundUse"]',function(){
         var changed = $('[name="enhancedSelectNotifySoundUse"]:checked').val();
         SetValue("enhancedNotifySound", changed);
+        notyOption.silent = (changed == "true")? false : true;
     });
 
     $(document).on("change",'input[name="enhancedSelectDownloadVideo"]',function(){
@@ -1222,6 +1918,7 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedSelectRecommendFriend"]',function(){
         var changed = $('[name="enhancedSelectRecommendFriend"]:checked').val();
         SetValue("enhancedHideRecommendFriend", changed);
+        HideRecommendFriend();
     });
 
     $(document).on("change",'input[name="enhancedSelectEmoticonSize"]',function(){
@@ -1306,22 +2003,16 @@ function LoadSettingsPageEvents()
         document.getElementById("customThemeLayer").style.display = 'none';
     });
 
-    $('body').on('click', '#enhancedFastDeleteClose', function() {
-        document.getElementById("fastDeleteLayer").remove();
-    });
-
-    $('body').on('click', '#enhancedBtnFastDeleteFriendConfirm', function() {
-        OpenFastDeleteFriend();
-    });
-
     $('body').on('click', '#enhancedKittyImage', function() {
         if (GetValue('enhancedKittyMode', 'none') == 'verycute') {
             catEffect.play();
-            // var random = Math.floor(Math.random() * 2);
-            // if (random == 0)
-            //     catEffect.play();
-            // else
-            //     catEffect2.play();
+            /*
+            var random = Math.floor(Math.random() * 2);
+            if (random == 0)
+                catEffect.play();
+            else
+                catEffect2.play();
+             */
         }
     });
 
@@ -1457,271 +2148,12 @@ function LoadSettingsPageEvents()
     });
 }
 
-function LoadForDeleteFriends(blockedUserOnly) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            jsonMyFriends = JSON.parse(xmlHttp.responseText);
-
-            var deleteCountLayer = document.createElement('div');
-            deleteCountLayer.id = "deleteCountLayer";
-            deleteCountLayer.className = "cover _cover";
-            document.body.appendChild(deleteCountLayer);
-            document.getElementById('deleteCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="deleteFriendText">친구 삭제 중... (0 / 0)</p><div>※정책상 삭제 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendComplete" style="display: none;"><span>확인</span></a> </div></div></div></div>';
-            //deletedFriendCount = 0;
-            if (blockedUserOnly)
-            {
-                VerifyBlockedUserForDeleteFriends();
-            }
-            DeleteFriends();
-        }
-    }
-    xmlHttp.open("GET", "https://story.kakao.com/a/friends");
-    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
-    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
-    xmlHttp.setRequestHeader("Accept", "application/json");
-    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-    xmlHttp.send();
-}
-
-function VerifyBlockedUserForDeleteFriends()
-{
-    for (var i = 0; i < jsonMyFriends.profiles.length; i++)
-    {
-        if (!jsonMyFriends.profiles[i].hasOwnProperty("blocked") || jsonMyFriends.profiles[i]["blocked"] == false)
-        {
-            jsonMyFriends.profiles.splice(i, 1);
-            i--;
-        }
-    }
-}
-
-function DeleteBlockedFriendsConfirm()
-{
-    var deleteLayer = document.createElement('div');
-    deleteLayer.id = "deleteBlockedLayer";
-    deleteLayer.className = "cover _cover";
-    document.body.appendChild(deleteLayer);
-    document.getElementById('deleteBlockedLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' + 
-                                                        '<div class="cover_wrapper" style="z-index: 201;">' + 
-                                                        '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
-                                                                '<div class="inner_toast_layer _toastBody">' + 
-                                                                    '<p class="txt _dialogText">정말 제한된 사용자를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
-                                                                    '<div class="btn_group">' + 
-                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteBlockedFriendConfirmCancel"><span>취소</span></a>' + 
-                                                                        '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteBlockedFriendConfirmOK"><span>확인</span></a>' +
-                                                                    '</div>' +
-                                                                '</div>' +
-                                                            '</div>' +
-                                                        '</div>';
-}
-
-function DeleteFriendsConfirm()
-{
-    var deleteLayer = document.createElement('div');
-    deleteLayer.id = "deleteLayer";
-    deleteLayer.className = "cover _cover";
-    document.body.appendChild(deleteLayer);
-    document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' + 
-                                                        '<div class="cover_wrapper" style="z-index: 201;">' + 
-                                                        '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
-                                                                '<div class="inner_toast_layer _toastBody">' + 
-                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
-                                                                    '<div class="btn_group">' + 
-                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendConfirmCancel"><span>취소</span></a>' + 
-                                                                        '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendConfirmOK"><span>확인</span></a>' +
-                                                                    '</div>' +
-                                                                '</div>' +
-                                                            '</div>' +
-                                                        '</div>';
-}
-
-function DeleteFriendsReConfirm()
-{
-    var deleteLayer = document.createElement('div');
-    deleteLayer.id = "deleteLayer";
-    deleteLayer.className = "cover _cover";
-    document.body.appendChild(deleteLayer);
-    document.getElementById('deleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' + 
-                                                        '<div class="cover_wrapper" style="z-index: 201;">' + 
-                                                        '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
-                                                                '<div class="inner_toast_layer _toastBody">' + 
-                                                                    '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>진행하면 되돌릴 수 없습니다!<br>다시 한 번 신중하게 생각해주세요!<br>취소하시려면 새로고침해야 합니다.</p>' +
-                                                                    '<div class="btn_group">' + 
-                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendReConfirmCancel"><span>취소</span></a>' + 
-                                                                        '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendReConfirmOK"><span>확인</span></a>' +
-                                                                    '</div>' +
-                                                                '</div>' +
-                                                            '</div>' +
-                                                        '</div>';
-}
-
-function DeleteFriends() {
-    setTimeout(function() {
-        if (deletedFriendCount < jsonMyFriends.profiles.length) {
-            _DeleteFriend(jsonMyFriends.profiles[deletedFriendCount]["id"]);
-            document.getElementById('deleteFriendText').innerHTML = '친구 삭제 중... (' + (deletedFriendCount + 1) + ' / ' + jsonMyFriends.profiles.length + ')';
-            deletedFriendCount++;
-            DeleteFriends();
-        } else {
-            document.getElementById('deleteFriendText').innerHTML = '전체 삭제 완료';
-            document.getElementById('deleteFriendComplete').style.display = 'block';
-        }
-    }, 300);
-}
-
-function _DeleteFriend(userid) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            //Deleted Message;
-        }
-    }
-    xmlHttp.open("DELETE", "https://story.kakao.com/a/friends/" + userid);
-    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
-    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
-    xmlHttp.setRequestHeader("Accept", "application/json");
-    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-    xmlHttp.send();
-}
-
-function ChangePermissionConfirm()
-{
-    var sourcePermissionElem = document.getElementById("enhancedOptionSourcePerm");
-    var sourcePermissionText = sourcePermissionElem.options[sourcePermissionElem.selectedIndex].text;
-
-    var changePermLayer = document.createElement('div');
-    changePermLayer.id = "changePermLayer";
-    changePermLayer.className = "cover _cover";
-    document.body.appendChild(changePermLayer);
-    document.getElementById('changePermLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div>' + 
-                                                        '<div class="cover_wrapper" style="z-index: 201;">' + 
-                                                        '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
-                                                                '<div class="inner_toast_layer _toastBody">' + 
-                                                                    '<p class="txt _dialogText">' + sourcePermissionText + ' 권한 게시글을 나만보기로 변경할까요? 취소하시려면 새로고침해야 합니다.</p>' +
-                                                                    '<div class="btn_group">' + 
-                                                                        '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="changePermissionConfirmCancel"><span>취소</span></a>' + 
-                                                                        '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionConfirmOK"><span>확인</span></a>' +
-                                                                    '</div>' +
-                                                                '</div>' +
-                                                            '</div>' +
-                                                        '</div>';
-}
-
-function _ChangePermission(articleID/*, perm, enableShare, commentWriteable, isMustRead*/)
-{
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            //Changed
-        }
-    }
-    xmlHttp.open("PUT", "https://story.kakao.com/a/activities/" + articleID);
-    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
-    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
-    xmlHttp.setRequestHeader("Accept", "application/json");
-    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-    xmlHttp.setRequestHeader("Accept-Language", "ko");
-    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-    xmlHttp.send("permission=M&enable_share=false&comment_all_writable=true&is_must_read=false");
-}
-
-function LoadActivitiesForPermission(userID, lastArticleID) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var activities = JSON.parse(xmlHttp.responseText);
-
-            if (activities.length == 0) {
-                jsonPermActivities = null;
-                document.getElementById('changePermissionText').innerHTML = '게시글 권한이 성공적으로 변경되었습니다.';
-                document.getElementById('changePermissionBtnOK').style.display = 'block';
-                return;
-            }
-
-            jsonPermActivities = activities;
-
-            SetPermissionActivities();
-        }
-    }
-    xmlHttp.open("GET", "https://story.kakao.com/a/profiles/" + userID + "/activities?ag=false&since=" + lastArticleID);
-    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
-    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
-    xmlHttp.setRequestHeader("Accept", "application/json");
-    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-    xmlHttp.send();
-}
-
-function SetPermissionActivities()
-{
-    setTimeout(function() {
-        if (changeInternalPermCount < jsonPermActivities.length)
-        {
-            var activity = jsonPermActivities[changeInternalPermCount];
-            
-            var lArticleID = activity["sid"];
-            var permission = activity["permission"];
-            var sourcePermission = document.getElementById("enhancedOptionSourcePerm").value;
-            /* For user-set permissions */
-            //var isMustRead = activity["is_must_read"];
-            //var commentWriteable = activity["comment_all_writable"];
-            //var shareable = activity["shareable"];
-            if (permission != 'M' && (permission == sourcePermission || sourcePermission == 'N'))
-            {
-                _ChangePermission(lArticleID/*, selNewPerm, shareable, commentWriteable, isMustRead*/);
-            }
-
-            document.getElementById('changePermissionText').innerHTML = '게시글 권한 변경 중... (' + (changePermCount + 1) + '/' + changePermActivityCount + '개 완료)';
-            changePermCount++;
-            changeInternalPermCount++;
-            SetPermissionActivities();
-        }
-        else
-        {
-            changeInternalPermCount = 0;
-            LoadActivitiesForPermission(changePermUserID, jsonPermActivities[jsonPermActivities.length - 1]["sid"]);
-        }
-    }, 550);
-    
-}
-
-function PrepareChangePermission() {
-
-    changePermCount = 0; //reset count
-
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var jsonProfile = JSON.parse(xmlHttp.responseText);
-            changePermUserID = jsonProfile.id;
-            changePermActivityCount = jsonProfile.activity_count;
-
-            var permissionCountLayer = document.createElement('div');
-            permissionCountLayer.id = "changePermissionCountLayer";
-            permissionCountLayer.className = "cover _cover";
-            document.body.appendChild(permissionCountLayer);
-            document.getElementById('changePermissionCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="changePermissionText">게시글 권한 변경 중... (0 / 0)</p><div>※정책상 변경 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionBtnOK" style="display: none;"><span>확인</span></a> </div></div></div></div>';
-            LoadActivitiesForPermission(changePermUserID, "");
-        }
-    }
-    xmlHttp.open("GET", "https://story.kakao.com/a/settings/profile");
-    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
-    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
-    xmlHttp.setRequestHeader("Accept", "application/json");
-    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-    xmlHttp.send();
-}
-
 function HideRecommendFriend()
 {
-    var el = document.getElementsByClassName("tit_widgets");
-    for (var i = 0; i < el.length; i++)
-    {
-        if (el[i].innerText == '추천친구')
-        {
-            el[i].parentElement.style.display = "none";
-        }
-    }
+    if (GetValue("enhancedHideRecommendFriend", "true") == "true")
+        SetCSS("enhancedHideRecommendFriend", '.story_widgets > div[data-part-name="recommends"] { display: none !important; }');
+    else
+        RemoveCSSCollection("enhancedHideRecommendFriend");
 }
 
 function CreateBlockStringList() {
@@ -1745,15 +2177,15 @@ function SetFont()
 }
 
 function SetFontSize() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var lines = xmlHttp.responseText.split("\n");
-            for (var i = 0; i < lines.length; i++) {
+            let lines = xmlHttp.responseText.split("\n");
+            for (let i = 0; i < lines.length; i++) {
 
-                var originSize = parseInt(lines[i].split("font-size:")[1].split("px")[0]);
-                var changedSize = originSize + parseInt(GetValue('enhancedFontSize', '0'));
-                var modifiedCSS = lines[i].replace( originSize , changedSize);
+                let originSize = parseInt(lines[i].split("font-size:")[1].split("px")[0]);
+                let changedSize = originSize + parseInt(GetValue('enhancedFontSize', '0'));
+                let modifiedCSS = lines[i].replace(String(originSize), String(changedSize));
                 SetCSS('enhancedFontSizeCSS' + i, modifiedCSS);
             }
         }
@@ -1771,13 +2203,13 @@ function GetOSTheme() {
 }
 
 function SetDarkThemeStyle(styleName) {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var lines = xmlHttp.responseText.split("\n");
-            for (var i = 0; i < lines.length; i++) {
-                var variableName = lines[i].split(":")[0];
-                var variableValue = lines[i].split(": ")[1].split(";")[0];
+            let lines = xmlHttp.responseText.split("\n");
+            for (let i = 0; i < lines.length; i++) {
+                let variableName = lines[i].split(":")[0];
+                let variableValue = lines[i].split(": ")[1].split(";")[0];
                 document.documentElement.style.setProperty(variableName, variableValue);
             }
             document.documentElement.style.setProperty('--saturation-factor', GetValue('enhancedThemeSaturation', '1'));
@@ -1797,25 +2229,25 @@ function SetDarkThemeStyle(styleName) {
 }
 
 function LoadThemeList() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
             jThemes = JSON.parse(xmlHttp.responseText);
-            for (var i = 0; i < jThemes.themes.length; i++)
+            for (let i = 0; i < jThemes.themes.length; i++)
             {
-                var opTheme = document.getElementById("enhancedOptionDarkTheme").options;
-                var op = new Option();
+                let opTheme = document.getElementById("enhancedOptionDarkTheme").options;
+                let op = new Option();
                 op.value = jThemes.themes[i].id;
                 op.text = jThemes.themes[i].name;
 
                 opTheme.add(op);
             }
 
-            var selectedDarkStyle = GetValue('enhancedDarkThemeStyle', 'discord');
+            let selectedDarkStyle = GetValue('enhancedDarkThemeStyle', 'discord');
             document.getElementById("enhancedOptionDarkTheme").value = selectedDarkStyle;
-            var authorIdx = document.getElementById("enhancedOptionDarkTheme").selectedIndex;
-            var authorEl = document.getElementById("themeAuthor");
-            var authorLink = jThemes.themes[authorIdx].url;
+            let authorIdx = document.getElementById("enhancedOptionDarkTheme").selectedIndex;
+            let authorEl = document.getElementById("themeAuthor");
+            let authorLink = jThemes.themes[authorIdx].url;
             authorEl.innerText = jThemes.themes[authorIdx].author;
             authorEl.href = authorLink;
             if (GetValue('enhancedSelectTheme', 'dark') == 'dark')
@@ -1829,11 +2261,11 @@ function LoadThemeList() {
 }
 
 function LoadDarkThemeCSS() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var darkcss = xmlHttp.responseText;
-            SetCSS("enhancedDarkCSS", darkcss);
+            let darkCSS = xmlHttp.responseText;
+            SetCSS("enhancedDarkCSS", darkCSS);
         }
     }
     xmlHttp.open("GET", resourceURL + "css/darktheme.css");
@@ -1841,11 +2273,11 @@ function LoadDarkThemeCSS() {
 }
 
 function LoadEnhancedCSS() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var darkcss = xmlHttp.responseText;
-            SetCSS('enhancedCSS', darkcss);
+            let enhancedCSS = xmlHttp.responseText;
+            SetCSS('enhancedCSS', enhancedCSS);
         }
     }
     xmlHttp.open("GET", resourceURL + "css/enhanced.css");
@@ -1853,11 +2285,11 @@ function LoadEnhancedCSS() {
 }
 
 function LoadExtendFeedCSS() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var darkcss = xmlHttp.responseText;
-            SetCSS('enhancedExtendFeedCSS', darkcss);
+            let extendFeedCSS = xmlHttp.responseText;
+            SetCSS('enhancedExtendFeedCSS', extendFeedCSS);
         }
     }
     xmlHttp.open("GET", resourceURL + "css/extend_feed.css");
@@ -1865,11 +2297,11 @@ function LoadExtendFeedCSS() {
 }
 
 function LoadExtendFeed1024CSS() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var darkcss = xmlHttp.responseText;
-            SetCSS('enhancedExtendFeedCSS', darkcss);
+            let extend1024CSS = xmlHttp.responseText;
+            SetCSS('enhancedExtendFeedCSS', extend1024CSS);
         }
     }
     xmlHttp.open("GET", resourceURL + "css/extend_feed_1024.css");
@@ -1877,11 +2309,11 @@ function LoadExtendFeed1024CSS() {
 }
 
 function LoadExtendFeedFlexibleCSS() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var darkcss = xmlHttp.responseText;
-            SetCSS('enhancedExtendFeedCSS', darkcss);
+            let extendFlexibleFeedCSS = xmlHttp.responseText;
+            SetCSS('enhancedExtendFeedCSS', extendFlexibleFeedCSS);
         }
     }
     xmlHttp.open("GET", resourceURL + "css/extend_feed_flexible.css");
@@ -1889,10 +2321,10 @@ function LoadExtendFeedFlexibleCSS() {
 }
 
 function LoadLeftSidebarCSS() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var leftSideCSS = xmlHttp.responseText;
+            let leftSideCSS = xmlHttp.responseText;
             SetCSS('enhancedLeftSidebarCSS', leftSideCSS);
         }
     }
@@ -1900,11 +2332,11 @@ function LoadLeftSidebarCSS() {
     xmlHttp.send();
 }
 
-function LoadDevCSS() {
-    var xmlHttp = new XMLHttpRequest();
+function __NotUsedMethod() {
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var darkcss = xmlHttp.responseText;
+            let darkcss = xmlHttp.responseText;
             SetCSS("enhancedDevCSS", darkcss);
         }
     }
@@ -1988,34 +2420,33 @@ function GetLatestNotify() {
     xmlHttp.send();
 }
 
-function SetNotify(content, title_, url)
+function SetNotify(content, title, url)
 {
-    var options = {
-        body: content,
-        icon: 'https://i.imgur.com/FSvg18g.png',
-        silent: (GetValue('enhancedNotifySound', 'true') === 'true'),
-        onclick: function() {
-            space.Router.navigate("/" + url);
-        }
+    notyOption.body = content;
+    /*
+    notyOption.onclick = function(e) {
+        e.preventDefault();
+        window.open("https://story.kakao.com/" + url, '_blank');
     }
+    */
 
-    var noty = new Notification(title_, options);
+    new Notification(title, notyOption);
 }
 
 function SaveText(text, name, type, btnID) {
-    var btnEl = document.getElementById(btnID);
-    var file = new Blob([text], {type: type});
+    let btnEl = document.getElementById(btnID);
+    let file = new Blob([text], {type: type});
     btnEl.href = URL.createObjectURL(file);
     btnEl.download = name;
 }
 
 function BackupFriendsList() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var jsonFriends = JSON.parse(xmlHttp.responseText);
-            var friendsText = '';
-            for (var i = 0; i < jsonFriends.profiles.length; i ++) {
+            let jsonFriends = JSON.parse(xmlHttp.responseText);
+            let friendsText = '';
+            for (let i = 0; i < jsonFriends.profiles.length; i ++) {
                 friendsText = friendsText + String(jsonFriends.profiles[i]["display_name"]) + " : " + String(jsonFriends.profiles[i]["id"]) + '\n';
             }
             document.getElementById("enhancedFriendsBackupDescription").innerHTML = "※백업 데이터가 생성 되었습니다! 한번 더 클릭하여 다운로드를 진행하세요.<br>만약 다운로드가 진행되지 않을 경우, 우클릭하여 다른 이름으로 링크 저장을 사용해보세요.<br>다시 새로운 정보로 다운로드 하시려면, 새로고침이 필요합니다.";
@@ -2031,12 +2462,12 @@ function BackupFriendsList() {
 }
 
 function BackupBannedUserList() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var jsonBannedUsers = JSON.parse(xmlHttp.responseText);
-            var bannedUsersText = '';
-            for (var i = 0; i < jsonBannedUsers.length; i ++) {
+            let jsonBannedUsers = JSON.parse(xmlHttp.responseText);
+            let bannedUsersText = '';
+            for (let i = 0; i < jsonBannedUsers.length; i ++) {
                 bannedUsersText = bannedUsersText + String(jsonBannedUsers[i]["display_name"]) + " : " + String(jsonBannedUsers[i]["id"]) + '\n';
             }
             document.getElementById("enhancedBannedUserBackupDescription").innerHTML = "※백업 데이터가 생성 되었습니다! 한번 더 클릭하여 다운로드를 진행하세요.<br>만약 다운로드가 진행되지 않을 경우, 우클릭하여 다른 이름으로 링크 저장을 사용해보세요.<br>다시 새로운 정보로 다운로드 하시려면, 새로고침이 필요합니다.";
@@ -2052,12 +2483,12 @@ function BackupBannedUserList() {
 }
 
 function AddDownloadVideoButton() {
-    var videoControl = document.getElementsByClassName("mejs-controls");
-    for (var i = 0; i < videoControl.length; i++) {
-        var checkDownExists = videoControl[i].getElementsByClassName("mejs-button mejs-videodown-button");
-        if (checkDownExists.length == 0) {
-            var videoURL = videoControl[i].parentElement.getElementsByClassName("mejs-mediaelement")[0].getElementsByClassName("mejs-kakao")[0].getAttribute("src");
-            var downloadBtnEl = document.createElement('div');
+    let videoControl = document.getElementsByClassName("mejs-controls");
+    for (let i = 0; i < videoControl.length; i++) {
+        let checkDownExists = videoControl[i].getElementsByClassName("mejs-button mejs-videodown-button");
+        if (checkDownExists.length === 0) {
+            let videoURL = videoControl[i].parentElement.getElementsByClassName("mejs-mediaelement")[0].getElementsByClassName("mejs-kakao")[0].getAttribute("src");
+            let downloadBtnEl = document.createElement('div');
             downloadBtnEl.id = 'videodown';
             downloadBtnEl.className = 'mejs-button mejs-videodown-button';
             videoControl[i].appendChild(downloadBtnEl);
@@ -2067,15 +2498,15 @@ function AddDownloadVideoButton() {
 }
 
 function HideChannelButton() {
-    var isHidden = GetValue("enhancedHideChannelButton", "true");
-    var val = isHidden == "true" ? 'none' : 'block';
+    let isHidden = GetValue("enhancedHideChannelButton", "true");
+    let val = isHidden == "true" ? 'none' : 'block';
     document.getElementsByClassName("storyteller_gnb")[0].style.display = val;
     document.getElementsByClassName("group_gnb")[0].style.display = val;
 }
 
 function HideMemorize() {
-    var memorize = document.getElementsByClassName("section section_time");
-    for (var i = 0; i < memorize.length; i++) {
+    let memorize = document.getElementsByClassName("section section_time");
+    for (let i = 0; i < memorize.length; i++) {
         memorize[i].parentElement.style.display = 'none';
     }
 }
@@ -2115,13 +2546,13 @@ function SetEmoticonSelectorSize()
         SetCSS('enhancedEmoticonSelectorItemSize', '.emoticon_keyboard .emt_il .emt_il_item { width: 128px !important; height: 128px !important; } .emoticon_keyboard .emt_il img { width: 128px !important; height: 128px !important; }')
         SetCSS('enhancedEmoticonSelectorBoxSize', '.write .section .inp_footer .emoticon_layer { width: 630px !important; } .emoticon_keyboard .emoticon_item_list { height: 450px !important; } .emoticon_layer { width: 630px !important; }')
     }
-    
+
 }
 
 function HideBlockedUserComment() {
-    var comments = document.getElementsByClassName("_commentContent");
-    for (var i = 0; i < comments.length; i++) {
-        var bannedID = comments[i].getElementsByClassName("txt")[0].getElementsByTagName("p")[0].getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
+    let comments = document.getElementsByClassName("_commentContent");
+    for (let i = 0; i < comments.length; i++) {
+        let bannedID = comments[i].getElementsByClassName("txt")[0].getElementsByTagName("p")[0].getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
 
         if (blockedList.has(bannedID) === true || feedBlockedList.has(bannedID) === true) {
             comments[i].parentElement.style.display = 'none';
@@ -2135,30 +2566,30 @@ function HideBlockedUserComment() {
 
 function HideBlockedUserArticle()
 {
-    var articles = document.getElementsByClassName("section _activity");
-    for (var i = 0; i < articles.length; i++)
+    let articles = document.getElementsByClassName("section _activity");
+    for (let i = 0; i < articles.length; i++)
     {
         if (articles[i].getElementsByClassName("fd_cont _contentWrapper").length <= 0) //this is not article
         {
             continue;
         }
 
-        var content = articles[i].getElementsByClassName("fd_cont _contentWrapper")[0];
+        let content = articles[i].getElementsByClassName("fd_cont _contentWrapper")[0];
 
         if (content.getElementsByClassName("share_wrap share_wrap_v2").length <= 0) //this is not shared article
         {
             continue;
         }
 
-        var shared_content = content.getElementsByClassName("share_wrap share_wrap_v2")[0];
-        
+        let shared_content = content.getElementsByClassName("share_wrap share_wrap_v2")[0];
+
         if (shared_content.getElementsByClassName("pf") <= 0) //???
         {
             continue;
         }
 
-        var profile_info = shared_content.getElementsByClassName("pf")[0];
-        var bannedID = profile_info.getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
+        let profile_info = shared_content.getElementsByClassName("pf")[0];
+        let bannedID = profile_info.getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
 
         if (blockedList.has(bannedID) == true || feedBlockedList.has(bannedID) == true) {
 
@@ -2180,15 +2611,15 @@ function HideBlockedUserArticle()
 
     }
 
-    var bundle_articles = document.getElementsByClassName("section section_bundle");
-    for (var i = 0; i < bundle_articles.length; i++)
+    let bundle_articles = document.getElementsByClassName("section section_bundle");
+    for (let i = 0; i < bundle_articles.length; i++)
     {
         if (bundle_articles[i].getElementsByClassName("fd_cont").length <= 0) //this is not valid bundled article
         {
             continue;
         }
 
-        var content = bundle_articles[i].getElementsByClassName("fd_cont")[0];
+        let content = bundle_articles[i].getElementsByClassName("fd_cont")[0];
 
         if (content.getElementsByClassName("_bundleContainer").length <= 0) //this is not valid bundled article
         {
@@ -2200,8 +2631,8 @@ function HideBlockedUserArticle()
             continue;
         }
 
-        var profile_info = content.querySelector("div[data-part-name='originalActivity']").getElementsByClassName("pf")[0];
-        var bannedID = profile_info.getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
+        let profile_info = content.querySelector("div[data-part-name='originalActivity']").getElementsByClassName("pf")[0];
+        let bannedID = profile_info.getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
 
         if (blockedList.has(bannedID) == true) {
 
@@ -2226,14 +2657,14 @@ function HideBlockedUserArticle()
 
 function GetFeedBlockedUsers()
 {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
             if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
                 feedBlockedList.clear();
-                var friends = JSON.parse(xmlHttp.responseText);
-                for (var i = 0; i < friends.profiles.length; i++)
+                let friends = JSON.parse(xmlHttp.responseText);
+                for (let i = 0; i < friends.profiles.length; i++)
                 {
-                    var isFeedBlocked = friends['profiles'][i]['is_feed_blocked'];
+                    let isFeedBlocked = friends['profiles'][i]['is_feed_blocked'];
                     let friendID = friends['profiles'][i]['id'];
                     if (isFeedBlocked == true)
                     {
@@ -2251,12 +2682,12 @@ function GetFeedBlockedUsers()
 }
 
 function GetBlockedUsers() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var jsonBlocked = JSON.parse(xmlHttp.responseText);
+            let jsonBlocked = JSON.parse(xmlHttp.responseText);
             blockedList.clear();
-            for (var i = 0; i < jsonBlocked.length; i ++) {
+            for (let i = 0; i < jsonBlocked.length; i ++) {
                 blockedList.add(String(jsonBlocked[i]["id"]));
             }
         }
@@ -2279,15 +2710,16 @@ function ShowBlockStringPage() {
 }
 
 function InitCustomThemePage() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var html = xmlHttp.responseText;
+            let html = xmlHttp.responseText;
 
-            var customThemeLayer = document.createElement('div');
+            let customThemeLayer = document.createElement('div');
             customThemeLayer.id = "customThemeLayer";
             customThemeLayer.className = "cover _cover";
             customThemeLayer.style.display = "none";
+            customThemeLayer.style.zIndex = "301";
             document.body.appendChild(customThemeLayer);
             document.getElementById('customThemeLayer').innerHTML = html;
             InitCustomThemeValues();
@@ -2300,14 +2732,14 @@ function InitCustomThemePage() {
 
 function InitCustomThemeValues()
 {
-    for (var i = 1; i <= 3; i++)
+    for (let i = 1; i <= 3; i++)
     {
-        var color = GetValue('enhancedCustomThemeColor' + i, GetRandomHexColor());
+        let color = GetValue('enhancedCustomThemeColor' + i, GetRandomHexColor());
         document.getElementById("enhancedCustomThemeColor" + i).value = color;
         document.getElementById("enhancedCustomThemePercent" + i).value = GetValue('enhancedCustomThemePercent' + i, Math.floor(Math.random() * 100));
-        var isBright = IsBrightColor(color);
-        var el = document.getElementsByClassName("enhanced_custom_gradient_color_" + i);
-        for (var j = 0; j < el.length; j++)
+        let isBright = IsBrightColor(color);
+        let el = document.getElementsByClassName("enhanced_custom_gradient_color_" + i);
+        for (let j = 0; j < el.length; j++)
         {
             el[j].style.backgroundColor = color;
             el[j].style.color = (isBright)? 'black' : 'white';
@@ -2323,14 +2755,14 @@ function InitCustomThemePageEvents()
         let color = this.value;
         CustomThemeColorEventFunc(color, 1);
     });
-    
+
     document.getElementById("enhancedCustomThemeColor2").addEventListener("input", function() {
-        var color = this.value;
+        let color = this.value;
         CustomThemeColorEventFunc(color, 2);
     });
 
     document.getElementById("enhancedCustomThemeColor3").addEventListener("input", function() {
-        var color = this.value;
+        let color = this.value;
         CustomThemeColorEventFunc(color, 3);
     });
 
@@ -2415,17 +2847,16 @@ function GetRandomHexColor()
 
 function IsBrightColor(hexColor)
 {
-    var rgb = HexToRGB(hexColor);
-    var brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
+    let rgb = HexToRGB(hexColor);
+    let brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
     return brightness > 125;
 }
 
 function GetHSLCSS(hexColor)
 {
-    var rgb = HexToRGB(hexColor);
-    var hsl = RGBToHSL(rgb);
-    //000 calc(var(--saturation-factor, 1)*0%) 100%;
-    //115 calc(var(--saturation-factor, 1)*10.5%) 42.9%;
+    let rgb = HexToRGB(hexColor);
+    let hsl = RGBToHSL(rgb);
+
     return hsl[0] + ' calc(var(--saturation-factor, 1)*' + hsl[1] + '%) ' + hsl[2] + '%';
 }
 
@@ -2437,7 +2868,7 @@ function GetGradientCSS(percent1, percent2, percent3, degree)
 function HexToRGB(hexColor) {
     const rgb = hexColor.startsWith('#') ? hexColor.slice(1) : hexColor;
     const [r, g, b] = [rgb.slice(0, 2), rgb.slice(2, 4), rgb.slice(4, 6)].map((hex) => Number.parseInt(hex, 16));
-  
+
     return [r, g, b];
   }
 
@@ -2447,7 +2878,7 @@ function RGBToHSL(rgb) {
     const b = rgb[2] / 255;
     const l = Math.max(r, g, b);
     const s = l - Math.min(r, g, b);
-  
+
     const h = s
       ? l === r
         ? (g - b) / s
@@ -2482,7 +2913,7 @@ function HideBlockStringArticle() {
 
 function MovePuppy()
 {
-    var hasPuppy = document.getElementById("enhancedPuppyImage") != null;
+    let hasPuppy = document.getElementById("enhancedPuppyImage") != null;
     if (GetValue('enhancedPuppyMode', 'none') === 'none')
         {
             if (hasPuppy)
@@ -2493,10 +2924,10 @@ function MovePuppy()
         }
     if (!hasPuppy)
     {
-        var puppy = document.createElement('div');
+        let puppy = document.createElement('div');
         puppy.className = 'enhanced_puppy_image';
 
-        var puppyContainer = document.createElement('div');
+        let puppyContainer = document.createElement('div');
         puppyContainer.id = 'enhancedPuppyImage';
         puppyContainer.className = 'enhanced_puppy';
         puppyContainer.appendChild(puppy);
@@ -2506,7 +2937,7 @@ function MovePuppy()
 
 function MoveKitty()
 {
-    var hasKitty = document.getElementById("enhancedKittyImage") != null;
+    let hasKitty = document.getElementById("enhancedKittyImage") != null;
     if (GetValue('enhancedKittyMode', 'none') == 'none')
     {
         if (hasKitty)
@@ -2517,7 +2948,7 @@ function MoveKitty()
     }
     if (!hasKitty)
     {
-        var kitty = document.createElement('img');
+        let kitty = document.createElement('img');
         kitty.id = 'enhancedKittyImage';
         kitty.className = 'enhanced_kitty';
         kitty.src = resourceURL + "images/cat.gif";
@@ -2526,7 +2957,7 @@ function MoveKitty()
 }
 
 function GetValue(key, defaultValue) {
-    var value = localStorage[key];
+    let value = localStorage[key];
     if (value == "" || value == null) {
         SetValue(key, defaultValue);
         value = defaultValue;
@@ -2557,16 +2988,9 @@ function RemoveCSSCollection(elID)
     }
 }
 
-function DownloadText(text, name, type) {
-    var a = document.getElementById("a");
-    var file = new Blob([text], {type: type});
-    a.href = URL.createObjectURL(file);
-    a.download = name;
-}
-
 function GetHideLogoIconTitle()
 {
-    var val = GetValue('enhancedHideLogoIcon', 'naver');
+    let val = GetValue('enhancedHideLogoIcon', 'naver');
     if (val === 'naver')
     {
         return 'NAVER';
@@ -2591,9 +3015,9 @@ function GetHideLogoIconTitle()
 
 function HideLogo()
 {
-    var link = document.querySelector("link[rel~='icon']");
-    var icon = currentFavicon + ".ico";
-    var addNotiEnabled = false;
+    let link = document.querySelector("link[rel~='icon']");
+    let icon = currentFavicon + ".ico";
+    let addNotiEnabled = false;
 
     //innerText starts with (N) means notification
 
@@ -2607,7 +3031,7 @@ function HideLogo()
         icon = GetValue('enhancedFaviconURL', resourceURL + 'images/naver.ico');
     }
 
-    var _title = currentTitle;
+    let _title = currentTitle;
     if (addNotiEnabled)
     {
         _title = '(N) ' + currentTitle;
@@ -2634,19 +3058,19 @@ function HideLogo()
     else
     {
         link.href = resourceURL + "images/" + icon;
-    }   
+    }
 }
 
 function SetClassicFavicon()
 {
-    var link = document.querySelector("link[rel~='icon']");
+    let link = document.querySelector("link[rel~='icon']");
 
     if (link.href.includes("classic.ico") || link.href.includes("classic_noty.ico"))
     {
         return;
     }
 
-    var faviLink = resourceURL + "images/classic.ico";
+    let faviLink = resourceURL + "images/classic.ico";
 
     if (document.getElementsByTagName('title')[0].innerText.includes("(N)"))
     {
@@ -2664,8 +3088,8 @@ function SetClassicFavicon()
 
 function AddPowerModeScoreElements()
 {
-    var header = document.querySelectorAll('[data-part-name="gnbMenu"]')[0];
-    var scoreElement = document.createElement('div');
+    let header = document.querySelectorAll('[data-part-name="gnbMenu"]')[0];
+    let scoreElement = document.createElement('div');
     scoreElement.id = 'enhancedPowerModeScore';
     scoreElement.className = 'enhanced_power_mode_score';
     scoreElement.innerText = 'COMBO 120';
@@ -2673,276 +3097,16 @@ function AddPowerModeScoreElements()
     header.appendChild(scoreElement);
 }
 
-//enhancedDark2TestCSS
-function SetCSS2(elID, cssText)
-{
-    //GM_addStyle(cssText);
-    var elem = document.createElement('style');
-    elem.id = elID;
-    document.head.appendChild(elem);
-    document.getElementById(elID).innerHTML = cssText;
-}
-
-/* For Login */
-function LoadLoginDarkThemeCSS()
-{
-    document.documentElement.style.setProperty('--background-color', '#2f3136');
-    document.documentElement.style.setProperty('--text-color', '#dcddde');
-    document.documentElement.style.setProperty('--text-highlight-color', '#fff');
-    document.documentElement.style.setProperty('--text-menu-color', '#b9bbbe');
-    document.documentElement.style.setProperty('--discord-blue', '#7289da');
-    document.documentElement.style.setProperty('--dark-background-color', '#202225');
-
-    var elem = document.createElement('style');
-    elem.id = 'enhancedLoginDarkThemeCSS';
-    document.head.appendChild(elem);
-    document.getElementById('enhancedLoginDarkThemeCSS').innerHTML =
-        'body { background: var(--background-color) !important; }' +
-        '.set_login .lab_choice { color: var(--text-color) !important; }' +
-        '.doc-footer .txt_copyright { color: var(--text-color) !important; }' +
-        'a { color: var(--text-highlight-color) !important; }' +
-        '.cont_login a { color: var(--text-menu-color) !important; }' +
-        '.doc-footer .service_info .link_info { color: var(--text-menu-color) !important; }' +
-        '.item_select .link_selected { color: var(--text-menu-color) !important; }' +
-        '.box_tf { border: solid 0px var(--text-highlight-color) !important; background: var(--dark-background-color) !important; padding-left: 10px; padding-right: 10px; }' +
-        '.box_tf .tf_g { color: var(--text-color) !important; caret-color: auto !important; }' +
-        '.info_tip, .line_or .txt_or { color: var(--text-color) !important;}' +
-        '.info_tip .txt_tip { color: var(--discord-blue) !important; }' +
-        '.box_tf .txt_mail { color: var(--text-color) !important; margin-right: 10px !important }' +
-        '.doc-title .tit_service .logo_kakao { background: var(--background-color) url(/images/pc/logo_kakao.png) no-repeat 0 0 !important; background-size: 100px 80px !important; background-position: 0 -41px !important};';
-
-}
-
-function ChangeLoginTheme(theme)
-{
-    var btnElem = document.getElementById('enhancedLoginThemeChangeBtn');
-    if (theme == 'dark')
-    {
-        LoadLoginDarkThemeCSS();
-        SetValue('enhancedSelectThemeLogin', 'dark');
-        btnElem.innerHTML = svgLight;
-    }
-    else if (theme == 'light')
-    {
-        document.querySelector('style').remove(); //Remove Dark Theme CSS
-        SetValue('enhancedSelectThemeLogin', 'light');
-        btnElem.innerHTML = svgDark;
-    }
-}
-
-function AddVisitorCountLayer()
-{
-    var visitorCountLayer = document.createElement("div");
-    visitorCountLayer.id = "enhancedVisitorCountLayer";
-    visitorCountLayer.className = "profile_collection visitor_count_layer";
-    document.getElementsByClassName("profile_collection")[0].parentElement.appendChild(visitorCountLayer);
-    visitorCountLayer.innerHTML = '<fieldset><h4 class="tit_collection">방문자수</h4></br><div style=""><canvas id="visitorChartCanvas"></canvas></div></fieldset>';
-}
-
-function ParseVisitorCount(jsonData)
-{
-    var counterJSON = null;
-    for (var i = 0; i < jsonData.length; i++)
-    {
-        if (jsonData[i].type == "visit_counter")
-        {
-            counterJSON = jsonData[i].object.items;
-            break;
-        }
-    }
-
-    if (counterJSON == null)
-    {
-        document.getElementById("enhancedVisitorCountLayer").style.display = 'none';
-        return;
-    }
-
-    var labelData = ['', '', '', '', '', '', ''];
-    var countData = [0, 0, 0, 0, 0, 0, 0];
-
-    for (var i = 0; i < counterJSON.length; i++)
-    {
-        labelData[i] = counterJSON[i].date;
-        countData[i] = (counterJSON[i].count == -1? 0 : counterJSON[i].count);
-    }
-
-    var chartCanvas = document.getElementById('visitorChartCanvas').getContext('2d');
-
-    var visitChart = new Chart(chartCanvas, {
-        type: 'line',
-        data: {
-            labels: labelData,
-            datasets: [
-                {
-                    fill: false,
-                    data: countData,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                    ],
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            plugins: {
-                legend: {
-                    display: false
-                }
-            }
-        }
-    })
-}
-
-function ViewVisitorChart()
-{
-    if (document.getElementById("enhancedVisitorCountLayer") != null)
-    {
-        return;
-    }
-
-    if (document.getElementsByClassName("profile_collection").length < 1)
-    {
-        return;
-    }
-
-    var pathname = window.location.pathname;
-    var pathList = pathname.split("/");
-    if (pathList.length < 3)
-    {
-        return;
-    }
-
-    var curUserID = pathList[1];
-
-    AddVisitorCountLayer();
-
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var highlights = JSON.parse(xmlHttp.responseText);
-            
-            ParseVisitorCount(highlights.highlight);
-        }
-    }
-    xmlHttp.open("GET", "https://story.kakao.com/a/profiles/" + curUserID + "/highlight");
-    xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
-    xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
-    xmlHttp.setRequestHeader("Accept", "application/json");
-    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-    xmlHttp.send();
-}
-
-function OpenFastDeleteFriend()
-{
-    var fastDeleteLayer = document.createElement('div');
-    fastDeleteLayer.id = "fastDeleteLayer";
-    fastDeleteLayer.className = "cover _cover";
-    document.body.appendChild(fastDeleteLayer);
-    document.getElementById('fastDeleteLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="story_layer story_feed_layer cover_content cover_center" data-kant-group="like"><div class="inner_story_layer _layerContainer" style="top: 630px;"><div class="layer_head"><strong class="tit_story">빠른 친구삭제</strong></div><div class="layer_body"><div class="fake_scroll"><ul id="enhancedFastDeleteTable" class="list_people list_people_v2 _listContainer" style="overflow-y: scroll;"></ul><div class="scroll" style="display: none; height: 60px;"><span class="top"></span><span class="bottom"></span></div></div></div><div class="layer_foot"><a href="#" class="btn_close _close" data-kant-id="false"><span id="enhancedFastDeleteClose" class="ico_ks ico_close">닫기</span></a></div></div></div></div>';
-    document.body.scrollTop = 0;
-
-    var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function() {
-            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-                var friends = JSON.parse(xmlHttp.responseText);
-                for (var i = 0; i < friends.profiles.length; i++)
-                {
-                    let friendli = document.createElement('li');
-                    var friendProfileImageL = friends['profiles'][i]['profile_image_url'];
-                    var friendProfileImageS = friends['profiles'][i]['profile_thumbnail_url'];
-                    var friendName = friends['profiles'][i]['display_name'];
-                    let friendID = friends['profiles'][i]['id'];
-                    friendli.id = "enhancedFastDelFriend_" + friendID;
-                    document.getElementById("enhancedFastDeleteTable").appendChild(friendli);
-                    document.getElementById("enhancedFastDelFriend_" + friendID).innerHTML = '<a href="/' + friendID + '" class="link_people"><span class="thumb_user"><span class="img_profile thumb_img"><img src="' + friendProfileImageL + '" width="36" height="36" data-image-src="' + friendProfileImageS + '" data-movie-src="" class="img_thumb" alt=""></span></span> <span class="info_user"><span class="inner_user"><span class="txt_user"><em class="tit_userinfo">' + friendName + '</em></span></span></span></a><div class="btn_group btn_group_v2"><a href="#" id="' + 'btnEnhancedFastDelFriend_' + friendID + '"class="btn_com btn_wh _acceptFriend fastDelBtn"><span>삭제</span></a></div>';
-                    document.getElementById("btnEnhancedFastDelFriend_" + friendID).addEventListener("click", function() {
-                        _DeleteFriend(friendID);
-                        friendli.remove();
-                    });
-                    
-                }
-            }
-        }
-        xmlHttp.open("GET", "https://story.kakao.com/a/friends");
-        xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
-        xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
-        xmlHttp.setRequestHeader("Accept", "application/json");
-        xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-        xmlHttp.send();
-}
-
-function AddLoginThemeSelectButtonUI()
-{
-    var body = document.body;
-    var btnElem = document.createElement('button');
-    btnElem.id = 'enhancedLoginThemeChangeBtn';
-    btnElem.innerHTML = svgDark;
-    btnElem.style.height = '64px';
-    btnElem.style.width = '64px';
-    btnElem.style.background = 'none';
-    btnElem.style.position = 'absolute';
-    btnElem.style.right = '10px';
-    btnElem.style.bottom = '10px';
-
-    var theme = GetValue('enhancedSelectThemeLogin', 'dark');
-
-    if (theme == 'dark')
-    {
-        btnElem.innerHTML = svgLight;
-    }
-    else if (theme == 'light')
-    {
-        btnElem.innerHTML = svgDark;
-    }
-    btnElem.onclick = function() {
-        if (theme == 'dark')
-        {
-            theme = 'light';
-        }
-        else if (theme == 'light')
-        {
-            theme = 'dark';
-        }
-
-        ChangeLoginTheme(theme);
-    }
-
-    body.appendChild(btnElem);
-}
-
-function SetExtendStoryWidgetsUI()
-{
-    var myInfo = document.querySelector('div[data-module="myStoryWidget"]');
-    if (myInfo)
-    {
-        var myInfoParent = myInfo.parentElement;
-        if (!myInfoParent.className.includes('story_cont'))
-        {
-            return;
-        }
-        myInfoParent.removeChild(myInfo);
-
-        var storyCover = document.getElementsByClassName("story_cover");
-        if (storyCover.length > 0)
-        {
-            storyCover[0].parentElement.parentElement.appendChild(myInfo);
-        }
-    }
-}
-
 function SetExtendCommentUI()
 {
-    var detailClass = document.getElementsByClassName("feed detail_desc _feedContainer");
+    let detailClass = document.getElementsByClassName("feed detail_desc _feedContainer");
     if (detailClass.length > 0)
     {
         return;
     }
 
-    var commentClasses = document.getElementsByClassName("comment");
-    for (var i = 0; i < commentClasses.length; i++)
+    let commentClasses = document.getElementsByClassName("comment");
+    for (let i = 0; i < commentClasses.length; i++)
     {
         let commentClass = commentClasses[i];
         let commentParent = commentClass.parentElement;
@@ -2977,9 +3141,9 @@ function MoveBirthdayFriendsToTop()
     }
 
     let friendsEl = null;
-    for (var i = 0; i < els.length; i++)
+    for (let i = 0; i < els.length; i++)
     {
-        if (els[i].getAttribute("data-part-name") == "peopleList")
+        if (els[i].getAttribute("data-part-name") === "peopleList")
         {
             friendsEl = els[i];
             break;
@@ -3015,17 +3179,9 @@ function MoveBirthdayFriendsToTop()
     }
 }
 
-(function() {
-    if (window.location.href.includes("accounts.kakao.com/login"))
-    {
-        AddLoginThemeSelectButtonUI();
-        if (GetValue('enhancedSelectThemeLogin', 'dark') == 'dark')
-        {
-            ChangeLoginTheme('dark');
-        }
-        
-        return;
-    }
+function MainKakaoStory()
+{
+    eventHandlerModule.initialize();
     InitEnhancedSettingsPage();
     InitCustomThemePage();
     LoadCommonEvents();
@@ -3038,7 +3194,7 @@ function MoveBirthdayFriendsToTop()
     {
         GetFeedBlockedUsers();
     }
-    
+
     SetEmoticonSelectorSize();
 
     setTimeout(() => AddEnhancedMenu(), 1000);
@@ -3078,18 +3234,11 @@ function MoveBirthdayFriendsToTop()
             HideBlockedUserArticle();
         }
 
-        if (GetValue('enhancedHideRecommendFriend', 'false') == 'true')
-        {
-            HideRecommendFriend();
-        }
-
         HideBlockStringArticle();
 
         ViewDetailNotFriendArticle();
 
-        RemoveRecommendFeed();
-
-        var hideLogoEnabled = (GetValue('enhancedHideLogo', 'false') == 'true');
+        let hideLogoEnabled = (GetValue('enhancedHideLogo', 'false') == 'true');
 
         if (hideLogoEnabled == true)
         {
@@ -3104,10 +3253,9 @@ function MoveBirthdayFriendsToTop()
         if (GetValue('enhancedWideMode', 'false') != 'false')
         {
             setTimeout(() => SetExtendCommentUI(), 750);
-            setTimeout(() => SetExtendStoryWidgetsUI(), 750);
         }
 
-        setTimeout(() => ViewVisitorChart(), 1000);
+        setTimeout(() => visitorChartModule.viewVisitorChart(), 1000);
 
         if (GetValue('enhancedEarthquake', 'false') == 'true')
         {
@@ -3119,4 +3267,16 @@ function MoveBirthdayFriendsToTop()
         }
 
     }, 100);
+}
+
+(function() {
+    /* Kakao Login */
+    if (window.location.href.includes("accounts.kakao.com/login"))
+    {
+        loginThemeModule.initialize();
+        return;
+    }
+
+    /* KakaoStory */
+    MainKakaoStory();
 })();
