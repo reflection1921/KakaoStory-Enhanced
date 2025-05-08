@@ -1398,6 +1398,16 @@ function LoadCommonEvents()
             return;
         }
 
+        //O - Notification Open / Close
+        if (e.code == "KeyO")
+        {
+            var elems = document.getElementsByClassName("link_gnb link_newnoti _notifyButton");
+            if (elems.length > 0)
+            {
+                elems[0].click();
+            }
+        }
+
         //J - FEED Down
         if (e.code === 'KeyJ')
         {
