@@ -1404,6 +1404,12 @@ function LoadCommonEvents()
             var elems = document.getElementsByClassName("link_gnb link_newnoti _notifyButton");
             if (elems.length > 0)
             {
+                let notiElem = document.getElementsByClassName("list_layer list_newnoti _notiList")[0];
+                let notiArr = notiElem.getElementsByTagName("li");
+                for (let i = 0; i < notiArr.length; i++)
+                {
+                    notiArr[i].classList.remove("enhanced_activty_selected");
+                }
                 elems[0].click();
             }
         }
@@ -1411,6 +1417,37 @@ function LoadCommonEvents()
         //J - FEED Down
         if (e.code === 'KeyJ')
         {
+            let notiOpened = document.getElementsByClassName("layer_gnb newnoti_layer _notifyLayer _ignoreScroll")[0].style.display === "block";
+            if (notiOpened)
+            {
+                let notiElem = document.getElementsByClassName("list_layer list_newnoti _notiList")[0];
+                let notiArr = notiElem.getElementsByTagName("li");
+                for (let i = 0; i < notiArr.length; i++)
+                {
+                    if (notiArr[i].classList.contains("enhanced_activty_selected"))
+                    {
+                        if (i == notiArr.length - 1)
+                        {
+                            ScrollToTargetSmoothly(notiElem, notiArr[i]);
+                            break;
+                        }
+                        notiArr[i].classList.remove("enhanced_activty_selected");
+                        notiArr[i + 1].classList.add("enhanced_activty_selected");
+                        ScrollToTargetSmoothly(notiElem, notiArr[i + 1]);
+                        break;
+                    }
+
+                    if (i == notiArr.length - 1)
+                    {
+                        notiArr[0].classList.add("enhanced_activty_selected");
+                        //visibleArticles[0].scrollIntoView();
+                        ScrollToTargetSmoothly(notiElem, notiArr[0]);
+                    }
+                }
+                
+                return;
+            }
+
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
             {
                 return;
@@ -1439,7 +1476,7 @@ function LoadCommonEvents()
                     visibleArticles[i].classList.remove("enhanced_activty_selected");
                     visibleArticles[i + 1].classList.add("enhanced_activty_selected");
                     //visibleArticles[i + 1].scrollIntoView();
-                    ScrollToTargetSmoothly(articles[i + 1]);
+                    ScrollToTargetSmoothly(visibleArticles[i + 1]);
                     break;
                 }
                 if (i == visibleArticles.length - 1)
@@ -1454,6 +1491,37 @@ function LoadCommonEvents()
         //K - Feed Up
         if (e.code === 'KeyK')
         {
+            let notiOpened = document.getElementsByClassName("layer_gnb newnoti_layer _notifyLayer _ignoreScroll")[0].style.display === "block";
+            if (notiOpened)
+            {
+                let notiElem = document.getElementsByClassName("list_layer list_newnoti _notiList")[0];
+                let notiArr = notiElem.getElementsByTagName("li");
+                for (let i = 0; i < notiArr.length; i++)
+                {
+                    if (notiArr[i].classList.contains("enhanced_activty_selected"))
+                    {
+                        if (i == 0)
+                        {
+                            ScrollToTargetSmoothly(notiElem, notiArr[i]);
+                            break;
+                        }
+                        notiArr[i].classList.remove("enhanced_activty_selected");
+                        notiArr[i - 1].classList.add("enhanced_activty_selected");
+                        ScrollToTargetSmoothly(notiElem, notiArr[i - 1]);
+                        break;
+                    }
+
+                    if (i == notiArr.length - 1)
+                    {
+                        notiArr[0].classList.add("enhanced_activty_selected");
+                        //visibleArticles[0].scrollIntoView();
+                        ScrollToTargetSmoothly(notiElem, notiArr[0]);
+                    }
+                }
+                
+                return;
+            }
+
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
             {
                 return;
@@ -1539,6 +1607,30 @@ function LoadCommonEvents()
         //F - Article Detail View(Close : ESC)
         if (e.code === 'KeyF')
         {
+            let notiOpened = document.getElementsByClassName("layer_gnb newnoti_layer _notifyLayer _ignoreScroll")[0].style.display === "block";
+            if (notiOpened)
+            {
+                let notiElem = document.getElementsByClassName("list_layer list_newnoti _notiList")[0];
+                let notiArr = notiElem.getElementsByTagName("li");
+
+                let selectedIdx = -1;
+
+                for (let i = 0; i < notiArr.length; i++)
+                {
+                    if (notiArr[i].classList.contains("enhanced_activty_selected"))
+                    {
+                        selectedIdx = i;
+                        break;
+                    }
+                }
+
+                if (selectedIdx == -1)
+                    return;
+
+                notiArr[selectedIdx].getElementsByClassName("link_newnoti link_newnoti2 _notification _hoverAtLink")[0].click();
+
+                return;
+            }
             var selElem = GetSelectedActivity();
             var timeElem = selElem.getElementsByClassName("time _linkPost")[0];
             if (timeElem)
@@ -1727,6 +1819,17 @@ function ScrollToTargetSmoothly(elem)
 
     //64: Header Height
     window.scrollTo(0, elem.offsetTop - 64);
+}
+
+function ScrollToTargetSmoothly(scrollElem, targetElem)
+{
+    // window.scrollTo({
+    //     top: elem.offsetTop - 64,
+    //     behavior: "smooth"
+    // });
+
+    //64: Header Height
+    scrollElem.scrollTo(0, targetElem.offsetTop - 64);
 }
 
 function VisibleEnhancedPowerModeCount()
