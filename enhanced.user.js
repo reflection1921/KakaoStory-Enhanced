@@ -1280,9 +1280,9 @@ function LoadCommonEvents()
             return;
         }
 
-
         //check e's element id is contents_write
-        if (e.target.id == "contents_write") {
+        let writingState = document.getElementsByClassName("write goaway").length == 0;
+        if (e.target.id == "contents_write" && writingState) {
             return;
         }
 
