@@ -1299,6 +1299,85 @@ function LoadCommonEvents()
 
         /* KEYBOARD CONTROL */
 
+        //Shift + D : Scroll Down(50% of window height)
+        if (e.shiftKey && e.code === 'KeyD')
+        {
+            let scrollHeight = window.innerHeight * 0.5;
+            window.scrollBy(0, scrollHeight);
+            return;
+        }
+
+        //Shift + U : Scroll Up(50% of window height)
+        if (e.shiftKey && e.code === 'KeyU')
+        {
+            let scrollHeight = window.innerHeight * 0.5;
+            window.scrollBy(0, -scrollHeight);
+            return;
+        }
+
+        //Shift + F : Scroll Down(100% of window height)
+        if (e.shiftKey && e.code === 'KeyF')
+        {
+            let scrollHeight = window.innerHeight * 1.0;
+            window.scrollBy(0, scrollHeight);
+            return;
+        }
+
+        //Shift + B : Scroll Up(100% of window height)
+        if (e.shiftKey && e.code === 'KeyB')
+        {
+            let scrollHeight = window.innerHeight * 1.0;
+            window.scrollBy(0, -scrollHeight);
+            return;
+        }
+
+        //Double Z - Cursor Center
+        if (e.code === 'KeyZ')
+        {
+            let currentTime = new Date().getTime();
+            if (!zKeyPressed)
+            {
+                zKeyPressed = true;
+                lastZKeyPressTime = currentTime;
+
+                // Normal Z
+                setTimeout(function() {
+                    if (zKeyPressed && currentTime - lastZKeyPressTime < doubleKeyPressThreshold) {
+                        // Some actions for single Z
+                        zKeyPressed = false;
+                    }
+                }, doubleKeyPressThreshold);
+            }
+            else //Double Z
+            {
+                let targetScroll = document.documentElement.scrollHeight * 0.5;
+
+                window.scrollTo(0, targetScroll);
+                zKeyPressed = false;
+            }
+        }
+
+        //ZT - Cursor Top
+        if (e.code === 'KeyT')
+        {
+            if (zKeyPressed)
+            {
+                window.scrollTo(0, 0);
+                zKeyPressed = false;
+            }
+        }
+
+        //ZT - Cursor Bottom
+        if (e.code === 'KeyB')
+        {
+            if (zKeyPressed)
+            {
+                let targetScroll = document.documentElement.scrollHeight;
+                window.scrollTo(0, targetScroll);
+                zKeyPressed = false;
+            }
+        }
+
         //Shift + M - Permission : Only Me
         if (e.shiftKey && e.code === 'KeyM')
         {
@@ -1470,20 +1549,20 @@ function LoadCommonEvents()
                     if (i == visibleArticles.length - 1)
                     {
                         //visibleArticles[i].scrollIntoView();
-                        ScrollToTargetSmoothly(visibleArticles[i]);
+                        ScrollToTargetSmoothlyWindow(visibleArticles[i]);
                         break;
                     }
                     visibleArticles[i].classList.remove("enhanced_activty_selected");
                     visibleArticles[i + 1].classList.add("enhanced_activty_selected");
                     //visibleArticles[i + 1].scrollIntoView();
-                    ScrollToTargetSmoothly(visibleArticles[i + 1]);
+                    ScrollToTargetSmoothlyWindow(visibleArticles[i + 1]);
                     break;
                 }
                 if (i == visibleArticles.length - 1)
                 {
                     visibleArticles[0].classList.add("enhanced_activty_selected");
                     //visibleArticles[0].scrollIntoView();
-                    ScrollToTargetSmoothly(visibleArticles[0]);
+                    ScrollToTargetSmoothlyWindow(visibleArticles[0]);
                 }
             }
         }
@@ -1543,20 +1622,20 @@ function LoadCommonEvents()
                     if (i == 0)
                     {
                         //visibleArticles[i].scrollIntoView();
-                        ScrollToTargetSmoothly(visibleArticles[i])
+                        ScrollToTargetSmoothlyWindow(visibleArticles[i])
                         break;
                     }
                     visibleArticles[i].classList.remove("enhanced_activty_selected");
                     visibleArticles[i - 1].classList.add("enhanced_activty_selected");
                     //visibleArticles[i - 1].scrollIntoView();
-                    ScrollToTargetSmoothly(visibleArticles[i - 1]);
+                    ScrollToTargetSmoothlyWindow(visibleArticles[i - 1]);
                     break;
                 }
                 if (i == visibleArticles.length - 1)
                 {
                     visibleArticles[0].classList.add("enhanced_activty_selected");
                     //visibleArticles[0].scrollIntoView();
-                    ScrollToTargetSmoothly(visibleArticles[0]);
+                    ScrollToTargetSmoothlyWindow(visibleArticles[0]);
                 }
             }
         }
@@ -1574,15 +1653,15 @@ function LoadCommonEvents()
                 return;
             }
 
-            var currentTime = new Date().getTime();
+            let currentTime = new Date().getTime();
             if (!gKeyPressed)
             {
                 gKeyPressed = true;
-                lastKeyPressTime = currentTime;
+                lastGKeyPressTime = currentTime;
 
                 // Normal G
                 setTimeout(function() {
-                    if (gKeyPressed && currentTime - lastKeyPressTime < doubleKeyPressThreshold) {
+                    if (gKeyPressed && currentTime - lastGKeyPressTime < doubleKeyPressThreshold) {
                         onGKeyPress(false);
                         gKeyPressed = false;
                     }
@@ -1598,7 +1677,7 @@ function LoadCommonEvents()
         //R - Refresh Feed / Go to Main
         if (e.code === 'KeyR')
         {
-            var elem = document.getElementsByClassName("link_kakaostory _btnHome")[0];
+            let elem = document.getElementsByClassName("link_kakaostory _btnHome")[0];
             if (elem) {
                 elem.click();
             }
@@ -1665,7 +1744,7 @@ function LoadCommonEvents()
             //var comment_elem = selElem.querySelectorAll('[id*="comt_view"]')[0];
             if (comment_elem)
             {
-                ScrollToTargetSmoothly(comment_elem);
+                ScrollToTargetSmoothlyWindow(comment_elem);
                 comment_elem.click();
                 e.preventDefault();
             }
@@ -1781,9 +1860,12 @@ function GetSelectedActivity()
     return visibleArticles[selectedIdx];
 }
 
+/* Z KEY VARIABLES */
+var zKeyPressed = false;
+var lastZKeyPressTime = 0;
 /* G KEY VARIABLES */
 var gKeyPressed = false;
-var lastKeyPressTime = 0;
+var lastGKeyPressTime = 0;
 var doubleKeyPressThreshold = 300;
 
 function onGKeyPress(doublePress)
@@ -1800,17 +1882,17 @@ function onGKeyPress(doublePress)
 
     if (doublePress)
     {
-        ScrollToTargetSmoothly(visibleArticles[0]);
+        ScrollToTargetSmoothlyWindow(visibleArticles[0]);
         visibleArticles[0].classList.add("enhanced_activty_selected");
     }
     else
     {
-        ScrollToTargetSmoothly(visibleArticles[visibleArticles.length - 1]);
+        ScrollToTargetSmoothlyWindow(visibleArticles[visibleArticles.length - 1]);
         visibleArticles[visibleArticles.length - 1].classList.add("enhanced_activty_selected");
     }
 }
 
-function ScrollToTargetSmoothly(elem)
+function ScrollToTargetSmoothlyWindow(elem)
 {
     // window.scrollTo({
     //     top: elem.offsetTop - 64,
