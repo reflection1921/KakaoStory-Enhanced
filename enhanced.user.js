@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.32
+// @version      1.33
 // @description  Add-on for KakaoStory
-// @author       Reflection, 박종우
+// @author       Reflection and other contributors
 // @match        https://story.kakao.com/*
 // @match        https://accounts.kakao.com/*
 // @icon         https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/story_favicon.ico
@@ -13,7 +13,7 @@
 // ==/UserScript==
 
 
-let scriptVersion = "1.32";
+let scriptVersion = "1.33";
 
 //let resourceURL = 'http://127.0.0.1:9011/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
