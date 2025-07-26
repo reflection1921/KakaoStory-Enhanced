@@ -1331,9 +1331,63 @@ function LoadCommonEvents()
             return;
         }
 
+        //GS - Share Article
+        if (e.code === 'KeyS')
+        {
+            if (gKeyPressed)
+            {
+                var selElem = GetSelectedActivity();
+                if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
+                {
+                    selElem = document.getElementsByClassName("section _activity")[0];
+                }
+                else if (document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center").length > 0)
+                {
+                    selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
+                }
+                let shareElem = selElem.querySelector('a[data-permission="98"]');
+                if (!shareElem)
+                {
+                    let shareSelElem = selElem.getElementsByClassName("_btnShare")[0];
+                    shareSelElem.click();
+                }
+
+                setTimeout(() => {
+                    shareElem = selElem.querySelector('a[data-kant-id="98"]');
+                    if (shareElem)
+                    {
+                        shareElem.click();
+                    }
+                }, 100);
+
+                gKeyPressed = false;
+            }
+        }
+
+        // GZ - Up Article
         //Double Z - Cursor Center
         if (e.code === 'KeyZ')
         {
+            if (gKeyPressed)
+            {
+                var selElem = GetSelectedActivity();
+                if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
+                {
+                    selElem = document.getElementsByClassName("section _activity")[0];
+                }
+                else if (document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center").length > 0)
+                {
+                    selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
+                }
+                let upElem = selElem.getElementsByClassName("_btnUp")[0];
+                if (upElem)
+                {
+                    upElem.click();
+                }
+
+                gKeyPressed = false;
+            }
+
             let currentTime = new Date().getTime();
             if (!zKeyPressed)
             {
@@ -1367,7 +1421,7 @@ function LoadCommonEvents()
             }
         }
 
-        //ZT - Cursor Bottom
+        //ZB - Cursor Bottom
         if (e.code === 'KeyB')
         {
             if (zKeyPressed)
