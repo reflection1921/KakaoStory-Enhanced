@@ -15,9 +15,9 @@
 
 let scriptVersion = "1.34";
 
-//let resourceURL = 'http://127.0.0.1:9011/kakaostory-enhanced/'; //for debug
+let resourceURL = 'http://127.0.0.1:9011/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 let notyTimeCount = 0; //for notification feature
 let blockedList = new Set(); //block users
@@ -921,11 +921,11 @@ function DisableScroll() {
 }
 
 function GetMyID() {
-    let tmpMyID = $('a[data-kant-id="737"]').attr('href').substring(1);
-    if (tmpMyID.charAt(0) === '_') {
-        myID = tmpMyID;
+    let userId = document.querySelector('a[data-kant-id="737"]')?.getAttribute('href')?.substring(1);
+    if (userId.charAt(0) === '_') {
+        myID = userId;
     } else {
-        GetMySID(tmpMyID);
+        GetMySID(userId);
     }
 }
 
@@ -1007,9 +1007,9 @@ function InitImagePasteEvent()
 
                 // 글쓰기 상태
                 let fileInput = null;
-                let writingState = document.getElementsByClassName("write goaway").length == 0;
+                let writingState = document.getElementsByClassName("write goaway").length === 0;
                 let articleWritingEnabled = false;
-                if (e.target.id == "contents_write" && writingState) {
+                if (e.target.id === "contents_write" && writingState) {
                     fileInput = document.querySelector('input[type="file"][title="사진/동영상 첨부"]');
                     articleWritingEnabled = true;
                 }
@@ -1037,7 +1037,7 @@ function InitImagePasteEvent()
                 if (!fileInput) return;
                 //글쓰기는 이미지 붙여넣기를 지원하지만 그 이미지가 클립보드의 첫번째에 있어야만 정상 동작
                 //글쓰기 댓글쓰기 어느쪽이든 webp는 지원하지 않으니 webp를 강제로 지원하도록(webp to png)
-                if (articleWritingEnabled && !isWebP && i == 0) return;
+                if (articleWritingEnabled && !isWebP && i === 0) return;
 
                 const dt = new DataTransfer();
                 dt.items.add(attachedFile);
@@ -1088,25 +1088,19 @@ function InitEnhancedValues()
     let useDiscordMention = GetValue('enhancedDiscordMention', 'false');
     $('input:radio[name="enhancedSelectDiscordMention"]:input[value=' + useDiscordMention + ']').attr("checked", true);
 
-    if (GetValue('enhancedSystemTheme', 'true') == 'true'){
-        document.getElementById('enhancedSystemTheme').checked = true;
-    }
-    else
-    {
-        document.getElementById('enhancedSystemTheme').checked = false;
-    }
+    document.getElementById('enhancedSystemTheme').checked = GetValue('enhancedSystemTheme', 'true') == 'true';
 
     let fontName = GetValue('enhancedFontName', 'Pretendard');
     document.getElementById("enhancedTxtFontName").value = fontName;
     document.getElementById("enhancedTxtFontCSS").value = GetValue('enhancedFontCSS', 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css');
     SetFont();
 
-    if (fontName == 'Pretendard')
+    if (fontName === 'Pretendard')
     {
         document.getElementById("enhancedFontNoto").checked = true;
         document.getElementById("groupEnhancedFontCustomEnable").style.display = "none";
     }
-    else if (fontName == '나눔고딕')
+    else if (fontName === '나눔고딕')
     {
         document.getElementById("enhancedFontNanum").checked = true;
         document.getElementById("groupEnhancedFontCustomEnable").style.display = "none";
@@ -1131,7 +1125,7 @@ function InitEnhancedValues()
     document.getElementById('enhancedTxtNotifyTime').value = GetValue('enhancedNotifyTime', '20');
 
     let downloadVideoEnabled = GetValue('enhancedDownloadVideo', 'false');
-    $('input:radio[name="enhancedSelectDownloadVideo"]:input[value=' + downloadVideoEnabled + ']').attr("checked", true);
+    document.querySelector('input[type="radio"][name="enhancedSelectDownloadVideo"][value="' + downloadVideoEnabled + '"]').checked = true;
 
     let isHidden = GetValue('enhancedHideChannelButton', 'true');
     $('input:radio[name="enhancedSelectHideChannelButton"]:input[value=' + isHidden + ']').attr("checked", true);
@@ -1141,11 +1135,11 @@ function InitEnhancedValues()
     document.getElementById("groupEnhancedHideLogoEnable").style.display = (isHiddenLogo == "true")? "block" : "none";
 
     let isHiddenLogoNoti = GetValue('enhancedHideLogoNoti', 'false');
-    $('input:radio[name="enhancedSelectHideLogoNoti"]:input[value=' + isHiddenLogoNoti + ']').attr("checked", true);
+    document.querySelector('input[type="radio"][name="enhancedSelectHideLogoNoti"][value="' + isHiddenLogoNoti + '"]').checked = true;
 
     let hiddenLogoIcon = GetValue('enhancedHideLogoIcon', 'naver');
     $('input:radio[name="enhancedSelectLogoIcon"]:input[value=' + hiddenLogoIcon + ']').attr("checked", true);
-    document.getElementById("groupEnhancedHideLogoCustomEnable").style.display = (hiddenLogoIcon == "custom")? "block" : "none";
+    document.getElementById("groupEnhancedHideLogoCustomEnable").style.display = (hiddenLogoIcon === "custom")? "block" : "none";
     currentFavicon = hiddenLogoIcon;
     currentTitle = GetHideLogoIconTitle();
     document.getElementById('enhancedTxtHideLogoTitle').value = GetValue('enhancedFaviconTitle', 'NAVER');
@@ -1154,52 +1148,52 @@ function InitEnhancedValues()
     let isHiddenMedia = GetValue('enhancedHideMedia', 'visible');
     $('input:radio[name="enhancedSelectHideMedia"]:input[value=' + isHiddenMedia + ']').attr("checked", true);
 
-    var isHiddenMemorize = GetValue('enhancedHideMemorize', 'true');
+    let isHiddenMemorize = GetValue('enhancedHideMemorize', 'true');
     $('input:radio[name="enhnacnedSelectHideMemorize"]:input[value=' + isHiddenMemorize + ']').attr("checked", true);
 
-    var isHiddenRecommendFriend = GetValue('enhancedHideRecommendFriend', 'false');
+    let isHiddenRecommendFriend = GetValue('enhancedHideRecommendFriend', 'false');
     $('input:radio[name="enhancedSelectRecommendFriend"]:input[value=' + isHiddenRecommendFriend + ']').attr("checked", true);
     HideRecommendFriend();
 
-    var size = GetValue('enhancedEmoticonSize', 'small');
+    let size = GetValue('enhancedEmoticonSize', 'small');
     $('input:radio[name="enhancedSelectEmoticonSize"]:input[value=' + size + ']').attr("checked", true);
     SetEmoticonSize();
 
-    var isEnhancedBlock = GetValue('enhancedBlockUser', 'true');
+    let isEnhancedBlock = GetValue('enhancedBlockUser', 'true');
     $('input:radio[name="enhancedSelectBlockUser"]:input[value=' + isEnhancedBlock + ']').attr("checked", true);
     document.getElementById("groupEnhancedBlockUser").style.display = (isEnhancedBlock == "true")? "block" : "none";
 
-    var isEnhancedFeedBlock = GetValue('enhancedExtendFeedBlock', 'false');
+    let isEnhancedFeedBlock = GetValue('enhancedExtendFeedBlock', 'false');
     $('input:radio[name="enhancedSelectFeedBlockUser"]:input[value=' + isEnhancedFeedBlock + ']').attr("checked", true);
 
-    var isKitty = GetValue('enhancedKittyMode', 'none');
+    let isKitty = GetValue('enhancedKittyMode', 'none');
     $('input:radio[name="enhancedSelectKittyMode"]:input[value=' + isKitty + ']').attr("checked", true);
 
-    var isPuppy = GetValue('enhancedPuppyMode', 'none');
+    let isPuppy = GetValue('enhancedPuppyMode', 'none');
     $('input:radio[name="enhancedSelectPuppyMode"]:input[value=' + isPuppy + ']').attr("checked", true);
 
-    var isEarthquake = GetValue('enhancedEarthquake', 'false');
+    let isEarthquake = GetValue('enhancedEarthquake', 'false');
     $('input:radio[name="enhancedSelectEarthquake"]:input[value=' + isEarthquake + ']').attr("checked", true);
 
-    var isBlink = GetValue('enhancedBlink', 'false');
+    let isBlink = GetValue('enhancedBlink', 'false');
     $('input:radio[name="enhancedSelectBlink"]:input[value=' + isBlink + ']').attr("checked", true);
 
-    var isKeyboard = GetValue('enhancedKeyboard', 'false');
+    let isKeyboard = GetValue('enhancedKeyboard', 'false');
     $('input:radio[name="enhancedSelectKeyboard"]:input[value=' + isKeyboard + ']').attr("checked", true);
 
-    var isBlockAllArticle = GetValue('enhancedBlockArticleAll', 'true');
+    let isBlockAllArticle = GetValue('enhancedBlockArticleAll', 'true');
     $('input:radio[name="enhancedSelectBlockArticleAll"]:input[value=' + isBlockAllArticle + ']').attr("checked", true);
 
-    var useWideMode = GetValue('enhancedWideMode', 'false');
+    let useWideMode = GetValue('enhancedWideMode', 'false');
     if (useWideMode == 'true')
     {
         SetValue('enhancedWideMode', 'fixed');
         useWideMode = 'fixed';
     }
-    $('input:radio[name="enhancedSelectWideMode"]:input[value=' + useWideMode + ']').attr("checked", true);
+    document.querySelector('input[type="radio"][name="enhancedSelectWideMode"][value="' + useWideMode + '"]').checked = true;
 
-    var sidebarLocation = GetValue('enhancedSidebarLocation', 'right');
-    $('input:radio[name="enhancedSelectSidebarLocation"]:input[value=' + sidebarLocation + ']').attr("checked", true);
+    let sidebarLocation = GetValue('enhancedSidebarLocation', 'right');
+    document.querySelector('input[type="radio"][name="enhancedSelectSidebarLocation"][value="' + sidebarLocation + '"]').checked = true;
 
     document.getElementById('enhancedCurrentVersion').innerText = "현재버전: " + scriptVersion;
 
@@ -1306,24 +1300,24 @@ function LoadCommonEvents()
     //Add user to block list when block.
     $(document).on('click', 'a[data-kant-id="1391"]', function(){
         $(document).on('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]', function(){
-            var splittedURL = $(location).attr('href').split('/');
-            var bannedUserID = splittedURL[splittedURL.length - 1];
+            let splittedURL = $(location).attr('href').split('/');
+            let bannedUserID = splittedURL[splittedURL.length - 1];
             blockedList.add(bannedUserID);
             $(document).off('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]');
         });
     });
-    //Delete user to block list when unblock.
+    //Delete user to block list when unblocking.
     $(document).on('click', 'a[data-kant-id="1392"]', function(){
-        var splittedURL = $(location).attr('href').split('/');
-        var bannedUserID = splittedURL[splittedURL.length - 1];
+        let splittedURL = $(location).attr('href').split('/');
+        let bannedUserID = splittedURL[splittedURL.length - 1];
         blockedList.delete(bannedUserID);
         $(document).off('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]');
     });
     //Add user to feed list when disable feed.
     $(document).on('click', 'a[data-kant-id="853"]', function(){
         $(document).on('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]', function(){
-            var splittedURL = $(location).attr('href').split('/');
-            var bannedUserID = splittedURL[splittedURL.length - 1];
+            let splittedURL = $(location).attr('href').split('/');
+            let bannedUserID = splittedURL[splittedURL.length - 1];
             blockedList.add(bannedUserID);
             $(document).off('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]');
         });
@@ -1331,27 +1325,27 @@ function LoadCommonEvents()
     //Delete user to feed list when re-enable feed.
     $(document).on('click', 'a[data-kant-id="852"]', function(){
         $(document).on('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]', function(){
-            var splittedURL = $(location).attr('href').split('/');
-            var bannedUserID = splittedURL[splittedURL.length - 1];
+            let splittedURL = $(location).attr('href').split('/');
+            let bannedUserID = splittedURL[splittedURL.length - 1];
             blockedList.delete(bannedUserID);
             $(document).off('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]');
         });
     });
     //Delete user to feed list when re-enable feed.
     $(document).on('click', 'a[data-kant-id="857"]', function(){
-        var splittedURL = $(location).attr('href').split('/');
-        var bannedUserID = splittedURL[splittedURL.length - 1];
+        let splittedURL = $(location).attr('href').split('/');
+        let bannedUserID = splittedURL[splittedURL.length - 1];
         blockedList.delete(bannedUserID);
     });
     //Delete user to block list when unblock in settings page.
     $(document).on('click', 'a[data-kant-id="845"]', function() {
-        var userIdx = $('a[data-kant-id="845"]').index(this);
-        var userID = $('a[data-kant-id="844"]').eq(userIdx).parent().attr('data-model');
+        let userIdx = $('a[data-kant-id="845"]').index(this);
+        let userID = $('a[data-kant-id="844"]').eq(userIdx).parent().attr('data-model');
         blockedList.delete(userID);
     });
 
     $('body').on('click', '#enhancedBtnSaveBlockString', function() {
-        var blockStrings = document.getElementById("textBlockString").value;
+        let blockStrings = document.getElementById("textBlockString").value;
         SetValue('enhancedBlockStringList', blockStrings);
         CreateBlockStringList();
         document.getElementById("banStringLayer").remove();
@@ -1370,7 +1364,7 @@ function LoadCommonEvents()
         this.style.display = 'none';
     });
 
-    $(document).on('keydown', '._editable', function(e) {
+    $(document).on('keydown', '._editable', function() {
         if (GetValue("enhancedEarthquake", 'false') == 'true') {
             $('div[data-part-name="writing"]').addClass("shake_text");
             $('.layer_write').addClass("shake_text");
@@ -1406,7 +1400,7 @@ function LoadCommonEvents()
             konamiCount++;
             if (konamiCount >= 10) {
                 konamiCount = 0;
-                var faviconClassic = GetValue("enhancedFaviconClassic", "false") == "true";
+                let faviconClassic = GetValue("enhancedFaviconClassic", "false") == "true";
                 SetValue("enhancedFaviconClassic", (faviconClassic)? "false" : "true");
             }
         } else {
@@ -1419,23 +1413,23 @@ function LoadCommonEvents()
         }
 
         //check element is input
-        if (document.activeElement.tagName == "INPUT" || document.activeElement.tagName == "TEXTAREA") {
+        if (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA") {
             return;
         }
 
         //check e's element id is contents_write
-        let writingState = document.getElementsByClassName("write goaway").length == 0;
-        if (e.target.id == "contents_write" && writingState) {
+        let writingState = document.getElementsByClassName("write goaway").length === 0;
+        if (e.target.id === "contents_write" && writingState) {
             return;
         }
 
         //check e's element class has 'comt_view<random_number>'
-        var elemId = e.target.id;
+        let elemId = e.target.id;
         if (elemId.includes("comt_view")) {
             return;
         }
 
-        if (document.getElementById("enhancedLayer").style.display == 'block')
+        if (document.getElementById("enhancedLayer").style.display === 'block')
         {
             return;
         }
@@ -1461,7 +1455,7 @@ function LoadCommonEvents()
         //Shift + F : Scroll Down(100% of window height)
         if (e.shiftKey && e.code === 'KeyF')
         {
-            let scrollHeight = window.innerHeight * 1.0;
+            let scrollHeight = window.innerHeight;
             window.scrollBy(0, scrollHeight);
             return;
         }
@@ -1469,7 +1463,7 @@ function LoadCommonEvents()
         //Shift + B : Scroll Up(100% of window height)
         if (e.shiftKey && e.code === 'KeyB')
         {
-            let scrollHeight = window.innerHeight * 1.0;
+            let scrollHeight = window.innerHeight;
             window.scrollBy(0, -scrollHeight);
             return;
         }
@@ -1479,7 +1473,7 @@ function LoadCommonEvents()
         {
             if (gKeyPressed)
             {
-                var selElem = GetSelectedActivity();
+                let selElem = GetSelectedActivity();
                 if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
                 {
                     selElem = document.getElementsByClassName("section _activity")[0];
@@ -1513,7 +1507,7 @@ function LoadCommonEvents()
         {
             if (gKeyPressed)
             {
-                var selElem = GetSelectedActivity();
+                let selElem = GetSelectedActivity();
                 if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
                 {
                     selElem = document.getElementsByClassName("section _activity")[0];
@@ -1578,7 +1572,7 @@ function LoadCommonEvents()
         //Shift + M - Permission : Only Me
         if (e.shiftKey && e.code === 'KeyM')
         {
-            var selElem = GetSelectedActivity();
+            let selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
             {
                 selElem = document.getElementsByClassName("section _activity")[0];
@@ -1587,17 +1581,17 @@ function LoadCommonEvents()
             {
                 selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
             }
-            var settingElem = selElem.getElementsByClassName("ico_ks bn_modify _btnSetting")[0];
+            let settingElem = selElem.getElementsByClassName("ico_ks bn_modify _btnSetting")[0];
             if (settingElem)
             {
-                var p = selElem.querySelector('li[data-permission="M"]');
+                let p = selElem.querySelector('li[data-permission="M"]');
                 if (!p)
                 {
                     settingElem.click();
                 }
 
                 setTimeout(() => {
-                    var permElem = selElem.querySelector('li[data-permission="M"]');
+                    let permElem = selElem.querySelector('li[data-permission="M"]');
                     if (permElem)
                     {
                         permElem.click();
@@ -1611,7 +1605,7 @@ function LoadCommonEvents()
         //Shift + F - Permission : Friends
         if (e.shiftKey && e.code === 'KeyF')
         {
-            var selElem = GetSelectedActivity();
+            let selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
             {
                 selElem = document.getElementsByClassName("section _activity")[0];
@@ -1620,17 +1614,17 @@ function LoadCommonEvents()
             {
                 selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
             }
-            var settingElem = selElem.getElementsByClassName("ico_ks bn_modify _btnSetting")[0];
+            let settingElem = selElem.getElementsByClassName("ico_ks bn_modify _btnSetting")[0];
             if (settingElem)
             {
-                var p = selElem.querySelector('li[data-permission="F"]');
+                let p = selElem.querySelector('li[data-permission="F"]');
                 if (!p)
                 {
                     settingElem.click();
                 }
 
                 setTimeout(() => {
-                    var permElem = selElem.querySelector('li[data-permission="F"]');
+                    let permElem = selElem.querySelector('li[data-permission="F"]');
                     if (permElem)
                     {
                         permElem.click();
@@ -1644,7 +1638,7 @@ function LoadCommonEvents()
         //Shift + A - Permission : All
         if (e.shiftKey && e.code === 'KeyA')
         {
-            var selElem = GetSelectedActivity();
+            let selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
             {
                 selElem = document.getElementsByClassName("section _activity")[0];
@@ -1653,17 +1647,17 @@ function LoadCommonEvents()
             {
                 selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
             }
-            var settingElem = selElem.getElementsByClassName("ico_ks bn_modify _btnSetting")[0];
+            let settingElem = selElem.getElementsByClassName("ico_ks bn_modify _btnSetting")[0];
             if (settingElem)
             {
-                var p = selElem.querySelector('li[data-permission="A"]');
+                let p = selElem.querySelector('li[data-permission="A"]');
                 if (!p)
                 {
                     settingElem.click();
                 }
 
                 setTimeout(() => {
-                    var permElem = selElem.querySelector('li[data-permission="A"]');
+                    let permElem = selElem.querySelector('li[data-permission="A"]');
                     if (permElem)
                     {
                         permElem.click();
@@ -1675,16 +1669,16 @@ function LoadCommonEvents()
         }
 
         //O - Notification Open / Close
-        if (e.code == "KeyO")
+        if (e.code === "KeyO")
         {
-            var elems = document.getElementsByClassName("link_gnb link_newnoti _notifyButton");
+            let elems = document.getElementsByClassName("link_gnb link_newnoti _notifyButton");
             if (elems.length > 0)
             {
                 let notiElem = document.getElementsByClassName("list_layer list_newnoti _notiList")[0];
                 let notiArr = notiElem.getElementsByTagName("li");
                 for (let i = 0; i < notiArr.length; i++)
                 {
-                    notiArr[i].classList.remove("enhanced_activty_selected");
+                    notiArr[i].classList.remove("enhanced_activity_selected");
                 }
                 elems[0].click();
             }
@@ -1700,22 +1694,22 @@ function LoadCommonEvents()
                 let notiArr = notiElem.getElementsByTagName("li");
                 for (let i = 0; i < notiArr.length; i++)
                 {
-                    if (notiArr[i].classList.contains("enhanced_activty_selected"))
+                    if (notiArr[i].classList.contains("enhanced_activity_selected"))
                     {
-                        if (i == notiArr.length - 1)
+                        if (i === notiArr.length - 1)
                         {
                             ScrollToTargetSmoothly(notiElem, notiArr[i]);
                             break;
                         }
-                        notiArr[i].classList.remove("enhanced_activty_selected");
-                        notiArr[i + 1].classList.add("enhanced_activty_selected");
+                        notiArr[i].classList.remove("enhanced_activity_selected");
+                        notiArr[i + 1].classList.add("enhanced_activity_selected");
                         ScrollToTargetSmoothly(notiElem, notiArr[i + 1]);
                         break;
                     }
 
-                    if (i == notiArr.length - 1)
+                    if (i === notiArr.length - 1)
                     {
-                        notiArr[0].classList.add("enhanced_activty_selected");
+                        notiArr[0].classList.add("enhanced_activity_selected");
                         //visibleArticles[0].scrollIntoView();
                         ScrollToTargetSmoothly(notiElem, notiArr[0]);
                     }
@@ -1734,30 +1728,30 @@ function LoadCommonEvents()
                 return;
             }
 
-            var articles = document.getElementsByClassName("section _activity");
-            var visibleArticles = Array.from(articles).filter(function(element) {
+            let articles = document.getElementsByClassName("section _activity");
+            let visibleArticles = Array.from(articles).filter(function(element) {
                 return window.getComputedStyle(element).display !== "none";
               });
 
-            for (var i = 0; i < visibleArticles.length; i++)
+            for (let i = 0; i < visibleArticles.length; i++)
             {
-                if (visibleArticles[i].classList.contains("enhanced_activty_selected"))
+                if (visibleArticles[i].classList.contains("enhanced_activity_selected"))
                 {
-                    if (i == visibleArticles.length - 1)
+                    if (i === visibleArticles.length - 1)
                     {
                         //visibleArticles[i].scrollIntoView();
                         ScrollToTargetSmoothlyWindow(visibleArticles[i]);
                         break;
                     }
-                    visibleArticles[i].classList.remove("enhanced_activty_selected");
-                    visibleArticles[i + 1].classList.add("enhanced_activty_selected");
+                    visibleArticles[i].classList.remove("enhanced_activity_selected");
+                    visibleArticles[i + 1].classList.add("enhanced_activity_selected");
                     //visibleArticles[i + 1].scrollIntoView();
                     ScrollToTargetSmoothlyWindow(visibleArticles[i + 1]);
                     break;
                 }
-                if (i == visibleArticles.length - 1)
+                if (i === visibleArticles.length - 1)
                 {
-                    visibleArticles[0].classList.add("enhanced_activty_selected");
+                    visibleArticles[0].classList.add("enhanced_activity_selected");
                     //visibleArticles[0].scrollIntoView();
                     ScrollToTargetSmoothlyWindow(visibleArticles[0]);
                 }
@@ -1767,29 +1761,29 @@ function LoadCommonEvents()
         //K - Feed Up
         if (e.code === 'KeyK')
         {
-            let notiOpened = document.getElementsByClassName("layer_gnb newnoti_layer _notifyLayer _ignoreScroll")[0].style.display === "block";
-            if (notiOpened)
+            let notyOpened = document.getElementsByClassName("layer_gnb newnoti_layer _notifyLayer _ignoreScroll")[0].style.display === "block";
+            if (notyOpened)
             {
                 let notiElem = document.getElementsByClassName("list_layer list_newnoti _notiList")[0];
                 let notiArr = notiElem.getElementsByTagName("li");
                 for (let i = 0; i < notiArr.length; i++)
                 {
-                    if (notiArr[i].classList.contains("enhanced_activty_selected"))
+                    if (notiArr[i].classList.contains("enhanced_activity_selected"))
                     {
-                        if (i == 0)
+                        if (i === 0)
                         {
                             ScrollToTargetSmoothly(notiElem, notiArr[i]);
                             break;
                         }
-                        notiArr[i].classList.remove("enhanced_activty_selected");
-                        notiArr[i - 1].classList.add("enhanced_activty_selected");
+                        notiArr[i].classList.remove("enhanced_activity_selected");
+                        notiArr[i - 1].classList.add("enhanced_activity_selected");
                         ScrollToTargetSmoothly(notiElem, notiArr[i - 1]);
                         break;
                     }
 
-                    if (i == notiArr.length - 1)
+                    if (i === notiArr.length - 1)
                     {
-                        notiArr[0].classList.add("enhanced_activty_selected");
+                        notiArr[0].classList.add("enhanced_activity_selected");
                         //visibleArticles[0].scrollIntoView();
                         ScrollToTargetSmoothly(notiElem, notiArr[0]);
                     }
@@ -1807,30 +1801,30 @@ function LoadCommonEvents()
             {
                 return;
             }
-            var articles = document.getElementsByClassName("section _activity");
-            var visibleArticles = Array.from(articles).filter(function(element) {
+            let articles = document.getElementsByClassName("section _activity");
+            let visibleArticles = Array.from(articles).filter(function(element) {
                 return window.getComputedStyle(element).display !== "none";
             });
 
-            for (var i = 0; i < visibleArticles.length; i++)
+            for (let i = 0; i < visibleArticles.length; i++)
             {
-                if (visibleArticles[i].classList.contains("enhanced_activty_selected"))
+                if (visibleArticles[i].classList.contains("enhanced_activity_selected"))
                 {
-                    if (i == 0)
+                    if (i === 0)
                     {
                         //visibleArticles[i].scrollIntoView();
                         ScrollToTargetSmoothlyWindow(visibleArticles[i])
                         break;
                     }
-                    visibleArticles[i].classList.remove("enhanced_activty_selected");
-                    visibleArticles[i - 1].classList.add("enhanced_activty_selected");
+                    visibleArticles[i].classList.remove("enhanced_activity_selected");
+                    visibleArticles[i - 1].classList.add("enhanced_activity_selected");
                     //visibleArticles[i - 1].scrollIntoView();
                     ScrollToTargetSmoothlyWindow(visibleArticles[i - 1]);
                     break;
                 }
-                if (i == visibleArticles.length - 1)
+                if (i === visibleArticles.length - 1)
                 {
-                    visibleArticles[0].classList.add("enhanced_activty_selected");
+                    visibleArticles[0].classList.add("enhanced_activity_selected");
                     //visibleArticles[0].scrollIntoView();
                     ScrollToTargetSmoothlyWindow(visibleArticles[0]);
                 }
@@ -1883,32 +1877,32 @@ function LoadCommonEvents()
         //F - Article Detail View(Close : ESC)
         if (e.code === 'KeyF')
         {
-            let notiOpened = document.getElementsByClassName("layer_gnb newnoti_layer _notifyLayer _ignoreScroll")[0].style.display === "block";
-            if (notiOpened)
+            let notyOpened = document.getElementsByClassName("layer_gnb newnoti_layer _notifyLayer _ignoreScroll")[0].style.display === "block";
+            if (notyOpened)
             {
-                let notiElem = document.getElementsByClassName("list_layer list_newnoti _notiList")[0];
-                let notiArr = notiElem.getElementsByTagName("li");
+                let notyElem = document.getElementsByClassName("list_layer list_newnoti _notiList")[0];
+                let notyArr = notyElem.getElementsByTagName("li");
 
                 let selectedIdx = -1;
 
-                for (let i = 0; i < notiArr.length; i++)
+                for (let i = 0; i < notyArr.length; i++)
                 {
-                    if (notiArr[i].classList.contains("enhanced_activty_selected"))
+                    if (notyArr[i].classList.contains("enhanced_activity_selected"))
                     {
                         selectedIdx = i;
                         break;
                     }
                 }
 
-                if (selectedIdx == -1)
+                if (selectedIdx === -1)
                     return;
 
-                notiArr[selectedIdx].getElementsByClassName("link_newnoti link_newnoti2 _notification _hoverAtLink")[0].click();
+                notyArr[selectedIdx].getElementsByClassName("link_newnoti link_newnoti2 _notification _hoverAtLink")[0].click();
 
                 return;
             }
-            var selElem = GetSelectedActivity();
-            var timeElem = selElem.getElementsByClassName("time _linkPost")[0];
+            let selElem = GetSelectedActivity();
+            let timeElem = selElem.getElementsByClassName("time _linkPost")[0];
             if (timeElem)
             {
                 timeElem.click();
@@ -1918,7 +1912,7 @@ function LoadCommonEvents()
         //N - New Article
         if (e.code === 'KeyN')
         {
-            var elem = document.getElementsByClassName("link_gnb link_write _toggleWriteButton")[0];
+            let elem = document.getElementsByClassName("link_gnb link_write _toggleWriteButton")[0];
             if (elem) {
                 elem.click();
                 e.preventDefault();
@@ -1928,7 +1922,7 @@ function LoadCommonEvents()
         //I - Comment Write
         if (e.code === 'KeyI')
         {
-            var selElem = GetSelectedActivity();
+            let selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
             {
                 selElem = document.getElementsByClassName("section _activity")[0];
@@ -1937,12 +1931,12 @@ function LoadCommonEvents()
             {
                 selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
             }
-            var comment_elem = selElem.getElementsByClassName("_commentWritingPlaceholder")[0];
+            let commentElem = selElem.getElementsByClassName("_commentWritingPlaceholder")[0];
             //var comment_elem = selElem.querySelectorAll('[id*="comt_view"]')[0];
-            if (comment_elem)
+            if (commentElem)
             {
-                ScrollToTargetSmoothlyWindow(comment_elem);
-                comment_elem.click();
+                ScrollToTargetSmoothlyWindow(commentElem);
+                commentElem.click();
                 e.preventDefault();
             }
         }
@@ -1950,7 +1944,7 @@ function LoadCommonEvents()
         //P - Previous Comment
         if (e.code === 'KeyP')
         {
-            var selElem = GetSelectedActivity();
+            let selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
             {
                 selElem = document.getElementsByClassName("section _activity")[0];
@@ -1959,7 +1953,7 @@ function LoadCommonEvents()
             {
                 selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
             }
-            var prevElem = selElem.getElementsByClassName("_btnShowPrevComment")[0];
+            let prevElem = selElem.getElementsByClassName("_btnShowPrevComment")[0];
             if (prevElem)
                 prevElem.click();
         }
@@ -1967,7 +1961,7 @@ function LoadCommonEvents()
         //C - First Comment
         if (e.code === 'KeyC')
         {
-            var selElem = GetSelectedActivity();
+            let selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
             {
                 selElem = document.getElementsByClassName("section _activity")[0];
@@ -1976,7 +1970,7 @@ function LoadCommonEvents()
             {
                 selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
             }
-            var prevElem = selElem.getElementsByClassName("link_view _btnShowFirstComment")[0];
+            let prevElem = selElem.getElementsByClassName("link_view _btnShowFirstComment")[0];
             if (prevElem)
                 prevElem.click();
         }
@@ -1984,7 +1978,7 @@ function LoadCommonEvents()
         //L - Like Feeling Button
         if (e.code === 'KeyL')
         {
-            var selElem = GetSelectedActivity();
+            let selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
             {
                 selElem = document.getElementsByClassName("section _activity")[0];
@@ -1993,7 +1987,7 @@ function LoadCommonEvents()
             {
                 selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
             }
-            var likeElem = selElem.getElementsByClassName("_btnLike")[0];
+            let likeElem = selElem.getElementsByClassName("_btnLike")[0];
             if (likeElem)
             {
                 likeElem.click();
@@ -2003,7 +1997,7 @@ function LoadCommonEvents()
         //D - Delete My Selected Article
         if (e.code === 'KeyD')
         {
-            var selElem = GetSelectedActivity();
+            let selElem = GetSelectedActivity();
             if (document.getElementsByClassName("feed detail_desc _feedContainer").length > 0)
             {
                 selElem = document.getElementsByClassName("section _activity")[0];
@@ -2012,16 +2006,16 @@ function LoadCommonEvents()
             {
                 selElem = document.getElementsByClassName("wrap_map wrap_desc detail_desc cover_content cover_center")[0];
             }
-            var settingElem = selElem.getElementsByClassName("ico_ks bn_modify _btnSetting")[0];
+            let settingElem = selElem.getElementsByClassName("ico_ks bn_modify _btnSetting")[0];
             if (settingElem)
             {
-                var p = document.getElementsByClassName("_btnActivityDelete link_menu")[0];
+                let p = document.getElementsByClassName("_btnActivityDelete link_menu")[0];
                 if (!p)
                 {
                     settingElem.click();
                 }
                 setTimeout(() => {
-                    var deleteElem = document.getElementsByClassName("_btnActivityDelete link_menu")[0];
+                    let deleteElem = document.getElementsByClassName("_btnActivityDelete link_menu")[0];
                     if (deleteElem)
                     {
                         deleteElem.click();
@@ -2044,7 +2038,7 @@ function GetSelectedActivity()
 
     for (let i = 0; i < visibleArticles.length; i++)
     {
-        if (visibleArticles[i].classList.contains("enhanced_activty_selected"))
+        if (visibleArticles[i].classList.contains("enhanced_activity_selected"))
         {
             selectedIdx = i;
             break;
@@ -2067,25 +2061,25 @@ var doubleKeyPressThreshold = 300;
 
 function onGKeyPress(doublePress)
 {
-    var articles = document.getElementsByClassName("section _activity");
-    var visibleArticles = Array.from(articles).filter(function(element) {
+    let articles = document.getElementsByClassName("section _activity");
+    let visibleArticles = Array.from(articles).filter(function(element) {
         return window.getComputedStyle(element).display !== "none";
     });
 
-    for (var i = 0; i < visibleArticles.length; i++)
+    for (let i = 0; i < visibleArticles.length; i++)
     {
-        visibleArticles[i].classList.remove("enhanced_activty_selected");
+        visibleArticles[i].classList.remove("enhanced_activity_selected");
     }
 
     if (doublePress)
     {
         ScrollToTargetSmoothlyWindow(visibleArticles[0]);
-        visibleArticles[0].classList.add("enhanced_activty_selected");
+        visibleArticles[0].classList.add("enhanced_activity_selected");
     }
     else
     {
         ScrollToTargetSmoothlyWindow(visibleArticles[visibleArticles.length - 1]);
-        visibleArticles[visibleArticles.length - 1].classList.add("enhanced_activty_selected");
+        visibleArticles[visibleArticles.length - 1].classList.add("enhanced_activity_selected");
     }
 }
 
@@ -2170,7 +2164,7 @@ function LoadSettingsPageEvents()
 
     $(document).on("change",'input[name="enhancedSelectTheme"]',function(){
         if (GetValue('enhancedSystemTheme', 'true') == 'false') {
-            var theme = $('[name="enhancedSelectTheme"]:checked').val();
+            let theme = document.querySelector('[name="enhancedSelectTheme"]:checked').value;
             SetValue("enhancedSelectTheme", theme);
             ChangeTheme(theme);
         }
@@ -2188,7 +2182,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on("change",'input[name="enhancedSelectDiscordMention"]',function(){
-        let useMention = $('[name="enhancedSelectDiscordMention"]:checked').val();
+        let useMention = document.querySelector('[name="enhancedSelectDiscordMention"]:checked').value;
         SetValue("enhancedDiscordMention", useMention);
         if (useMention == 'true')
         {
@@ -2199,9 +2193,9 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedUseSystemTheme"]',function(){
         if (document.getElementById("enhancedSystemTheme").checked) {
             SetValue('enhancedSystemTheme', 'true');
-            var systemTheme = GetOSTheme();
-            var currentTheme = GetValue('enhancedSelectTheme', 'dark');
-            if (systemTheme != currentTheme) {
+            let systemTheme = GetOSTheme();
+            let currentTheme = GetValue('enhancedSelectTheme', 'dark');
+            if (systemTheme !== currentTheme) {
                 SetValue('enhancedSelectTheme', systemTheme);
                 ChangeTheme(systemTheme);
             }
@@ -2211,8 +2205,8 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on('click', '#enhancedFontNanum', function() {
-        var fontName = "나눔고딕";
-        var fontCSS = "";
+        const fontName = "나눔고딕";
+        const fontCSS = "";
         document.getElementById("enhancedTxtFontName").value = fontName;
         document.getElementById("enhancedTxtFontCSS").value = fontCSS;
         SetValue('enhancedFontName', fontName);
@@ -2222,8 +2216,8 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on('click', '#enhancedFontNoto', function() {
-        var fontName = "Pretendard";
-        var fontCSS = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css";
+        const fontName = "Pretendard";
+        const fontCSS = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css";
         document.getElementById("enhancedTxtFontName").value = fontName;
         document.getElementById("enhancedTxtFontCSS").value = fontCSS;
         SetValue('enhancedFontName', fontName);
@@ -2257,7 +2251,7 @@ function LoadSettingsPageEvents()
     changePermissionModule.initialize();
 
     $(document).on("change",'input[name="enhancedSelectNotifyUse"]',function(){
-        var changed = $('[name="enhancedSelectNotifyUse"]:checked').val();
+        let changed = document.querySelector('[name="enhancedSelectNotifyUse"]:checked')?.value;
         document.getElementById("groupEnhancedNotifyEnable").style.display = (changed == "true")? "block" : "none";
         SetValue("enhancedNotify", changed);
         if (GetValue("enhancedNotify", "false") == "true")
@@ -2267,60 +2261,60 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on("change",'input[name="enhancedSelectNotifySoundUse"]',function(){
-        var changed = $('[name="enhancedSelectNotifySoundUse"]:checked').val();
+        let changed = document.querySelector('[name="enhancedSelectNotifySoundUse"]:checked')?.value;
         SetValue("enhancedNotifySound", changed);
         notyOption.silent = (changed == "true")? false : true;
     });
 
     $(document).on("change",'input[name="enhancedSelectDownloadVideo"]',function(){
-        var changed = $('[name="enhancedSelectDownloadVideo"]:checked').val();
+        let changed = document.querySelector('[name="enhancedSelectDownloadVideo"]:checked')?.value;
         SetValue("enhancedDownloadVideo", changed);
     });
 
     $(document).on("change",'input[name="enhancedSelectHideChannelButton"]',function(){
-        var changed = $('[name="enhancedSelectHideChannelButton"]:checked').val();
+        let changed = document.querySelector('[name="enhancedSelectHideChannelButton"]:checked')?.value;
         SetValue("enhancedHideChannelButton", changed);
         HideChannelButton();
     });
 
     $(document).on("change",'input[name="enhancedSelectHideLogo"]',function(){
-        var changed = $('[name="enhancedSelectHideLogo"]:checked').val();
+        let changed = document.querySelector('[name="enhancedSelectHideLogo"]:checked')?.value;
         document.getElementById("groupEnhancedHideLogoEnable").style.display = (changed == "true")? "block" : "none";
         SetValue("enhancedHideLogo", changed);
     });
 
     $(document).on("change",'input[name="enhancedSelectHideLogoNoti"]',function(){
-        var changed = $('[name="enhancedSelectHideLogoNoti"]:checked').val();
+        let changed = document.querySelector('[name="enhancedSelectHideLogoNoti"]:checked')?.value;
         SetValue("enhancedHideLogoNoti", changed);
     });
 
     $(document).on("change",'input[name="enhancedSelectLogoIcon"]',function(){
-        var iconName = $('[name="enhancedSelectLogoIcon"]:checked').val();
-        document.getElementById("groupEnhancedHideLogoCustomEnable").style.display = (iconName == "custom")? "block" : "none";
+        let iconName = document.querySelector('[name="enhancedSelectLogoIcon"]:checked')?.value;
+        document.getElementById("groupEnhancedHideLogoCustomEnable").style.display = (iconName === "custom")? "block" : "none";
         SetValue("enhancedHideLogoIcon", iconName);
         currentFavicon = iconName;
         currentTitle = GetHideLogoIconTitle();
     });
 
     $(document).on("change",'input[name="enhancedSelectHideMedia"]',function(){
-        var changed = $('[name="enhancedSelectHideMedia"]:checked').val();
+        let changed = document.querySelector('[name="enhancedSelectHideMedia"]:checked')?.value;
         SetValue("enhancedHideMedia", changed);
         HideMedia();
     });
 
     $(document).on("change",'input[name="enhnacnedSelectHideMemorize"]',function(){
-        var changed = $('[name="enhnacnedSelectHideMemorize"]:checked').val();
+        let changed = document.querySelector('[name="enhnacnedSelectHideMemorize"]:checked')?.value;
         SetValue("enhancedHideMemorize", changed);
     });
 
     $(document).on("change",'input[name="enhancedSelectRecommendFriend"]',function(){
-        var changed = $('[name="enhancedSelectRecommendFriend"]:checked').val();
+        let changed = document.querySelector('[name="enhancedSelectRecommendFriend"]:checked')?.value;
         SetValue("enhancedHideRecommendFriend", changed);
         HideRecommendFriend();
     });
 
     $(document).on("change",'input[name="enhancedSelectEmoticonSize"]',function(){
-        var size = $('[name="enhancedSelectEmoticonSize"]:checked').val();
+        let size = document.querySelector('input[name="enhancedSelectEmoticonSize"]:checked')?.value;
         SetValue("enhancedEmoticonSize", size);
         SetEmoticonSize();
     });
@@ -2342,7 +2336,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on("change",'input[name="enhancedSelectBlockUser"]',function(){
-        var isEnhancedBlock = $('[name="enhancedSelectBlockUser"]:checked').val();
+        let isEnhancedBlock = $('[name="enhancedSelectBlockUser"]:checked').val();
         document.getElementById("groupEnhancedBlockUser").style.display = (isEnhancedBlock == "true")? "block" : "none";
         if (isEnhancedBlock == "true")
         {
@@ -2352,7 +2346,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on("change",'input[name="enhancedSelectFeedBlockUser"]',function(){
-        var isEnhancedFeedBlock = $('[name="enhancedSelectFeedBlockUser"]:checked').val();
+        let isEnhancedFeedBlock = document.querySelector('[name="enhancedSelectFeedBlockUser"]:checked')?.value;
         if (isEnhancedFeedBlock == "true")
         {
             GetFeedBlockedUsers();
@@ -2361,22 +2355,22 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on("change",'input[name="enhancedSelectEarthquake"]',function(){
-        var changed = $('[name="enhancedSelectEarthquake"]:checked').val();
+        let changed = document.querySelector('[name="enhancedSelectEarthquake"]:checked')?.value;
         SetValue("enhancedEarthquake", changed);
     });
 
     $(document).on("change",'input[name="enhancedSelectBlink"]',function(){
-        var changed = $('[name="enhancedSelectBlink"]:checked').val();
+        let changed = document.querySelector('[name="enhancedSelectBlink"]:checked')?.value;
         SetValue("enhancedBlink", changed);
     });
 
     $(document).on("change",'input[name="enhancedSelectKeyboard"]',function(){
-        var changed = $('[name="enhancedSelectKeyboard"]:checked').val();
+        let changed = document.querySelector('[name="enhancedSelectKeyboard"]:checked')?.value;
         SetValue("enhancedKeyboard", changed);
     });
 
     $(document).on("change",'input[name="enhancedSelectBlockArticleAll"]',function(){
-        var changed = $('[name="enhancedSelectBlockArticleAll"]:checked').val();
+        let changed = document.querySelector('[name="enhancedSelectBlockArticleAll"]:checked')?.value;
         SetValue("enhancedBlockArticleAll", changed);
     });
 
@@ -2402,33 +2396,26 @@ function LoadSettingsPageEvents()
     });
 
     $('body').on('click', '#enhancedKittyImage', function() {
-        if (GetValue('enhancedKittyMode', 'none') == 'verycute') {
+        if (GetValue('enhancedKittyMode', 'none') === 'verycute') {
             catEffect.play();
-            /*
-            var random = Math.floor(Math.random() * 2);
-            if (random == 0)
-                catEffect.play();
-            else
-                catEffect2.play();
-             */
         }
     });
 
     $('body').on('click', '#enhancedPuppyImage', function() {
-        if (GetValue('enhancedPuppyMode', 'none') == 'verycute') {
+        if (GetValue('enhancedPuppyMode', 'none') === 'verycute') {
             dogEffect.play();
         }
     });
 
     $(document).on("change",'input[name="enhancedSelectWideMode"]',function(){
-        var changed = $('[name="enhancedSelectWideMode"]:checked').val();
+        let changed = document.querySelector('[name="enhancedSelectWideMode"]:checked')?.value;
         SetValue("enhancedWideMode", changed);
     });
 
     $(document).on("change",'input[name="enhancedSelectSidebarLocation"]',function(){
-        var changed = $('[name="enhancedSelectSidebarLocation"]:checked').val();
+        let changed = document.querySelector('[name="enhancedSelectSidebarLocation"]:checked')?.value;
         SetValue("enhancedSidebarLocation", changed);
-        if (changed == "left")
+        if (changed === "left")
         {
             LoadLeftSidebarCSS();
         }
@@ -2439,14 +2426,14 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on('keypress', '#enhancedTxtFontSize', function(e) {
-        if (e.keyCode == 13) {
+        if (e.keyCode === 13) {
             SetValue('enhancedFontSize', document.getElementById('enhancedTxtFontSize').value);
             SetFontSize();
         }
     });
 
     $(document).on('input', '#inputSlideThemeSaturation', function() {
-        var saturation = document.getElementById("inputSlideThemeSaturation").value;
+        let saturation = document.getElementById("inputSlideThemeSaturation").value;
         SetValue('enhancedThemeSaturation', saturation);
         document.documentElement.style.setProperty('--saturation-factor', saturation);
         document.getElementById("enhancedTxtThemeSaturation").value = saturation;
@@ -2454,7 +2441,7 @@ function LoadSettingsPageEvents()
 
     $(document).on('keypress', '#enhancedTxtThemeSaturation', function(e) {
         if (e.key === 'Enter') {
-            var saturation = document.getElementById('enhancedTxtThemeSaturation').value;
+            let saturation = document.getElementById('enhancedTxtThemeSaturation').value;
             SetValue('enhancedThemeSaturation', saturation);
             document.documentElement.style.setProperty('--saturation-factor', saturation);
             document.getElementById("inputSlideThemeSaturation").value = saturation;
@@ -2462,7 +2449,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on('click', '#enhancedSettingsTitleThemeUI', function() {
-        var elem = document.getElementById("enhancedSettingsContentThemeUI");
+        let elem = document.getElementById("enhancedSettingsContentThemeUI");
         if (!elem.classList.contains("enhanced_settings_content_hidden"))
         {
             elem.classList.add("enhanced_settings_content_hidden");
@@ -2474,7 +2461,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on('click', '#enhancedSettingsTitleFont', function() {
-        var elem = document.getElementById("enhancedSettingsContentFont");
+        let elem = document.getElementById("enhancedSettingsContentFont");
         if (!elem.classList.contains("enhanced_settings_content_hidden"))
         {
             elem.classList.add("enhanced_settings_content_hidden");
@@ -2486,7 +2473,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on('click', '#enhancedSettingsTitleNotification', function() {
-        var elem = document.getElementById("enhancedSettingsContentNotification");
+        let elem = document.getElementById("enhancedSettingsContentNotification");
         if (!elem.classList.contains("enhanced_settings_content_hidden"))
         {
             elem.classList.add("enhanced_settings_content_hidden");
@@ -2498,7 +2485,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on('click', '#enhancedSettingsTitleAdvancedBlock', function() {
-        var elem = document.getElementById("enhancedSettingsContentAdvancedBlock");
+        let elem = document.getElementById("enhancedSettingsContentAdvancedBlock");
         if (!elem.classList.contains("enhanced_settings_content_hidden"))
         {
             elem.classList.add("enhanced_settings_content_hidden");
@@ -2510,7 +2497,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on('click', '#enhancedSettingsTitleEtc', function() {
-        var elem = document.getElementById("enhancedSettingsContentEtc");
+        let elem = document.getElementById("enhancedSettingsContentEtc");
         if (!elem.classList.contains("enhanced_settings_content_hidden"))
         {
             elem.classList.add("enhanced_settings_content_hidden");
@@ -2522,7 +2509,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on('click', '#enhancedSettingsTitleAddon', function() {
-        var elem = document.getElementById("enhancedSettingsContentAddon");
+        let elem = document.getElementById("enhancedSettingsContentAddon");
         if (!elem.classList.contains("enhanced_settings_content_hidden"))
         {
             elem.classList.add("enhanced_settings_content_hidden");
@@ -2534,7 +2521,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on('click', '#enhancedSettingsTitleInfo', function() {
-        var elem = document.getElementById("enhancedSettingsContentInfo");
+        let elem = document.getElementById("enhancedSettingsContentInfo");
         if (!elem.classList.contains("enhanced_settings_content_hidden"))
         {
             elem.classList.add("enhanced_settings_content_hidden");
@@ -2632,14 +2619,13 @@ function HideRecommendFriend()
 }
 
 function CreateBlockStringList() {
-    var banStrings = GetValue('enhancedBlockStringList', '').split("\n");
-    var blockedStringSet = new Set();
-    for (var i = 0; i < banStrings.length; i++) {
-        if (banStrings[i] == "") {
+    let banStrings = GetValue('enhancedBlockStringList', '').split("\n");
+    let blockedStringSet = new Set();
+    for (let i = 0; i < banStrings.length; i++) {
+        if (banStrings[i] == "")
             continue;
-        } else {
-            blockedStringSet.add(banStrings[i]);
-       }
+
+        blockedStringSet.add(banStrings[i]);
     }
 
     blockedStringList = Array.from(blockedStringSet);
@@ -2688,7 +2674,7 @@ function SetDarkThemeStyle(styleName) {
                 document.documentElement.style.setProperty(variableName, variableValue);
             }
             document.documentElement.style.setProperty('--saturation-factor', GetValue('enhancedThemeSaturation', '1'));
-            if (styleName == "custom_dark" || styleName == "custom_light")
+            if (styleName === "custom_dark" || styleName === "custom_light")
             {
                 document.getElementById("groupThemeGradientCustomTheme").style.display = 'block';
                 SetCustomTheme();
@@ -2725,7 +2711,7 @@ function LoadThemeList() {
             let authorLink = jThemes.themes[authorIdx].url;
             authorEl.innerText = jThemes.themes[authorIdx].author;
             authorEl.href = authorLink;
-            if (GetValue('enhancedSelectTheme', 'dark') == 'dark')
+            if (GetValue('enhancedSelectTheme', 'dark') === 'dark')
             {
                 SetDarkThemeStyle(selectedDarkStyle);
             }
@@ -2821,14 +2807,14 @@ function __NotUsedMethod() {
 
 function ChangeTheme(styleName)
 {
-    if (styleName == 'dark')
+    if (styleName === 'dark')
     {
         LoadDarkThemeCSS();
         SetDarkThemeStyle(GetValue('enhancedDarkThemeStyle', 'discord'));
     }
     else
     {
-        $('style').remove(); //Remove Dark Theme CSS
+        document.querySelectorAll('style').forEach(el => el.remove()); //Remove Dark Theme CSS
         document.documentElement.style.setProperty('--lighter-background-color', '#dddddd'); //enhanced setting page textbox background
         document.documentElement.style.setProperty('--text-color', '#000000'); //enhanced setting page textbox color
         document.documentElement.style.setProperty('--text-highlight-color', '#000000'); //enhanced feature
@@ -2839,7 +2825,7 @@ function ChangeTheme(styleName)
         SetCSS('enhancedLightLogo', '.head_story .tit_kakaostory .link_kakaostory { background: url(\''+ resourceURL + 'images/logo_kseh.png\'); } ');
     }
     //hide original logo
-    var hideOriginLogo = '.head_story .tit_kakaostory .logo_kakaostory { width: 0px !important; }'
+    let hideOriginLogo = '.head_story .tit_kakaostory .logo_kakaostory { width: 0px !important; }'
     + '.head_story .tit_kakaostory .link_kakaostory { width: 145px !important; height: 27px !important; background-size: cover !important; }';
     SetCSS('enhancedHideLogoCSS', hideOriginLogo);
     LoadEnhancedCSS();
@@ -2857,24 +2843,24 @@ function ChangeTheme(styleName)
         LoadExtendFeedFlexibleCSS();
     }
 
-    if (GetValue('enhancedSidebarLocation', 'right') == 'left')
+    if (GetValue('enhancedSidebarLocation', 'right') === 'left')
     {
         LoadLeftSidebarCSS();
     }
 }
 
 function GetLatestNotify() {
-    var xmlHttp = new XMLHttpRequest();
+    let xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-            var jsonNoty = JSON.parse(xmlHttp.responseText);
-            var notyID = jsonNoty[0]["id"];
-            var notyMessage = jsonNoty[0]["message"];
-            var notyScheme = jsonNoty[0]["scheme"];
-            var notyContent = jsonNoty[0]["content"];
-            var notyURL = String(notyScheme).split("/");
+            let jsonNoty = JSON.parse(xmlHttp.responseText);
+            let notyID = jsonNoty[0]["id"];
+            let notyMessage = jsonNoty[0]["message"];
+            let notyScheme = jsonNoty[0]["scheme"];
+            let notyContent = jsonNoty[0]["content"];
+            let notyURL = String(notyScheme).split("/");
             notyURL = notyURL[notyURL.length-1].replace(".", "/");
-            if (String(notyID) != GetValue('enhancedLatestNotyID', ''))
+            if (String(notyID) !== GetValue('enhancedLatestNotyID', ''))
             {
                 SetValue('enhancedLatestNotyID', String(notyID));
                 if (String(jsonNoty[0]["is_new"]) == 'false') {
@@ -3009,14 +2995,14 @@ function SetEmoticonSize()
 
 function SetEmoticonSelectorSize()
 {
-    var sSize = GetValue("enhancedEmoticonSize", 'small');
+    let sSize = GetValue("enhancedEmoticonSize", 'small');
 
-    if (sSize == "middle")
+    if (sSize === "middle")
     {
         SetCSS('enhancedEmoticonSelectorItemSize', '.emoticon_keyboard .emt_il .emt_il_item { width: 96px !important; height: 96px !important; } .emoticon_keyboard .emt_il img { width: 96px !important; height: 96px !important; }')
         SetCSS('enhancedEmoticonSelectorBoxSize', '.write .section .inp_footer .emoticon_layer { width: 500px !important; } .emoticon_keyboard .emoticon_item_list { height: 350px !important; } .emoticon_layer { width: 500px !important; }')
     }
-    else if (sSize == "big")
+    else if (sSize === "big")
     {
         SetCSS('enhancedEmoticonSelectorItemSize', '.emoticon_keyboard .emt_il .emt_il_item { width: 128px !important; height: 128px !important; } .emoticon_keyboard .emt_il img { width: 128px !important; height: 128px !important; }')
         SetCSS('enhancedEmoticonSelectorBoxSize', '.write .section .inp_footer .emoticon_layer { width: 630px !important; } .emoticon_keyboard .emoticon_item_list { height: 450px !important; } .emoticon_layer { width: 630px !important; }')
@@ -3176,7 +3162,7 @@ function GetBlockedUsers() {
 }
 
 function ShowBlockStringPage() {
-    var blockStringLayer = document.createElement('div');
+    let blockStringLayer = document.createElement('div');
     blockStringLayer.id = "banStringLayer";
     blockStringLayer.className = "cover _cover";
     document.body.appendChild(blockStringLayer);
@@ -3262,7 +3248,7 @@ function InitCustomThemePageEvents()
     });
 
     document.getElementById("enhancedBtnRandomCustomColor").addEventListener("click", function() {
-        for (var i = 1; i <= 3; i++)
+        for (let i = 1; i <= 3; i++)
         {
             document.getElementById("enhancedCustomThemeColor" + i).value = GetRandomHexColor();
             let percent = Math.floor(Math.random() * 33) + ((i - 1) * 33) + 1;
@@ -3285,9 +3271,9 @@ function CustomThemeColorEventFunc(color, i)
         return;
     }
     SetValue('enhancedCustomThemeColor' + i, color);
-    var isBright = IsBrightColor(color);
-    var el = document.getElementsByClassName("enhanced_custom_gradient_color_" + i);
-    for (var j = 0; j < el.length; j++)
+    let isBright = IsBrightColor(color);
+    let el = document.getElementsByClassName("enhanced_custom_gradient_color_" + i);
+    for (let j = 0; j < el.length; j++)
     {
         el[j].style.backgroundColor = color;
         el[j].style.color = (isBright)? 'black' : 'white';
@@ -3298,14 +3284,14 @@ function CustomThemeColorEventFunc(color, i)
 
 function SetCustomTheme()
 {
-    for (var i = 1; i <= 3; i++)
+    for (let i = 1; i <= 3; i++)
     {
         document.documentElement.style.setProperty('--bg-gradient-custom-' + i + '-hsl', GetHSLCSS(document.getElementById("enhancedCustomThemeColor" + i).value));
     }
 
-    var percent1 = GetValue('enhancedCustomThemePercent1', Math.floor(Math.random() * 100));
-    var percent2 = GetValue('enhancedCustomThemePercent2', Math.floor(Math.random() * 100));
-    var percent3 = GetValue('enhancedCustomThemePercent3', Math.floor(Math.random() * 100));
+    let percent1 = GetValue('enhancedCustomThemePercent1', Math.floor(Math.random() * 100));
+    let percent2 = GetValue('enhancedCustomThemePercent2', Math.floor(Math.random() * 100));
+    let percent3 = GetValue('enhancedCustomThemePercent3', Math.floor(Math.random() * 100));
     document.documentElement.style.setProperty('--custom-background-color', GetGradientCSS(percent1, percent2, percent3, GetValue('enhancedCustomThemeDegree', Math.floor(Math.random() * 360))));
     document.documentElement.style.setProperty('--saturation-factor', GetValue('enhancedThemeSaturation', '1'));
 }
@@ -3369,17 +3355,16 @@ function RGBToHSL(rgb) {
   }
 
 function HideBlockStringArticle() {
-    var articles = document.getElementsByClassName("txt_wrap");
-    for (var i = 0; i < articles.length; i++) {
-        var articleText = articles[i].innerText.toLowerCase();
-        for (var j = 0; j < blockedStringList.length; j++) {
+    let articles = document.getElementsByClassName("txt_wrap");
+    for (let i = 0; i < articles.length; i++) {
+        let articleText = articles[i].innerText.toLowerCase();
+        for (let j = 0; j < blockedStringList.length; j++) {
             if (articleText.includes(blockedStringList[j].toLowerCase())) {
                 if (articles[i].parentElement.className.toString().includes("share_wrap")) {
                     articles[i].parentElement.parentElement.parentElement.parentElement.parentElement.style.display = 'none';
                 } else {
                     articles[i].parentElement.parentElement.parentElement.style.display = 'none';
                 }
-                continue;
             }
             //i -= 1; <-- only for remove()
         }
@@ -3413,7 +3398,7 @@ function MovePuppy()
 function MoveKitty()
 {
     let hasKitty = document.getElementById("enhancedKittyImage") != null;
-    if (GetValue('enhancedKittyMode', 'none') == 'none')
+    if (GetValue('enhancedKittyMode', 'none') === 'none')
     {
         if (hasKitty)
         {
@@ -3448,7 +3433,7 @@ function SetValue(key, value)
 function SetCSS(elID, cssText)
 {
     //GM_addStyle(cssText);
-    var elem = document.createElement('style');
+    let elem = document.createElement('style');
     elem.id = elID;
     document.head.appendChild(elem);
     document.getElementById(elID).innerHTML = cssText;
@@ -3456,7 +3441,7 @@ function SetCSS(elID, cssText)
 
 function RemoveCSSCollection(elID)
 {
-    var elem = document.getElementById(elID);
+    let elem = document.getElementById(elID);
     if (elem != null)
     {
         elem.remove();
@@ -3501,7 +3486,7 @@ function HideLogo()
         addNotiEnabled = true;
     }
 
-    if (currentFavicon == 'custom')
+    if (currentFavicon === 'custom')
     {
         icon = GetValue('enhancedFaviconURL', resourceURL + 'images/naver.ico');
     }
@@ -3512,7 +3497,7 @@ function HideLogo()
         _title = '(N) ' + currentTitle;
     }
 
-    if (document.getElementsByTagName('title')[0].innerText == _title &&
+    if (document.getElementsByTagName('title')[0].innerText === _title &&
         link.href.includes(icon))
     {
         return;
@@ -3526,7 +3511,7 @@ function HideLogo()
         document.getElementsByTagName('head')[0].appendChild(link);
     }
 
-    if (currentFavicon == 'custom')
+    if (currentFavicon === 'custom')
     {
         link.href = GetValue('enhancedFaviconURL', resourceURL + 'images/naver.ico');
     }
@@ -3716,7 +3701,7 @@ function MainKakaoStory()
 
         let hideLogoEnabled = (GetValue('enhancedHideLogo', 'false') == 'true');
 
-        if (hideLogoEnabled == true)
+        if (hideLogoEnabled === true)
         {
             setTimeout(() => HideLogo(), 750);
         }
