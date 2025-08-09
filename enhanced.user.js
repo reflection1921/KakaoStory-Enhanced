@@ -45,7 +45,38 @@ let notyOption = {
 let konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
 let konamiCount = 0;
 
+let enhancedMenuAlreadyAdded = false;
+
+function AddEnhancedMenuObserver() {
+    if (enhancedMenuAlreadyAdded) return;
+
+    const observer = new MutationObserver((mutations) => {
+        for (const { addedNodes } of mutations) {
+            for (const node of addedNodes) {
+                if (!(node instanceof HTMLElement)) continue;
+
+                const target = node.classList.contains('menu_util') 
+                    ? node 
+                    : node.querySelector('.menu_util');
+
+                if (target) {
+                    observer.disconnect();
+                    enhancedMenuAlreadyAdded = true;
+                    AddEnhancedMenu();
+                    return;
+                }
+            }
+        }
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+    });
+}
+
 function AddEnhancedMenu() {
+    if (enhancedMenuAlreadyAdded) return;
     document.getElementsByClassName("menu_util")[0].innerHTML = '<li><a href="#" id="enhancedHideSidebar" class="link_menu _btnSettingProfile">사이드바 숨기기</a></li><li class="enhanced_settings_menu"><a href="#" id="enhancedOpenSettings" class="link_menu _btnSettingProfile">Enhanced 설정</a></li>' + document.getElementsByClassName("menu_util")[0].innerHTML;
     document.getElementById("enhancedOpenSettings").addEventListener("click", function() {
         document.getElementById("enhancedLayer").style.display = 'block';
@@ -3520,6 +3551,7 @@ function MainKakaoStory()
     InitCustomThemePage();
     InitImagePasteEvent();
     LoadCommonEvents();
+
     if (GetValue('enhancedBlockUser', 'true') == 'true')
     {
         GetBlockedUsers();
@@ -3532,7 +3564,7 @@ function MainKakaoStory()
 
     SetEmoticonSelectorSize();
 
-    setTimeout(() => AddEnhancedMenu(), 1000);
+    AddEnhancedMenuObserver();
     setTimeout(() => MoveKitty(), 1000);
     setTimeout(() => MovePuppy(), 1000);
     setTimeout(() => GetMyID(), 3000); //for discord style mention feature
