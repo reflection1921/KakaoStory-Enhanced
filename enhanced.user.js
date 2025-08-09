@@ -45,10 +45,7 @@ let notyOption = {
 let konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
 let konamiCount = 0;
 
-let enhancedMenuAlreadyAdded = false;
-
 function AddEnhancedMenuObserver() {
-    if (enhancedMenuAlreadyAdded) return;
 
     const observer = new MutationObserver((mutations) => {
         for (const { addedNodes } of mutations) {
@@ -60,8 +57,8 @@ function AddEnhancedMenuObserver() {
                     : node.querySelector('.menu_util');
 
                 if (target) {
+                    console.log("Enhanced Menu Observer: Found menu_util element, adding enhanced menu.");
                     observer.disconnect();
-                    enhancedMenuAlreadyAdded = true;
                     AddEnhancedMenu();
                     return;
                 }
@@ -76,7 +73,6 @@ function AddEnhancedMenuObserver() {
 }
 
 function AddEnhancedMenu() {
-    if (enhancedMenuAlreadyAdded) return;
     document.getElementsByClassName("menu_util")[0].innerHTML = '<li><a href="#" id="enhancedHideSidebar" class="link_menu _btnSettingProfile">사이드바 숨기기</a></li><li class="enhanced_settings_menu"><a href="#" id="enhancedOpenSettings" class="link_menu _btnSettingProfile">Enhanced 설정</a></li>' + document.getElementsByClassName("menu_util")[0].innerHTML;
     document.getElementById("enhancedOpenSettings").addEventListener("click", function() {
         document.getElementById("enhancedLayer").style.display = 'block';
