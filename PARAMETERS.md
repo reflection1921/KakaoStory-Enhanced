@@ -45,6 +45,7 @@
 | enhancedCustomThemePercent2 | Integer                                             | Random                           | Set custom theme percent 2                                       |
 | enhancedCustomThemePercent3 | Integer                                             | Random                           | Set custom theme percent 3                                       |
 | enhancedCustomThemeDegree   | Integer                                             | Random                           | Set custom theme degree                                          |
+| enhancedHideMedia           | `visible`, `blur`, `hidden`                         | `visible`                        | Hide media                                                       |
 
 ## Login Page Parameters
 | Key                         | Values                                    | Default Value                    | Description                                       |

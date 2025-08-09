@@ -45,6 +45,33 @@ let notyOption = {
 let konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
 let konamiCount = 0;
 
+// media hide mode(blur)
+const targetSelectorsBlur = [
+  '.fd_cont .wrap_swipe',
+  '.fd_cont .img_wrap',
+  '.fd_cont .movie_wrap',
+  '.fd_cont .link_imgthumb',
+];
+
+let mediaHideObserver = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+        for (const node of mutation.addedNodes) {
+            if (!(node instanceof HTMLElement)) continue;
+
+            const targets = [];
+
+            for (const selector of targetSelectorsBlur) {
+            if (node.matches?.(selector)) {
+                targets.push(node);
+            }
+            node.querySelectorAll?.(selector)?.forEach(el => targets.push(el));
+            }
+
+            targets.forEach(AddBlurToMedia);
+        }
+    }
+});
+
 function AddEnhancedMenuObserver() {
 
     const observer = new MutationObserver((mutations) => {
@@ -57,7 +84,6 @@ function AddEnhancedMenuObserver() {
                     : node.querySelector('.menu_util');
 
                 if (target) {
-                    console.log("Enhanced Menu Observer: Found menu_util element, adding enhanced menu.");
                     observer.disconnect();
                     AddEnhancedMenu();
                     return;
@@ -1104,26 +1130,29 @@ function InitEnhancedValues()
 
     document.getElementById('enhancedTxtNotifyTime').value = GetValue('enhancedNotifyTime', '20');
 
-    var downloadVideoEnabled = GetValue('enhancedDownloadVideo', 'false');
+    let downloadVideoEnabled = GetValue('enhancedDownloadVideo', 'false');
     $('input:radio[name="enhancedSelectDownloadVideo"]:input[value=' + downloadVideoEnabled + ']').attr("checked", true);
 
-    var isHidden = GetValue('enhancedHideChannelButton', 'true');
+    let isHidden = GetValue('enhancedHideChannelButton', 'true');
     $('input:radio[name="enhancedSelectHideChannelButton"]:input[value=' + isHidden + ']').attr("checked", true);
 
-    var isHiddenLogo = GetValue('enhancedHideLogo', 'false');
+    let isHiddenLogo = GetValue('enhancedHideLogo', 'false');
     $('input:radio[name="enhancedSelectHideLogo"]:input[value=' + isHiddenLogo + ']').attr("checked", true);
     document.getElementById("groupEnhancedHideLogoEnable").style.display = (isHiddenLogo == "true")? "block" : "none";
 
-    var isHiddenLogoNoti = GetValue('enhancedHideLogoNoti', 'false');
+    let isHiddenLogoNoti = GetValue('enhancedHideLogoNoti', 'false');
     $('input:radio[name="enhancedSelectHideLogoNoti"]:input[value=' + isHiddenLogoNoti + ']').attr("checked", true);
 
-    var hiddenLogoIcon = GetValue('enhancedHideLogoIcon', 'naver');
+    let hiddenLogoIcon = GetValue('enhancedHideLogoIcon', 'naver');
     $('input:radio[name="enhancedSelectLogoIcon"]:input[value=' + hiddenLogoIcon + ']').attr("checked", true);
     document.getElementById("groupEnhancedHideLogoCustomEnable").style.display = (hiddenLogoIcon == "custom")? "block" : "none";
     currentFavicon = hiddenLogoIcon;
     currentTitle = GetHideLogoIconTitle();
     document.getElementById('enhancedTxtHideLogoTitle').value = GetValue('enhancedFaviconTitle', 'NAVER');
     document.getElementById('enhancedTxtHideLogoFaviconURL').value = GetValue('enhancedFaviconURL', resourceURL + 'images/naver.ico');
+
+    let isHiddenMedia = GetValue('enhancedHideMedia', 'visible');
+    $('input:radio[name="enhancedSelectHideMedia"]:input[value=' + isHiddenMedia + ']').attr("checked", true);
 
     var isHiddenMemorize = GetValue('enhancedHideMemorize', 'true');
     $('input:radio[name="enhnacnedSelectHideMemorize"]:input[value=' + isHiddenMemorize + ']').attr("checked", true);
@@ -2273,6 +2302,12 @@ function LoadSettingsPageEvents()
         currentTitle = GetHideLogoIconTitle();
     });
 
+    $(document).on("change",'input[name="enhancedSelectHideMedia"]',function(){
+        var changed = $('[name="enhancedSelectHideMedia"]:checked').val();
+        SetValue("enhancedHideMedia", changed);
+        HideMedia();
+    });
+
     $(document).on("change",'input[name="enhnacnedSelectHideMemorize"]',function(){
         var changed = $('[name="enhnacnedSelectHideMemorize"]:checked').val();
         SetValue("enhancedHideMemorize", changed);
@@ -2509,6 +2544,83 @@ function LoadSettingsPageEvents()
             elem.classList.remove("enhanced_settings_content_hidden");
         }
     });
+}
+
+function HideMedia()
+{
+    let mode = GetValue("enhancedHideMedia", "visible");
+    switch (mode)
+    {
+        case "visible":
+            mediaHideObserver.disconnect();
+            RemoveBlurAllMedia();
+            RemoveCSSCollection("mediaHideTextModeCss");
+            break;
+        case "blur":
+            {
+                InitBlurMedia();
+                RemoveCSSCollection("mediaHideTextModeCss");
+                mediaHideObserver.observe(document.body, {
+                    childList: true,
+                    subtree: true,
+                });
+            }
+            break;
+        case "hidden":
+            mediaHideObserver.disconnect();
+            RemoveBlurAllMedia();
+            SetCSS('mediaHideTextModeCss', '.fd_cont .wrap_swipe { height: 0px !important; } .fd_cont .img_wrap { height: 0px !important; } .fd_cont .movie_wrap { height: 0px !important; } .fd_cont .link_imgthumb { height: 0px !important; }');
+            break;
+        default: // visible과 동일한 처리
+            mediaHideObserver.disconnect();
+            RemoveBlurAllMedia();
+            RemoveCSSCollection("mediaHideTextModeCss");
+            break;
+    }
+    
+}
+
+function InitBlurMedia() {
+    targetSelectorsBlur.forEach(selector => {
+        document.querySelectorAll(selector).forEach(AddBlurToMedia);
+    });
+}
+
+function RemoveBlurAllMedia()
+{
+    const blurOverlays = document.querySelectorAll('.blur-overlay-media');
+    blurOverlays.forEach(blurOverlay => {
+        blurOverlay.parentElement.dataset.blurDisabled = 'false';
+        blurOverlay.parentElement.getElementsByClassName('media-blur-disable-button')[0]?.remove();
+        blurOverlay.remove();
+    });
+}
+
+function AddBlurToMedia(elem)
+{
+    if (elem.querySelector('.blur-overlay-media')) return;
+    if (elem.dataset.blurDisabled === 'true') return;
+    
+    const blurOverlay = document.createElement('div');
+    blurOverlay.className = 'blur-overlay-media';
+
+    const buttonDisableBlur = document.createElement('button');
+    buttonDisableBlur.textContent = '미디어 보기';
+    buttonDisableBlur.className = 'media-blur-disable-button';
+
+    buttonDisableBlur.addEventListener('click', () => {
+        blurOverlay.remove();
+        buttonDisableBlur.remove();
+        elem.dataset.blurDisabled = 'true';
+    });
+
+    const computedStyle = getComputedStyle(elem);
+    if (computedStyle.position === 'static') {
+        elem.style.position = 'relative';
+    }
+
+    elem.appendChild(blurOverlay);
+    elem.appendChild(buttonDisableBlur);
 }
 
 function HideRecommendFriend()
@@ -3547,6 +3659,7 @@ function MainKakaoStory()
     InitCustomThemePage();
     InitImagePasteEvent();
     LoadCommonEvents();
+    HideMedia();
 
     if (GetValue('enhancedBlockUser', 'true') == 'true')
     {
