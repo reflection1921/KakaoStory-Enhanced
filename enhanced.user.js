@@ -911,6 +911,93 @@ function HighlightCommentLikeDiscord() {
     }
 }
 
+function InitImagePasteEvent()
+{
+    document.addEventListener('paste', async function (e) {
+        const items = e.clipboardData?.items;
+        if (!items) return;
+
+        for (let i = 0; i < items.length; i++)
+        {
+            const item = items[i];
+            if (item.kind === 'file' && item.type.startsWith('image/')) {
+                const file = item.getAsFile();
+                if (!file) continue;
+
+                let attachedFile = file;
+                let isWebP = false;
+
+                if (file.type === 'image/webp') {
+                    try {
+                        const imageBitmap = await createImageBitmap(file);
+                        const canvas = document.createElement('canvas');
+                        canvas.width = imageBitmap.width;
+                        canvas.height = imageBitmap.height;
+
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(imageBitmap, 0, 0);
+
+                        const pngBlob = await new Promise(resolve =>
+                            canvas.toBlob(resolve, 'image/png')
+                        );
+
+                        attachedFile = new File(
+                            [pngBlob],
+                            file.name.replace(/\.webp$/, '.png'),
+                            { type: 'image/png' }
+                        );
+                        isWebP = true;
+                    } catch (ex) {
+                        return;
+                    }
+                }
+
+                // 글쓰기 상태
+                let fileInput = null;
+                let writingState = document.getElementsByClassName("write goaway").length == 0;
+                let articleWritingEnabled = false;
+                if (e.target.id == "contents_write" && writingState) {
+                    fileInput = document.querySelector('input[type="file"][title="사진/동영상 첨부"]');
+                    articleWritingEnabled = true;
+                }
+
+                // 댓글 쓰기 상태
+                let commentWritingEnabled = false;
+                document.querySelectorAll('input[type="file"]').forEach(input => {
+                    let targetAncestor = input;
+                    for (let j = 0; j < 3; j++) {
+                        if (!targetAncestor.parentElement) {
+                            targetAncestor = null;
+                            break;
+                        }
+                        targetAncestor = targetAncestor.parentElement;
+                    }
+
+                    let comtViewId = "#" + e.target.id;
+                    if (targetAncestor && targetAncestor.querySelector(comtViewId)) {
+                        fileInput = input;
+                        commentWritingEnabled = true;
+                        console.log('댓글 조건 만족:', input);
+                    }
+                });
+
+                if (!fileInput) return;
+                //글쓰기는 이미지 붙여넣기를 지원하지만 그 이미지가 클립보드의 첫번째에 있어야만 정상 동작
+                //글쓰기 댓글쓰기 어느쪽이든 webp는 지원하지 않으니 webp를 강제로 지원하도록(webp to png)
+                if (articleWritingEnabled && !isWebP && i == 0) return;
+
+                const dt = new DataTransfer();
+                dt.items.add(attachedFile);
+                fileInput.files = dt.files;
+                fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+                console.log('[Tampermonkey] 이미지 첨부됨:', attachedFile.name);
+
+                break;
+            }
+        }
+    });
+}
+
 // Settings Page
 function InitEnhancedSettingsPage() {
     let xmlHttp = new XMLHttpRequest();
@@ -3417,12 +3504,10 @@ function MoveBirthdayFriendsToTop()
         return;
     }
 
-    let lastIndex = -1;
     for (let i = 0; i < friends.length; i++)
     {
         if (friends[i].className.includes("user_birth"))
         {
-            lastIndex = i;
             friendsEl.insertBefore(friends[i], friendsEl.firstChild);
         }
     }
@@ -3433,6 +3518,7 @@ function MainKakaoStory()
     eventHandlerModule.initialize();
     InitEnhancedSettingsPage();
     InitCustomThemePage();
+    InitImagePasteEvent();
     LoadCommonEvents();
     if (GetValue('enhancedBlockUser', 'true') == 'true')
     {
