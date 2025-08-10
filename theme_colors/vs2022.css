@@ -1,22 +1,23 @@
 --saturation-factor: 1;
---right-background-color: hsl(240 calc(var(--saturation-factor, 1)*3.2%) 18.2);
---background-color: hsl(240 calc(var(--saturation-factor, 1)*1.3%) 14.7);
---light-background-color: hsl(240 calc(var(--saturation-factor, 1)*3.2%) 18.2);
+--right-background-color: hsl(0 calc(var(--saturation-factor, 1)*0%) 18.04); v
+--background-color: hsl(0 calc(var(--saturation-factor, 1)*0%) 12.16); v
+--light-background-color: hsl(0 calc(var(--saturation-factor, 1)*0%) 18.04); v
 --lighter-background-color: hsl(240 calc(var(--saturation-factor, 1)*3.8%) 20.8);
 --dark-background-color: hsl(240 calc(var(--saturation-factor, 1)*1.3%) 14.7);
 --darker-background-color: hsl(240 calc(var(--saturation-factor, 1)*1.8%) 10.8);
+--comment-background-color: hsl(0 calc(var(--saturation-factor, 1)*0%) 21.96); v
 --background-border-color: #333337;
 --text-color: #d0d0d0;
 --text-title-color: #d0d0d0;
 --text-highlight-color: #f1f1f1;
 --text-desc-color: #999999;
---noti-unread-background-color: #2b537d;
+--noti-unread-background-color: #143d66; v
 --noti-unread-bar-color: #577430;
 --info-text-color: #999999;
 --scrap-text-color: #007acc;
 --menu-text-color: #f1f1f1;
---emoticon-background-color: hsl(217 calc(var(--saturation-factor, 1)*7.6%) 33.5);
---discord-blue: #68217a;
+--emoticon-background-color: hsl(0 calc(var(--saturation-factor, 1)*0%) 18.04); v
+--discord-blue: #7160e8; v
 --discord-blue-disable: #9f5faf;
 --discord-blue-hover: #862a9d;
 --black: #000;
