@@ -132,7 +132,7 @@ function AddEnhancedMenu() {
         SetValue('enhancedSidebarShow', 'true');
     });
 
-    if (GetValue('enhancedSidebarShow', 'true') == 'false')
+    if (GetValue('enhancedSidebarShow', 'true') === 'false')
     {
         document.getElementById("mSnb").classList.add('enhanced_sidebar_hidden');
         document.getElementById("enhancedShowSidebar").style.display = 'block';
@@ -1088,7 +1088,7 @@ function InitEnhancedValues()
     let useDiscordMention = GetValue('enhancedDiscordMention', 'false');
     document.querySelector(`input[type="radio"][name="enhancedSelectDiscordMention"][value="${useDiscordMention}"]`).checked = true;
 
-    document.getElementById('enhancedSystemTheme').checked = GetValue('enhancedSystemTheme', 'true') == 'true';
+    document.getElementById('enhancedSystemTheme').checked = GetValue('enhancedSystemTheme', 'true') === 'true';
 
     let fontName = GetValue('enhancedFontName', 'Pretendard');
     document.getElementById("enhancedTxtFontName").value = fontName;
@@ -1116,10 +1116,10 @@ function InitEnhancedValues()
 
     let notifyEnabled = GetValue('enhancedNotify', 'false');
     document.querySelector(`input[type="radio"][name="enhancedSelectNotifyUse"][value="${notifyEnabled}"]`).checked = true;
-    document.getElementById("groupEnhancedNotifyEnable").style.display = (notifyEnabled == "true")? "block" : "none";
+    document.getElementById("groupEnhancedNotifyEnable").style.display = (notifyEnabled === "true")? "block" : "none";
 
     let notifySoundEnabled = GetValue('enhancedNotifySound', 'true');
-    notyOption.silent = (notifySoundEnabled == 'true')? false : true;
+    notyOption.silent = (notifySoundEnabled !== 'true');
     document.querySelector(`input[type="radio"][name="enhancedSelectNotifySoundUse"][value="${notifySoundEnabled}"]`).checked = true;
 
     document.getElementById('enhancedTxtNotifyTime').value = GetValue('enhancedNotifyTime', '20');
@@ -1132,7 +1132,7 @@ function InitEnhancedValues()
 
     let isHiddenLogo = GetValue('enhancedHideLogo', 'false');
     document.querySelector(`input[type="radio"][name="enhancedSelectHideLogo"][value="${isHiddenLogo}"]`).checked = true;
-    document.getElementById("groupEnhancedHideLogoEnable").style.display = (isHiddenLogo == "true")? "block" : "none";
+    document.getElementById("groupEnhancedHideLogoEnable").style.display = (isHiddenLogo === "true")? "block" : "none";
 
     let isHiddenLogoNoti = GetValue('enhancedHideLogoNoti', 'false');
     document.querySelector('input[type="radio"][name="enhancedSelectHideLogoNoti"][value="' + isHiddenLogoNoti + '"]').checked = true;
@@ -1161,7 +1161,7 @@ function InitEnhancedValues()
 
     let isEnhancedBlock = GetValue('enhancedBlockUser', 'true');
     document.querySelector(`input[type="radio"][name="enhancedSelectBlockUser"][value="${isEnhancedBlock}"]`).checked = true;
-    document.getElementById("groupEnhancedBlockUser").style.display = (isEnhancedBlock == "true")? "block" : "none";
+    document.getElementById("groupEnhancedBlockUser").style.display = (isEnhancedBlock === "true")? "block" : "none";
 
     let isEnhancedFeedBlock = GetValue('enhancedExtendFeedBlock', 'false');
     document.querySelector(`input[type="radio"][name="enhancedSelectFeedBlockUser"][value="${isEnhancedFeedBlock}"]`).checked = true;
@@ -1185,7 +1185,7 @@ function InitEnhancedValues()
     document.querySelector(`input[type="radio"][name="enhancedSelectBlockArticleAll"][value="${isBlockAllArticle}"]`).checked = true;
 
     let useWideMode = GetValue('enhancedWideMode', 'false');
-    if (useWideMode == 'true')
+    if (useWideMode === 'true')
     {
         SetValue('enhancedWideMode', 'fixed');
         useWideMode = 'fixed';
@@ -1365,18 +1365,18 @@ function LoadCommonEvents()
     });
 
     $(document).on('keydown', '._editable', function() {
-        if (GetValue("enhancedEarthquake", 'false') == 'true') {
+        if (GetValue("enhancedEarthquake", 'false') === 'true') {
             $('div[data-part-name="writing"]').addClass("shake_text");
             $('.layer_write').addClass("shake_text");
             VisibleEnhancedPowerModeCount();
         }
-        if (GetValue("enhancedBlink", 'false') == 'true') {
+        if (GetValue("enhancedBlink", 'false') === 'true') {
             document.getElementById("contents_write").classList.add("blink_text");
         }
     });
 
     $(document).on('keydown', '[id^=comt_view]', function(e) {
-        if (GetValue("enhancedEarthquake", 'false') == 'true') {
+        if (GetValue("enhancedEarthquake", 'false') === 'true') {
             if ($(e.target).parents('._commentWriting').length > 0) {
                 $(e.target).parents('._commentWriting').addClass("shake_text");
                 VisibleEnhancedPowerModeCount();
@@ -1400,14 +1400,14 @@ function LoadCommonEvents()
             konamiCount++;
             if (konamiCount >= 10) {
                 konamiCount = 0;
-                let faviconClassic = GetValue("enhancedFaviconClassic", "false") == "true";
+                let faviconClassic = GetValue("enhancedFaviconClassic", "false") === "true";
                 SetValue("enhancedFaviconClassic", (faviconClassic)? "false" : "true");
             }
         } else {
             konamiCount = 0;
         }
 
-        if (GetValue("enhancedKeyboard", 'false') == 'false')
+        if (GetValue("enhancedKeyboard", 'false') === 'false')
         {
             return;
         }
@@ -2163,7 +2163,7 @@ function LoadSettingsPageEvents()
     });
 
     $(document).on("change",'input[name="enhancedSelectTheme"]',function(){
-        if (GetValue('enhancedSystemTheme', 'true') == 'false') {
+        if (GetValue('enhancedSystemTheme', 'true') === 'false') {
             let theme = document.querySelector('[name="enhancedSelectTheme"]:checked').value;
             SetValue("enhancedSelectTheme", theme);
             ChangeTheme(theme);
@@ -2184,7 +2184,7 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedSelectDiscordMention"]',function(){
         let useMention = document.querySelector('[name="enhancedSelectDiscordMention"]:checked').value;
         SetValue("enhancedDiscordMention", useMention);
-        if (useMention == 'true')
+        if (useMention === 'true')
         {
             GetMyID();
         }
@@ -2252,9 +2252,9 @@ function LoadSettingsPageEvents()
 
     $(document).on("change",'input[name="enhancedSelectNotifyUse"]',function(){
         let changed = document.querySelector('[name="enhancedSelectNotifyUse"]:checked')?.value;
-        document.getElementById("groupEnhancedNotifyEnable").style.display = (changed == "true")? "block" : "none";
+        document.getElementById("groupEnhancedNotifyEnable").style.display = (changed === "true")? "block" : "none";
         SetValue("enhancedNotify", changed);
-        if (GetValue("enhancedNotify", "false") == "true")
+        if (GetValue("enhancedNotify", "false") === "true")
         {
             Notification.requestPermission();
         }
@@ -2263,7 +2263,7 @@ function LoadSettingsPageEvents()
     $(document).on("change",'input[name="enhancedSelectNotifySoundUse"]',function(){
         let changed = document.querySelector('[name="enhancedSelectNotifySoundUse"]:checked')?.value;
         SetValue("enhancedNotifySound", changed);
-        notyOption.silent = (changed == "true")? false : true;
+        notyOption.silent = (changed !== "true");
     });
 
     $(document).on("change",'input[name="enhancedSelectDownloadVideo"]',function(){
@@ -2279,7 +2279,7 @@ function LoadSettingsPageEvents()
 
     $(document).on("change",'input[name="enhancedSelectHideLogo"]',function(){
         let changed = document.querySelector('[name="enhancedSelectHideLogo"]:checked')?.value;
-        document.getElementById("groupEnhancedHideLogoEnable").style.display = (changed == "true")? "block" : "none";
+        document.getElementById("groupEnhancedHideLogoEnable").style.display = (changed === "true")? "block" : "none";
         SetValue("enhancedHideLogo", changed);
     });
 
@@ -2337,8 +2337,8 @@ function LoadSettingsPageEvents()
 
     $(document).on("change",'input[name="enhancedSelectBlockUser"]',function(){
         let isEnhancedBlock = $('[name="enhancedSelectBlockUser"]:checked').val();
-        document.getElementById("groupEnhancedBlockUser").style.display = (isEnhancedBlock == "true")? "block" : "none";
-        if (isEnhancedBlock == "true")
+        document.getElementById("groupEnhancedBlockUser").style.display = (isEnhancedBlock === "true")? "block" : "none";
+        if (isEnhancedBlock === "true")
         {
             GetBlockedUsers();
         }
@@ -2347,7 +2347,7 @@ function LoadSettingsPageEvents()
 
     $(document).on("change",'input[name="enhancedSelectFeedBlockUser"]',function(){
         let isEnhancedFeedBlock = document.querySelector('[name="enhancedSelectFeedBlockUser"]:checked')?.value;
-        if (isEnhancedFeedBlock == "true")
+        if (isEnhancedFeedBlock === "true")
         {
             GetFeedBlockedUsers();
         }
@@ -2612,7 +2612,7 @@ function AddBlurToMedia(elem)
 
 function HideRecommendFriend()
 {
-    if (GetValue("enhancedHideRecommendFriend", "true") == "true")
+    if (GetValue("enhancedHideRecommendFriend", "true") === "true")
         SetCSS("enhancedHideRecommendFriend", '.story_widgets > div[data-part-name="recommends"] { display: none !important; }');
     else
         RemoveCSSCollection("enhancedHideRecommendFriend");
@@ -2830,15 +2830,15 @@ function ChangeTheme(styleName)
     SetCSS('enhancedHideLogoCSS', hideOriginLogo);
     LoadEnhancedCSS();
     //LoadDevCSS();
-    if (GetValue('enhancedWideMode', 'false') == 'true' || GetValue('enhancedWideMode', 'false') == 'fixed')
+    if (GetValue('enhancedWideMode', 'false') === 'true' || GetValue('enhancedWideMode', 'false') === 'fixed')
     {
         LoadExtendFeedCSS();
     }
-    else if (GetValue('enhancedWideMode', 'false') == 'fixed_1024')
+    else if (GetValue('enhancedWideMode', 'false') === 'fixed_1024')
     {
         LoadExtendFeed1024CSS();
     }
-    else if (GetValue('enhancedWideMode', 'false') == 'flexible')
+    else if (GetValue('enhancedWideMode', 'false') === 'flexible')
     {
         LoadExtendFeedFlexibleCSS();
     }
@@ -2863,7 +2863,7 @@ function GetLatestNotify() {
             if (String(notyID) !== GetValue('enhancedLatestNotyID', ''))
             {
                 SetValue('enhancedLatestNotyID', String(notyID));
-                if (String(jsonNoty[0]["is_new"]) == 'false') {
+                if (String(jsonNoty[0]["is_new"]) === 'false') {
                     return;
                 }
                 if (notyContent == undefined) {
@@ -2960,7 +2960,7 @@ function AddDownloadVideoButton() {
 
 function HideChannelButton() {
     let isHidden = GetValue("enhancedHideChannelButton", "true");
-    let val = isHidden == "true" ? 'none' : 'block';
+    let val = isHidden === "true" ? 'none' : 'block';
     document.getElementsByClassName("storyteller_gnb")[0].style.display = val;
     document.getElementsByClassName("group_gnb")[0].style.display = val;
 }
@@ -3052,7 +3052,7 @@ function HideBlockedUserArticle()
         let profile_info = shared_content.getElementsByClassName("pf")[0];
         let bannedID = profile_info.getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
 
-        if (blockedList.has(bannedID) == true || feedBlockedList.has(bannedID) == true) {
+        if (blockedList.has(bannedID) || feedBlockedList.has(bannedID)) {
 
             //not used.
             /*
@@ -3481,7 +3481,7 @@ function HideLogo()
 
     //innerText starts with (N) means notification
 
-    if (GetValue("enhancedHideLogoNoti", 'false') == 'true' && document.getElementsByTagName('title')[0].innerText.startsWith('(N)'))
+    if (GetValue("enhancedHideLogoNoti", 'false') === 'true' && document.getElementsByTagName('title')[0].innerText.startsWith('(N)'))
     {
         addNotiEnabled = true;
     }
@@ -3646,12 +3646,12 @@ function MainKakaoStory()
     LoadCommonEvents();
     HideMedia();
 
-    if (GetValue('enhancedBlockUser', 'true') == 'true')
+    if (GetValue('enhancedBlockUser', 'true') === 'true')
     {
         GetBlockedUsers();
     }
 
-    if (GetValue('enhancedExtendFeedBlock', 'false') == 'true')
+    if (GetValue('enhancedExtendFeedBlock', 'false') === 'true')
     {
         GetFeedBlockedUsers();
     }
@@ -3667,7 +3667,7 @@ function MainKakaoStory()
     setTimeout(() => MoveBirthdayFriendsToTop(), 100); //move birthday friends to top
 
     setInterval(function() {
-        if (GetValue('enhancedNotify', 'false') == 'true')
+        if (GetValue('enhancedNotify', 'false') === 'true')
         {
             notyTimeCount += 1;
             if (notyTimeCount >= parseInt(GetValue('enhancedNotifyTime', '20')) * 10)
@@ -3676,20 +3676,20 @@ function MainKakaoStory()
                 GetLatestNotify();
             }
         }
-        if (GetValue("enhancedDiscordMention", 'false') == 'true')
+        if (GetValue("enhancedDiscordMention", 'false') === 'true')
         {
             HighlightCommentLikeDiscord();
         }
 
-        if (GetValue('enhancedDownloadVideo', 'false') == 'true') {
+        if (GetValue('enhancedDownloadVideo', 'false') === 'true') {
             AddDownloadVideoButton();
         }
 
-        if (GetValue('enhancedHideMemorize', 'true') == 'true') {
+        if (GetValue('enhancedHideMemorize', 'true') === 'true') {
             HideMemorize();
         }
 
-        if (GetValue('enhancedBlockUser', 'true') == 'true')
+        if (GetValue('enhancedBlockUser', 'true') === 'true')
         {
             HideBlockedUserComment();
             HideBlockedUserArticle();
@@ -3699,26 +3699,26 @@ function MainKakaoStory()
 
         ViewDetailNotFriendArticle();
 
-        let hideLogoEnabled = (GetValue('enhancedHideLogo', 'false') == 'true');
+        let hideLogoEnabled = (GetValue('enhancedHideLogo', 'false') === 'true');
 
         if (hideLogoEnabled === true)
         {
             setTimeout(() => HideLogo(), 750);
         }
 
-        if (GetValue("enhancedFaviconClassic", "false") == "true" && !hideLogoEnabled)
+        if (GetValue("enhancedFaviconClassic", "false") === "true" && !hideLogoEnabled)
         {
             setTimeout(() => SetClassicFavicon(), 750);
         }
 
-        if (GetValue('enhancedWideMode', 'false') != 'false')
+        if (GetValue('enhancedWideMode', 'false') !== 'false')
         {
             setTimeout(() => SetExtendCommentUI(), 750);
         }
 
         setTimeout(() => visitorChartModule.viewVisitorChart(), 1000);
 
-        if (GetValue('enhancedEarthquake', 'false') == 'true')
+        if (GetValue('enhancedEarthquake', 'false') === 'true')
         {
             powerComboTimeCnt += 1;
             if (powerComboTimeCnt > 50)
