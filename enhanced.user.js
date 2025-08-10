@@ -1080,13 +1080,13 @@ function AttachEnhancedSettingsPage(html)
 function InitEnhancedValues()
 {
     let selectedTheme = GetValue('enhancedSelectTheme', 'dark');
-    $('input:radio[name="enhancedSelectTheme"]:input[value=' + selectedTheme + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectTheme"][value="${selectedTheme}"]`).checked = true;
 
     LoadThemeList();
     ChangeTheme(selectedTheme);
 
     let useDiscordMention = GetValue('enhancedDiscordMention', 'false');
-    $('input:radio[name="enhancedSelectDiscordMention"]:input[value=' + useDiscordMention + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectDiscordMention"][value="${useDiscordMention}"]`).checked = true;
 
     document.getElementById('enhancedSystemTheme').checked = GetValue('enhancedSystemTheme', 'true') == 'true';
 
@@ -1115,12 +1115,12 @@ function InitEnhancedValues()
     SetFontSize();
 
     let notifyEnabled = GetValue('enhancedNotify', 'false');
-    $('input:radio[name="enhancedSelectNotifyUse"]:input[value=' + notifyEnabled + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectNotifyUse"][value="${notifyEnabled}"]`).checked = true;
     document.getElementById("groupEnhancedNotifyEnable").style.display = (notifyEnabled == "true")? "block" : "none";
 
     let notifySoundEnabled = GetValue('enhancedNotifySound', 'true');
     notyOption.silent = (notifySoundEnabled == 'true')? false : true;
-    $('input:radio[name="enhancedSelectNotifySoundUse"]:input[value=' + notifySoundEnabled + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectNotifySoundUse"][value="${notifySoundEnabled}"]`).checked = true;
 
     document.getElementById('enhancedTxtNotifyTime').value = GetValue('enhancedNotifyTime', '20');
 
@@ -1128,17 +1128,17 @@ function InitEnhancedValues()
     document.querySelector('input[type="radio"][name="enhancedSelectDownloadVideo"][value="' + downloadVideoEnabled + '"]').checked = true;
 
     let isHidden = GetValue('enhancedHideChannelButton', 'true');
-    $('input:radio[name="enhancedSelectHideChannelButton"]:input[value=' + isHidden + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectHideChannelButton"][value="${isHidden}"]`).checked = true;
 
     let isHiddenLogo = GetValue('enhancedHideLogo', 'false');
-    $('input:radio[name="enhancedSelectHideLogo"]:input[value=' + isHiddenLogo + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectHideLogo"][value="${isHiddenLogo}"]`).checked = true;
     document.getElementById("groupEnhancedHideLogoEnable").style.display = (isHiddenLogo == "true")? "block" : "none";
 
     let isHiddenLogoNoti = GetValue('enhancedHideLogoNoti', 'false');
     document.querySelector('input[type="radio"][name="enhancedSelectHideLogoNoti"][value="' + isHiddenLogoNoti + '"]').checked = true;
 
     let hiddenLogoIcon = GetValue('enhancedHideLogoIcon', 'naver');
-    $('input:radio[name="enhancedSelectLogoIcon"]:input[value=' + hiddenLogoIcon + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectLogoIcon"][value="${hiddenLogoIcon}"]`).checked = true;
     document.getElementById("groupEnhancedHideLogoCustomEnable").style.display = (hiddenLogoIcon === "custom")? "block" : "none";
     currentFavicon = hiddenLogoIcon;
     currentTitle = GetHideLogoIconTitle();
@@ -1146,43 +1146,43 @@ function InitEnhancedValues()
     document.getElementById('enhancedTxtHideLogoFaviconURL').value = GetValue('enhancedFaviconURL', resourceURL + 'images/naver.ico');
 
     let isHiddenMedia = GetValue('enhancedHideMedia', 'visible');
-    $('input:radio[name="enhancedSelectHideMedia"]:input[value=' + isHiddenMedia + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectHideMedia"][value="${isHiddenMedia}"]`).checked = true;
 
     let isHiddenMemorize = GetValue('enhancedHideMemorize', 'true');
-    $('input:radio[name="enhnacnedSelectHideMemorize"]:input[value=' + isHiddenMemorize + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhnacnedSelectHideMemorize"][value="${isHiddenMemorize}"]`).checked = true;
 
     let isHiddenRecommendFriend = GetValue('enhancedHideRecommendFriend', 'false');
-    $('input:radio[name="enhancedSelectRecommendFriend"]:input[value=' + isHiddenRecommendFriend + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectRecommendFriend"][value="${isHiddenRecommendFriend}"]`).checked = true;
     HideRecommendFriend();
 
     let size = GetValue('enhancedEmoticonSize', 'small');
-    $('input:radio[name="enhancedSelectEmoticonSize"]:input[value=' + size + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectEmoticonSize"][value="${size}"]`).checked = true;
     SetEmoticonSize();
 
     let isEnhancedBlock = GetValue('enhancedBlockUser', 'true');
-    $('input:radio[name="enhancedSelectBlockUser"]:input[value=' + isEnhancedBlock + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectBlockUser"][value="${isEnhancedBlock}"]`).checked = true;
     document.getElementById("groupEnhancedBlockUser").style.display = (isEnhancedBlock == "true")? "block" : "none";
 
     let isEnhancedFeedBlock = GetValue('enhancedExtendFeedBlock', 'false');
-    $('input:radio[name="enhancedSelectFeedBlockUser"]:input[value=' + isEnhancedFeedBlock + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectFeedBlockUser"][value="${isEnhancedFeedBlock}"]`).checked = true;
 
     let isKitty = GetValue('enhancedKittyMode', 'none');
-    $('input:radio[name="enhancedSelectKittyMode"]:input[value=' + isKitty + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectKittyMode"][value="${isKitty}"]`).checked = true;
 
     let isPuppy = GetValue('enhancedPuppyMode', 'none');
-    $('input:radio[name="enhancedSelectPuppyMode"]:input[value=' + isPuppy + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectPuppyMode"][value="${isPuppy}"]`).checked = true;
 
     let isEarthquake = GetValue('enhancedEarthquake', 'false');
-    $('input:radio[name="enhancedSelectEarthquake"]:input[value=' + isEarthquake + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectEarthquake"][value="${isEarthquake}"]`).checked = true;
 
     let isBlink = GetValue('enhancedBlink', 'false');
-    $('input:radio[name="enhancedSelectBlink"]:input[value=' + isBlink + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectBlink"][value="${isBlink}"]`).checked = true;
 
     let isKeyboard = GetValue('enhancedKeyboard', 'false');
-    $('input:radio[name="enhancedSelectKeyboard"]:input[value=' + isKeyboard + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectKeyboard"][value="${isKeyboard}"]`).checked = true;
 
     let isBlockAllArticle = GetValue('enhancedBlockArticleAll', 'true');
-    $('input:radio[name="enhancedSelectBlockArticleAll"]:input[value=' + isBlockAllArticle + ']').attr("checked", true);
+    document.querySelector(`input[type="radio"][name="enhancedSelectBlockArticleAll"][value="${isBlockAllArticle}"]`).checked = true;
 
     let useWideMode = GetValue('enhancedWideMode', 'false');
     if (useWideMode == 'true')
@@ -1300,7 +1300,7 @@ function LoadCommonEvents()
     //Add user to block list when block.
     $(document).on('click', 'a[data-kant-id="1391"]', function(){
         $(document).on('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]', function(){
-            let splittedURL = $(location).attr('href').split('/');
+            let splittedURL = location.href.split('/');
             let bannedUserID = splittedURL[splittedURL.length - 1];
             blockedList.add(bannedUserID);
             $(document).off('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]');
@@ -1308,7 +1308,7 @@ function LoadCommonEvents()
     });
     //Delete user to block list when unblocking.
     $(document).on('click', 'a[data-kant-id="1392"]', function(){
-        let splittedURL = $(location).attr('href').split('/');
+        let splittedURL = location.href.split('/');
         let bannedUserID = splittedURL[splittedURL.length - 1];
         blockedList.delete(bannedUserID);
         $(document).off('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]');
@@ -1316,7 +1316,7 @@ function LoadCommonEvents()
     //Add user to feed list when disable feed.
     $(document).on('click', 'a[data-kant-id="853"]', function(){
         $(document).on('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]', function(){
-            let splittedURL = $(location).attr('href').split('/');
+            let splittedURL = location.href.split('/');
             let bannedUserID = splittedURL[splittedURL.length - 1];
             blockedList.add(bannedUserID);
             $(document).off('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]');
@@ -1325,7 +1325,7 @@ function LoadCommonEvents()
     //Delete user to feed list when re-enable feed.
     $(document).on('click', 'a[data-kant-id="852"]', function(){
         $(document).on('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]', function(){
-            let splittedURL = $(location).attr('href').split('/');
+            let splittedURL = location.href.split('/');
             let bannedUserID = splittedURL[splittedURL.length - 1];
             blockedList.delete(bannedUserID);
             $(document).off('click', 'a[class="btn_com btn_or _dialogOk _dialogBtn"]');
@@ -1333,7 +1333,7 @@ function LoadCommonEvents()
     });
     //Delete user to feed list when re-enable feed.
     $(document).on('click', 'a[data-kant-id="857"]', function(){
-        let splittedURL = $(location).attr('href').split('/');
+        let splittedURL = location.href.split('/');
         let bannedUserID = splittedURL[splittedURL.length - 1];
         blockedList.delete(bannedUserID);
     });
@@ -3095,7 +3095,7 @@ function HideBlockedUserArticle()
         let profile_info = content.querySelector("div[data-part-name='originalActivity']").getElementsByClassName("pf")[0];
         let bannedID = profile_info.getElementsByTagName("a")[0].getAttribute("href").replace("/", "");
 
-        if (blockedList.has(bannedID) == true) {
+        if (blockedList.has(bannedID)) {
 
             //not used.
             /*
