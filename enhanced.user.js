@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.34
+// @version      1.35
 // @description  Add-on for KakaoStory
 // @author       Reflection and other contributors
 // @match        https://story.kakao.com/*
@@ -13,11 +13,11 @@
 // ==/UserScript==
 
 
-let scriptVersion = "1.34";
+let scriptVersion = "1.35";
 
-let resourceURL = 'http://127.0.0.1:9011/kakaostory-enhanced/'; //for debug
+//let resourceURL = 'http://127.0.0.1:9011/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
-//let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
+let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
 let notyTimeCount = 0; //for notification feature
 let blockedList = new Set(); //block users
@@ -1030,7 +1030,6 @@ function InitImagePasteEvent()
                     if (targetAncestor && targetAncestor.querySelector(comtViewId)) {
                         fileInput = input;
                         commentWritingEnabled = true;
-                        console.log('댓글 조건 만족:', input);
                     }
                 });
 
@@ -1043,7 +1042,6 @@ function InitImagePasteEvent()
                 dt.items.add(attachedFile);
                 fileInput.files = dt.files;
                 fileInput.dispatchEvent(new Event('change', { bubbles: true }));
-                console.log('[Tampermonkey] 이미지 첨부됨:', attachedFile.name);
 
                 break;
             }
