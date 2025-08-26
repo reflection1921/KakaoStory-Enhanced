@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         KakaoStory Enhanced
 // @namespace    http://chihaya.kr
-// @version      1.35
+// @version      1.36
 // @description  Add-on for KakaoStory
 // @author       Reflection and other contributors
 // @match        https://story.kakao.com/*
@@ -13,7 +13,7 @@
 // ==/UserScript==
 
 
-let scriptVersion = "1.35";
+let scriptVersion = "1.36";
 
 //let resourceURL = 'http://127.0.0.1:9011/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
