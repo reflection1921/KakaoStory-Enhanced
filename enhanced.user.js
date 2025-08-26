@@ -580,6 +580,9 @@ const changePermissionModule = (function() {
         let sourcePermissionElem = document.getElementById("enhancedOptionSourcePerm");
         let sourcePermissionText = sourcePermissionElem.options[sourcePermissionElem.selectedIndex].text;
 
+        let destPermissionElem = document.getElementById("enhancedOptionDestPerm");
+        let destPermissionText = destPermissionElem.options[destPermissionElem.selectedIndex].text;
+
         let changePermLayer = document.createElement('div');
         changePermLayer.id = "changePermLayer";
         changePermLayer.className = "cover _cover";
@@ -588,7 +591,7 @@ const changePermissionModule = (function() {
             '<div class="cover_wrapper" style="z-index: 201;">' +
             '<div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;">' +
             '<div class="inner_toast_layer _toastBody">' +
-            '<p class="txt _dialogText">' + sourcePermissionText + ' 권한 게시글을 나만보기로 변경할까요? 취소하시려면 새로고침해야 합니다.</p>' +
+            '<p class="txt _dialogText">' + sourcePermissionText + ' 권한 게시글을 ' + destPermissionText + '로 변경할까요? 취소하시려면 새로고침해야 합니다.</p>' +
             '<div class="btn_group">' +
             '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="changePermissionConfirmCancel"><span>취소</span></a>' +
             '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionConfirmOK"><span>확인</span></a>' +
@@ -598,7 +601,7 @@ const changePermissionModule = (function() {
             '</div>';
     }
 
-    function _ChangePermission(articleID/*, perm, enableShare, commentWriteable, isMustRead*/)
+    function _ChangePermission(articleID, perm, enableShare /*, commentWriteable, isMustRead*/)
     {
         let xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
@@ -606,6 +609,10 @@ const changePermissionModule = (function() {
                 //Changed
             }
         }
+
+        if (perm === 'M')
+            enableShare = "false";
+
         xmlHttp.open("PUT", "https://story.kakao.com/a/activities/" + articleID);
         xmlHttp.setRequestHeader("x-kakao-apilevel", "49");
         xmlHttp.setRequestHeader("x-kakao-deviceinfo", "web:d;-;-");
@@ -613,7 +620,7 @@ const changePermissionModule = (function() {
         xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         xmlHttp.setRequestHeader("Accept-Language", "ko");
         xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-        xmlHttp.send("permission=M&enable_share=false&comment_all_writable=true&is_must_read=false");
+        xmlHttp.send("permission=" + perm + "&enable_share=" + enableShare + "&comment_all_writable=true&is_must_read=false");
     }
 
     function LoadActivitiesForPermission(userID, lastArticleID) {
@@ -652,13 +659,16 @@ const changePermissionModule = (function() {
                 let lArticleID = activity["sid"];
                 let permission = activity["permission"];
                 let sourcePermission = document.getElementById("enhancedOptionSourcePerm").value;
+                let destPermission = document.getElementById("enhancedOptionDestPerm").value;
                 /* For user-set permissions */
                 //var isMustRead = activity["is_must_read"];
                 //var commentWriteable = activity["comment_all_writable"];
-                //var shareable = activity["shareable"];
-                if (permission !== 'M' && (permission === sourcePermission || sourcePermission === 'N'))
+                var shareable = activity["shareable"];
+                var shareableChecked = document.getElementById("enhancedShareFriendsEnablePermChange").checked;
+                var shareableCheckedStr = shareableChecked === true ? "true" : "false";
+                if ((permission === sourcePermission || sourcePermission === 'N') && (destPermission !== permission || shareable != shareableCheckedStr))
                 {
-                    _ChangePermission(lArticleID/*, selNewPerm, shareable, commentWriteable, isMustRead*/);
+                    _ChangePermission(lArticleID, destPermission, shareableCheckedStr/*, commentWriteable, isMustRead*/);
                 }
 
                 document.getElementById('changePermissionText').innerHTML = '게시글 권한 변경 중... (' + (changePermCount + 1) + '/' + changePermActivityCount + '개 완료)';

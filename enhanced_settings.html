@@ -511,14 +511,24 @@
                             <option value="A">전체공개</option>
                             <option value="F">친구공개</option>
                             <option value="P">우리끼리보기</option>
-                            <!--<option value="M">나만보기</option>-->
+                            <option value="M">나만보기</option>
                         </select> 권한 게시글을
+                        <select id="enhancedOptionDestPerm" name="enhancedSelectChangePermDest">
+                            <!--<option value="A">전체공개</option>-->
+                            <option value="F">친구공개</option>
+                            <!--<option value="P">우리끼리보기</option>-->
+                            <option value="M">나만보기</option>
+                        </select> 로
                         <div class="btn_area">
                             <a style="cursor: pointer" class="btn_com btn_wh _enhanced_green_btn" id="enhancedBtnChangePermConfirm">
                                 <em>일괄 변경</em>
                             </a>
                         </div>
-                        <div>※해당 기능을 사용하여 특정 권한의 게시글들을 한번에 나만보기로 변경하실 수 있습니다.<br><br>
+                        <div>
+                            <input type="checkbox" class="inp_radio _friendListExposure" name="enhancedEnableShareFriendsInPermChange" id="enhancedShareFriendsEnablePermChange" checked>
+                            <label for="enhancedShareFriendsEnablePermChange">친구의 공유 허용</label>
+                        </div>
+                        <div>※해당 기능을 사용하여 특정 권한의 게시글들을 한번에 다른 권한으로 변경하실 수 있습니다.<br><br>
                              ※해당 기능은 실험적인 기능입니다.</div>
                     </dd>
                     <dt>친구목록 백업</dt>
