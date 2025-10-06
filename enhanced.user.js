@@ -15,7 +15,7 @@
 
 let scriptVersion = "1.36";
 
-//let resourceURL = 'http://127.0.0.1:9011/kakaostory-enhanced/'; //for debug
+//let resourceURL = 'http://127.0.0.1:8977/kakaostory-enhanced/'; //for debug
 //let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/dev/'; //github dev
 let resourceURL = 'https://raw.githubusercontent.com/reflection1921/KakaoStory-Enhanced/main/';
 let myID = ''; //for discord mention style feature
@@ -259,8 +259,8 @@ const deleteFriendsModule = (function() {
             '<div class="inner_toast_layer _toastBody">' +
             '<p class="txt _dialogText">정말 제한된 사용자를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.</p>' +
             '<div class="btn_group">' +
-            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteBlockedFriendConfirmCancel"><span>취소</span></a>' +
-            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteBlockedFriendConfirmOK"><span>확인</span></a>' +
+            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteBlockedFriendConfirmCancel"><span style="pointer-events: none;">취소</span></a>' +
+            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteBlockedFriendConfirmOK"><span style="pointer-events: none;">확인</span></a>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -279,8 +279,8 @@ const deleteFriendsModule = (function() {
             '<div class="inner_toast_layer _toastBody">' +
             '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.<br>취소하더라도 이미 삭제된 친구는 복구되지 않습니다!</p>' +
             '<div class="btn_group">' +
-            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendConfirmCancel"><span>취소</span></a>' +
-            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendConfirmOK"><span>확인</span></a>' +
+            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendConfirmCancel"><span style="pointer-events: none;">취소</span></a>' +
+            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendConfirmOK"><span style="pointer-events: none;">확인</span></a>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -299,8 +299,8 @@ const deleteFriendsModule = (function() {
             '<div class="inner_toast_layer _toastBody">' +
             '<p class="txt _dialogText">정말 친구를 전체 삭제하시겠습니까?<br>진행하면 되돌릴 수 없습니다!<br>다시 한 번 신중하게 생각해주세요!<br>취소하시려면 새로고침해야 합니다.<br>취소하더라도 이미 삭제된 친구는 복구되지 않습니다!</p>' +
             '<div class="btn_group">' +
-            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendReConfirmCancel"><span>취소</span></a>' +
-            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendReConfirmOK"><span>확인</span></a>' +
+            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="deleteFriendReConfirmCancel"><span style="pointer-events: none;">취소</span></a>' +
+            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="deleteFriendReConfirmOK"><span style="pointer-events: none;">확인</span></a>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -422,8 +422,8 @@ const removeAllArticlesModule = (function() {
             '<div class="inner_toast_layer _toastBody">' +
             '<p class="txt _dialogText">정말 게시글을 전체 삭제하시겠습니까?<br>취소하시려면 새로고침해야 합니다.<br>취소하더라도 이미 삭제된 게시글은 복구되지 않습니다!</p>' +
             '<div class="btn_group">' +
-            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="removeAllArticlesConfirmCancel"><span>취소</span></a>' +
-            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="removeAllArticlesConfirmOK"><span>확인</span></a>' +
+            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="removeAllArticlesConfirmCancel"><span style="pointer-events: none;">취소</span></a>' +
+            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="removeAllArticlesConfirmOK"><span style="pointer-events: none;">확인</span></a>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -442,8 +442,8 @@ const removeAllArticlesModule = (function() {
             '<div class="inner_toast_layer _toastBody">' +
             '<p class="txt _dialogText">정말 게시글을 전체 삭제하시겠습니까?<br>진행하면 되돌릴 수 없습니다!<br>다시 한 번 신중하게 생각해주세요!<br>취소하시려면 새로고침해야 합니다.<br>취소하더라도 이미 삭제된 게시글은 복구되지 않습니다!</p>' +
             '<div class="btn_group">' +
-            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="removeAllArticlesReConfirmCancel"><span>취소</span></a>' +
-            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="removeAllArticlesReConfirmOK"><span>확인</span></a>' +
+            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="removeAllArticlesReConfirmCancel"><span style="pointer-events: none;">취소</span></a>' +
+            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="removeAllArticlesReConfirmOK"><span style="pointer-events: none;">확인</span></a>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -539,7 +539,7 @@ const removeAllArticlesModule = (function() {
                 removeAllArticlesCountLayer.id = "removeAllArticlesCountLayer";
                 removeAllArticlesCountLayer.className = "cover _cover";
                 document.body.appendChild(removeAllArticlesCountLayer);
-                document.getElementById('removeAllArticlesCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="removeAllArticlesText">게시글 삭제 중... (0 / 0)</p><div>※정책상 변경 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="removeAllArticlesBtnOK" style="display: none;"><span>확인</span></a> </div></div></div></div>';
+                document.getElementById('removeAllArticlesCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="removeAllArticlesText">게시글 삭제 중... (0 / 0)</p><div>※정책상 변경 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="removeAllArticlesBtnOK" style="display: none;"><span style="pointer-events: none;">확인</span></a> </div></div></div></div>';
                 loadActivitiesForRemove(removeArticlesUserID, "");
             }
         }
@@ -593,8 +593,8 @@ const changePermissionModule = (function() {
             '<div class="inner_toast_layer _toastBody">' +
             '<p class="txt _dialogText">' + sourcePermissionText + ' 권한 게시글을 ' + destPermissionText + '로 변경할까요? 취소하시려면 새로고침해야 합니다.</p>' +
             '<div class="btn_group">' +
-            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="changePermissionConfirmCancel"><span>취소</span></a>' +
-            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionConfirmOK"><span>확인</span></a>' +
+            '<a href="#" class="btn_com btn_wh _dialogCancel _dialogBtn" id="changePermissionConfirmCancel"><span style="pointer-events: none;">취소</span></a>' +
+            '<a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionConfirmOK"><span style="pointer-events: none;">확인</span></a>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -700,7 +700,7 @@ const changePermissionModule = (function() {
                 permissionCountLayer.id = "changePermissionCountLayer";
                 permissionCountLayer.className = "cover _cover";
                 document.body.appendChild(permissionCountLayer);
-                document.getElementById('changePermissionCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="changePermissionText">게시글 권한 변경 중... (0 / 0)</p><div>※정책상 변경 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionBtnOK" style="display: none;"><span>확인</span></a> </div></div></div></div>';
+                document.getElementById('changePermissionCountLayer').innerHTML = '<div class="dimmed dimmed50" style="z-index: 201;"></div><div class="cover_wrapper" style="z-index: 201;"><div class="toast_popup cover_content cover_center" tabindex="-1" style="top: 436px; margin-left: -170px;"><div class="inner_toast_layer _toastBody"><p class="txt _dialogText" id="changePermissionText">게시글 권한 변경 중... (0 / 0)</p><div>※정책상 변경 속도는 느리게 설정되었습니다.<br>취소하시려면 새로고침 하세요.</div><div class="btn_group"><a href="#" class="btn_com btn_or _dialogOk _dialogBtn" id="changePermissionBtnOK" style="display: none;"><span style="pointer-events: none;">확인</span></a> </div></div></div></div>';
                 LoadActivitiesForPermission(changePermUserID, "");
             }
         }
