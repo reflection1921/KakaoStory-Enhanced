@@ -72,6 +72,19 @@ let mediaHideObserver = new MutationObserver((mutationsList) => {
     }
 });
 
+function GetFormattedDateTime() {
+    const now = new Date();
+
+    const yyyy = now.getFullYear();
+    const MM = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const ss = String(now.getSeconds()).padStart(2, '0');
+
+    return `${yyyy}${MM}${dd}_${hh}${mm}${ss}`;
+}
+
 function AddEnhancedMenuObserver() {
 
     const observer = new MutationObserver((mutations) => {
@@ -2918,8 +2931,8 @@ function BackupFriendsList() {
             for (let i = 0; i < jsonFriends.profiles.length; i ++) {
                 friendsText = friendsText + String(jsonFriends.profiles[i]["display_name"]) + " : " + String(jsonFriends.profiles[i]["id"]) + '\n';
             }
-            document.getElementById("enhancedFriendsBackupDescription").innerHTML = "※백업 데이터가 생성 되었습니다! 한번 더 클릭하여 다운로드를 진행하세요.<br>만약 다운로드가 진행되지 않을 경우, 우클릭하여 다른 이름으로 링크 저장을 사용해보세요.<br>다시 새로운 정보로 다운로드 하시려면, 새로고침이 필요합니다.";
-            SaveText(friendsText, "친구목록백업.txt", "text/plain", "enhancedBtnBackupFriendsList");
+            SaveText(friendsText, "친구목록백업_" + GetFormattedDateTime() + ".txt", "text/plain", "hiddenBtnBackupFriendsList");
+            document.getElementById("hiddenBtnBackupFriendsList").click();
         }
     }
     xmlHttp.open("GET", "https://story.kakao.com/a/friends");
@@ -2939,8 +2952,8 @@ function BackupBannedUserList() {
             for (let i = 0; i < jsonBannedUsers.length; i ++) {
                 bannedUsersText = bannedUsersText + String(jsonBannedUsers[i]["display_name"]) + " : " + String(jsonBannedUsers[i]["id"]) + '\n';
             }
-            document.getElementById("enhancedBannedUserBackupDescription").innerHTML = "※백업 데이터가 생성 되었습니다! 한번 더 클릭하여 다운로드를 진행하세요.<br>만약 다운로드가 진행되지 않을 경우, 우클릭하여 다른 이름으로 링크 저장을 사용해보세요.<br>다시 새로운 정보로 다운로드 하시려면, 새로고침이 필요합니다.";
-            SaveText(bannedUsersText, "차단목록백업.txt", "text/plain", "enhancedBtnBackupBannedUserList");
+            SaveText(bannedUsersText, "차단목록백업_" + GetFormattedDateTime() + ".txt", "text/plain", "hiddenBtnBackupBannedUserList");
+            document.getElementById("hiddenBtnBackupBannedUserList").click();
         }
     }
     xmlHttp.open("GET", "https://story.kakao.com/a/bans");
